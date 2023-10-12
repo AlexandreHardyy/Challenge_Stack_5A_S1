@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 const Header = () => {
   return (
-    <div className="flex py-4 items-center justify-between">
+    <div className="fixed top-0 left-0 w-full bg-slate-300 flex py-4 px-6 items-center justify-between">
       <h1>RodeWise</h1>
       <div className="flex gap-8">
         <Button variant="ghost">Service</Button>
