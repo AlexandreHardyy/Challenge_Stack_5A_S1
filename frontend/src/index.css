@@ -65,6 +65,10 @@ html, body {
   margin: 0;
 }
 
+html {
+  height: 100vh;
+}
+
 ul {
   list-style: none;
   padding: 0;
