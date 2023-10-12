@@ -1,19 +1,23 @@
 # RoadWise : Projet de Plateforme SaaS pour les Auto-Écoles
 
 ## Table des matières
+
 - [RoadWise : Projet de Plateforme SaaS pour les Auto-Écoles](#roadwise--projet-de-plateforme-saas-pour-les-auto-écoles)
-  - [Table des matières](#table-des-matières)
-  - [Description](#description)
-  - [Fonctionnalités](#fonctionnalités)
-  - [Technologies](#technologies)
-  - [Installation](#installation)
-  - [Utilisation](#utilisation)
-  - [Auteurs](#auteurs)
-  - [Contact](#contact)
+    - [Table des matières](#table-des-matières)
+    - [Description](#description)
+    - [Fonctionnalités](#fonctionnalités)
+    - [Technologies](#technologies)
+    - [Installation](#installation)
+    - [Utilisation](#utilisation)
+    - [Auteurs](#Auteurs)
+    - [Contact](#contact)
 
 ## Description
 
-Ce projet est le fruit du travail de quatre étudiants de l'ESGI en 5ème année, spécialisés en Informatique et Web (IW). L'objectif de ce projet est de développer une application SaaS qui facilite la gestion des réservations pour les auto-écoles. La plateforme fournira aux auto-écoles un outil convivial pour la gestion des créneaux de plusieurs établissements différents.
+Ce projet est le fruit du travail de quatre étudiants de l'ESGI en 5ᵉ année, spécialisés en Informatique et Web (IW).
+L'objectif de ce projet est de développer une application SaaS qui facilite la gestion des réservations pour les
+auto-écoles. La plateforme fournira aux auto-écoles un outil convivial pour la gestion des créneaux de plusieurs
+établissements différents.
 
 ## Fonctionnalités
 
@@ -48,7 +52,7 @@ Pour installer et exécuter cette application localement, suivez ces étapes :
    ```bash
    cd nom-du-projet
    cd front-end && npm install
-   cd ../back-end && composer install
+   cd ../back-end && make install
    ```
 
 3. Configurez la base de données et les paramètres d'environnement.
@@ -57,19 +61,20 @@ Pour installer et exécuter cette application localement, suivez ces étapes :
    cp .env.example .env
    ```
 
-Assurez-vous de configurer correctement les variables d'environnement dans les fichiers .env pour votre base de données et d'autres paramètres.
+   Assurez-vous de configurer correctement les variables d'environnement dans les fichiers .env pour votre base de
+   données et d'autres paramètres.
 
 4. Exécutez l'application.
 
-- Pour le front-end :
-   ```bash
-   cd front-end && npm start
-   ```
+    - Pour le front-end :
+       ```bash
+       cd front-end && npm start
+       ```
 
-- Pour le back-end :
-   ```bash
-   cd back-end && symfony serve
-   ```
+    - Pour le back-end :
+       ```bash
+       cd back-end && make start
+       ```
 
 5. Accédez à l'application dans votre navigateur à l'adresse http://localhost:3000.
 
@@ -81,7 +86,8 @@ Assurez-vous de configurer correctement les variables d'environnement dans les f
 
 ## Utilisation
 
-Pour utiliser cette application, vous devrez peut-être créer un compte en tant qu'administrateur ou en tant qu'école. Vous pouvez également vous connecter en tant qu'utilisateur pour réserver des leçons de conduite.
+Pour utiliser cette application, vous devrez peut-être créer un compte en tant qu'administrateur ou en tant qu'école.
+Vous pouvez également vous connecter en tant qu'utilisateur pour réserver des leçons de conduite.
 
 ## Auteurs
 
