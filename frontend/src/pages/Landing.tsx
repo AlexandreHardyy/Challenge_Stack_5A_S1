@@ -1,10 +1,6 @@
-import Header from "@/layouts/Header.tsx";
-
 const Landing = () => {
   return (
-    <div className="px-8">
-      <Header />
-      <main>
+    <div>
         <h1 className="font-semibold text-4xl">
           Réservez, Roulez, Réussissez : Votre Avenir sur la Voie Rapide !
         </h1>
@@ -13,7 +9,6 @@ const Landing = () => {
           pour de multiples auto-écoles, optimisant l'efficacité et la
           satisfaction des instructeurs et des élèves.
         </p>
-      </main>
     </div>
   );
 };
