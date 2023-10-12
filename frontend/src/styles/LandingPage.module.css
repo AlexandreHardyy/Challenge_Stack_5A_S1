@@ -1,0 +1,8 @@
+#section2 {
+    clip-path: polygon(
+            0 0, /* left top */
+            100% 10%, /* right top */
+            100% 100%, /* right bottom */
+            0 90% /* left bottom */
+    );
+}
