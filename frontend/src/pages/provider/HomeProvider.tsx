@@ -1,9 +1,7 @@
 const HomeProvider = () => {
     return (
-      <div>
-      <h1>Welcome to Home Provider</h1>
-    </div>
+      <div>Home Provider</div>
     )
   }
   
-  export default HomeProvider
+export default HomeProvider

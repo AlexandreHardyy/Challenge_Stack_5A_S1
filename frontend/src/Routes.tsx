@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound"
 import AdminLayout from "./layouts/Admin"
 import HomeAdmin from "./pages/admin/HomeAdmin"
 import HomeProvider from "./pages/provider/HomeProvider"
+import Employees from "./pages/provider/Employees"
   
 const Routes = () => {
     const router = createBrowserRouter([
@@ -18,10 +19,6 @@ const Routes = () => {
           {
             path: "/",
             element: <Landing />,
-          },
-          {
-            path: "/provider",
-            element: <HomeProvider />,
           }
         ],
         errorElement: <NotFound />,
@@ -35,7 +32,11 @@ const Routes = () => {
           },
           {
             path: "/provider",
-            element: <HomeProvider />,
+            element: <HomeProvider />
+          },
+          {
+            path: "/provider/employee",
+            element: <Employees />
           }
         ],
         errorElement: <NotFound />,
