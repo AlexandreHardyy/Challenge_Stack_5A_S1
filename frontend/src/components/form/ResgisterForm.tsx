@@ -137,9 +137,9 @@ const RegisterForm = () => {
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel>
-                    En cochant cette case, vous acceptez les{" "}
-                    <Link className="text-primary" to="#">
-                      conditions d'utilisation
+                    By checking this box, you accept the{" "}
+                    <Link className="text-primary" to="/terms">
+                      terms and conditions
                     </Link>
                   </FormLabel>
                   <FormMessage />
@@ -147,7 +147,7 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Create my account</Button>
         </form>
       </Form>
     </>

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button.tsx";
 import { Link } from "react-router-dom";
+import { ModeToggle } from "@/components/Mode-toggle.tsx";
 
 const Header = () => {
   return (
@@ -17,6 +18,7 @@ const Header = () => {
         </Button>
       </div>
       <div className="flex gap-4">
+        <ModeToggle />
         <Button variant="secondary" asChild>
           <Link to="/register">Sign up</Link>
         </Button>

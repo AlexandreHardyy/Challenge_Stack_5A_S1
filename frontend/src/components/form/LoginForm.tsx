@@ -60,7 +60,7 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Log in</Button>
         </form>
       </Form>
     </>

@@ -9,6 +9,7 @@ import HomeProvider from "./pages/provider/HomeProvider";
 import Employees from "./pages/provider/Employees";
 import Login from "@/pages/auth/Login.tsx";
 import Register from "@/pages/auth/Register.tsx";
+import Terms from "@/pages/Terms.tsx";
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const Routes = () => {
         {
           path: "/register",
           element: <Register />,
+        },
+        {
+          path: "/terms",
+          element: <Terms />,
         },
       ],
       errorElement: <NotFound />,
