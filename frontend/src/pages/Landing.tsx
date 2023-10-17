@@ -11,7 +11,7 @@ const Landing = () => {
           <h1 className="font-semibold text-5xl leading-relaxed">
             Réservez, Roulez, Réussissez. Votre Avenir sur la Voie Rapide !
           </h1>
-          <p className="py-4 opacity-70 text-xl">
+          <p className="py-4 text-xl text-foreground">
             Notre application simplifie la planification des leçons de conduite
             pour de multiples auto-écoles, optimisant l'efficacité et la
             satisfaction des instructeurs et des élèves.
@@ -22,7 +22,7 @@ const Landing = () => {
       </section>
       <section
         id={styles.section2}
-        className="mt-10 bg-slate-100 w-full h-screen px-8 py-32 flex justify-between gap-16"
+        className="mt-10 bg-muted w-full h-screen px-8 py-32 flex justify-between gap-16"
       >
         <div>
           <h1 className="font-semibold text-5xl leading-relaxed p-6">
