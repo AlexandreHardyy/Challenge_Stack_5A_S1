@@ -7,7 +7,10 @@ import { ThemeProvider } from "@/components/Theme-provider.tsx";
 
 const queryClient = new QueryClient();
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootDiv = document.getElementById("root")
+rootDiv?.setAttribute('class', 'flex flex-col min-h-screen')
+
+ReactDOM.createRoot(rootDiv!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
