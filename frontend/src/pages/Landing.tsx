@@ -11,7 +11,7 @@ const Landing = () => {
           <h1 className="font-semibold text-5xl leading-relaxed">
             Réservez, Roulez, Réussissez. Votre Avenir sur la Voie Rapide !
           </h1>
-          <p className="py-4 opacity-70 text-xl">
+          <p className="py-4 text-xl text-gray-500">
             Notre application simplifie la planification des leçons de conduite
             pour de multiples auto-écoles, optimisant l'efficacité et la
             satisfaction des instructeurs et des élèves.

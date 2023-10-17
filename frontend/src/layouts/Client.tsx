@@ -6,7 +6,7 @@ const ClientLayout = () => {
   return (
     <>
       <Header />
-      <main className="mt-20 h-full m-h-[100vh]">
+      <main className="mt-6 h-full m-h-[100vh]">
         <Outlet />
       </main>
       <Footer />

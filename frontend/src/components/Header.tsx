@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header className="flex px-8 py-4 items-center justify-between">
+    <header className="flex px-8 py-4 items-center justify-between sticky top-0 bg-background drop-shadow-md z-50">
       <h1>RodeWise</h1>
       <div className="flex gap-8">
         <Button variant="ghost" asChild>

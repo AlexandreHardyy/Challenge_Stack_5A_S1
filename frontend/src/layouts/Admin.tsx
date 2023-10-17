@@ -5,7 +5,7 @@ const AdminLayout = () => {
   return (
     <>
       <Header />
-      <main className="p-6 mt-20 h-full m-h-[100vh]">
+      <main className="p-6 mt-6 h-full m-h-[100vh]">
         <Outlet />
       </main>
     </>
