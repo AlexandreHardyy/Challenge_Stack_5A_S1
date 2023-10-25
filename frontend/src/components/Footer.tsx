@@ -1,31 +1,9 @@
-import { useTranslation } from "react-i18next";
-
-const lngs = {
-  en: { nativeName: "English" },
-  fr: { nativeName: "Français" },
-}
+import LanguageSelector from "@/components/LanguageSelector.tsx";
 
 const Footer = () => {
-  const { i18n } = useTranslation();
   return (
-    <footer className="flex justify-between px-8 py-4 bg-neutral-800 text-white h-28">
-      <div>
-        {Object.keys(lngs).map((lng) => (
-          <button
-            key={lng}
-            style={{
-              fontWeight: i18n.language === lng ? "bold" : "normal",
-            }}
-            type="submit"
-            onClick={() => {
-              i18n.changeLanguage(lng);
-            }}
-            disabled={i18n.language === lng}
-          >
-            { lngs[lng].nativeName }
-          </button>
-        ))}
-      </div>
+    <footer className="flex items-center justify-between px-8 py-4 bg-neutral-800 text-white h-28">
+      <LanguageSelector />
       <div>
         <p>Nous retrouver</p>
       </div>

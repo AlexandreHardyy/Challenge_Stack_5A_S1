@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next';
+import { Button } from "@/components/ui/button.tsx";
 
-const lngs = {
+interface Language {
+	nativeName: string;
+}
+
+const languages: { [key: string]: Language } = {
 	en: { nativeName: "English" },
 	fr: { nativeName: "Français" }
 }
@@ -8,26 +13,21 @@ const lngs = {
 function LanguageSelector() {
 	const { i18n } = useTranslation();
 
-	const changeLanguage = (lng: string) => {
-		i18n.changeLanguage(lng);
-	};
-
 	return (
-		<div>
-			{Object.keys(lngs).map((lng) => (
-				<button
-					key={lng}
-					style={{
-						fontWeight: i18n.language === lng ? "bold" : "normal",
-					}}
+		<div className="flex items-center justify-between gap-1">
+			{Object.keys(languages).map((language) => (
+				<Button
+					variant="secondary"
+					key={language}
+					style={{ fontWeight: i18n.language === language ? "bold" : "normal" }}
 					type="submit"
 					onClick={() => {
-						i18n.changeLanguage(lng);
+						i18n.changeLanguage(language).then(r => console.log(r));
 					}}
-					disabled={i18n.language === lng}
+					disabled={i18n.language === language}
 				>
-					{ lngs[lng].nativeName }
-				</button>
+					{ languages[language].nativeName }
+				</Button>
 			))}
 		</div>
 	);

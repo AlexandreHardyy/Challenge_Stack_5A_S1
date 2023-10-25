@@ -2,7 +2,6 @@ import UndrawMeeting from "@/assets/img/UndrawMeeting.svg";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import styles from "@/styles/LandingPage.module.css";
-
 import { useTranslation } from "react-i18next";
 
 const Landing = () => {

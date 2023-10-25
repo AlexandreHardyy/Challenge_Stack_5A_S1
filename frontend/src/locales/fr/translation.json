@@ -6,5 +6,16 @@
     "section1": {
       "title": "Réservez, Roulez, Réussissez. Votre Avenir sur la Voie Rapide !"
     }
+  },
+  "header": {
+    "menu": {
+      "services": "Services",
+      "FAQ": "FAQ",
+      "about": "À propos"
+    },
+    "cta": {
+      "signIn": "Se connecter",
+      "signUp": "S'inscrire"
+    }
   }
 }

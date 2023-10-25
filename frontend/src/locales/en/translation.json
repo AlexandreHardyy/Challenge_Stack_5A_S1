@@ -6,5 +6,16 @@
     "section1": {
       "title": "Book, Drive, Succeed. Your Future on the Fast Lane!"
     }
+  },
+  "header": {
+    "menu": {
+      "services": "Services",
+      "FAQ": "FAQ",
+      "about": "About us"
+    },
+    "cta": {
+      "signIn": "Sign in",
+      "signUp": "Sign up"
+    }
   }
 }
