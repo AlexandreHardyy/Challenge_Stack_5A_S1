@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import styles from "@/styles/LandingPage.module.css"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 
 const Landing = () => {
   const { t } = useTranslation()
@@ -52,6 +53,14 @@ const Landing = () => {
             </p>
           </div>
         </div>
+      </section>
+      <section className="w-full px-8 py-8 flex justify-between items-center flex-col gap-8">
+        <h1 className="font-semibold text-2xl leading-relaxed">
+          {t("landing.newProvider.title")}
+        </h1>
+        <Button>
+          <Link to="/provider/new">{t("landing.newProvider.cta")}</Link>
+        </Button>
       </section>
     </>
   )

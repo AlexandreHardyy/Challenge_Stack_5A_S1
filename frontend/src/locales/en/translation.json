@@ -1,12 +1,4 @@
 {
-  "landing": {
-    "title": "Book, Drive, Succeed. Your Future on the Fast Lane!",
-    "subtitle": "Our app simplifies the planning of driving lessons for multiple driving schools, optimizing the efficiency and satisfaction of instructors and students.",
-    "ctaDiscover": "Discover now",
-    "section1": {
-      "title": "Book, Drive, Succeed. Your Future on the Fast Lane!"
-    }
-  },
   "header": {
     "menu": {
       "services": "Services",
@@ -47,5 +39,68 @@
   "ratingsComponent": {
     "ratings": "Ratings",
     "seeMore": "See more"
-  } 
+  },
+  "footer": {
+    "menu": {
+      "knowUs": "Know us",
+      "credits": "©2023 RoadWise, Inc.",
+      "contact": "Contact us"
+    }
+  },
+  "common": {
+    "cta": {
+      "submit": "Submit",
+      "cancel": "Cancel"
+    }
+  },
+  "landing": {
+    "title": "Book, Drive, Succeed. Your Future on the Fast Lane!",
+    "subtitle": "Our app simplifies the planning of driving lessons for multiple driving schools, optimizing the efficiency and satisfaction of instructors and students.",
+    "ctaDiscover": "Discover now",
+    "section1": {
+      "title": "Book, Drive, Succeed. Your Future on the Fast Lane!"
+    },
+    "newProvider": {
+      "title": "If you are a driving school, join us !",
+      "cta": "Become a provider"
+    }
+  },
+  "newProvider": {
+    "form": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phoneNumber": "Phone number",
+      "socialReason": "Social reason",
+      "description": "Description",
+      "sirenNumber": "N° SIREN",
+      "placeholders": {
+        "firstName": "Enter your first name",
+        "lastName": "Enter your last name",
+        "email": "Enter your email",
+        "phoneNumber": "+33 0 00 00 00 00",
+        "socialReason": "Enter your social reason",
+        "description": "Enter your description",
+        "sirenNumber": "Enter your SIREN number"
+      },
+      "cta": {
+        "submit": "Become a provider"
+      },
+      "errors": {
+        "firstName": "FirstName must be at least 2 characters.",
+        "lastName": "LastName must be at least 2 characters.",
+        "email": "Email is required",
+        "phoneNumber": "Phone number must be in a valid format (ex: +33 0 00 00 00 00 or 00 00 00 00 00).",
+        "socialReason": "Social reason must be at least 2 characters.",
+        "sirenNumberRegExp": "Siren number must be in a valid format (ex: 123456789).",
+        "sirenNumberNotValid": "Siren number is not valid."
+      },
+      "toast": {
+        "successTitle": "Request sent",
+        "errorTitle": "Error",
+        "success": "Your request has been sent to the admin, you will receive an email when your account is activated.",
+        "error": "An error has occurred. Please try again later."
+      }
+    }
+  }
 }
