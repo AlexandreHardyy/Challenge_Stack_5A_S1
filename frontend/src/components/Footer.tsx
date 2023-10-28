@@ -1,6 +1,9 @@
+import LanguageSelector from "@/components/LanguageSelector.tsx";
+
 const Footer = () => {
   return (
-    <footer className="flex justify-between px-8 py-4 bg-neutral-800 text-white h-28">
+    <footer className="flex items-center justify-between px-8 py-4 bg-neutral-800 text-white h-28">
+      <LanguageSelector />
       <div>
         <p>Nous retrouver</p>
       </div>

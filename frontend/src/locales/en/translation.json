@@ -1,0 +1,21 @@
+{
+  "landing": {
+    "title": "Book, Drive, Succeed. Your Future on the Fast Lane!",
+    "subtitle": "Our app simplifies the planning of driving lessons for multiple driving schools, optimizing the efficiency and satisfaction of instructors and students.",
+    "ctaDiscover": "Discover now",
+    "section1": {
+      "title": "Book, Drive, Succeed. Your Future on the Fast Lane!"
+    }
+  },
+  "header": {
+    "menu": {
+      "services": "Services",
+      "FAQ": "FAQ",
+      "about": "About us"
+    },
+    "cta": {
+      "signIn": "Sign in",
+      "signUp": "Sign up"
+    }
+  }
+}

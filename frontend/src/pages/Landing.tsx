@@ -2,21 +2,21 @@ import UndrawMeeting from "@/assets/img/UndrawMeeting.svg";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import styles from "@/styles/LandingPage.module.css";
+import { useTranslation } from "react-i18next";
 
 const Landing = () => {
+    const { t } = useTranslation();
   return (
     <>
       <section className="flex justify-between gap-16 mt-14 px-8">
         <div>
           <h1 className="font-semibold text-5xl leading-relaxed">
-            Réservez, Roulez, Réussissez. Votre Avenir sur la Voie Rapide !
+            {t("landing.title")}
           </h1>
           <p className="py-4 text-xl text-foreground">
-            Notre application simplifie la planification des leçons de conduite
-            pour de multiples auto-écoles, optimisant l'efficacité et la
-            satisfaction des instructeurs et des élèves.
+            {t("landing.subtitle")}
           </p>
-          <Button>Discover now</Button>
+          <Button>{t("landing.ctaDiscover")}</Button>
         </div>
         <img src={UndrawMeeting} className="w-2/5" alt="image homapage" />
       </section>
@@ -26,7 +26,7 @@ const Landing = () => {
       >
         <div>
           <h1 className="font-semibold text-5xl leading-relaxed p-6">
-            Réservez, Roulez, Réussissez. Votre Avenir sur la Voie Rapide
+            {t("landing.section1.title")}
           </h1>
           <strong className="p-6 text-8xl font-bold text-primary">30 +</strong>
         </div>
