@@ -10,6 +10,7 @@ import Employees from "./pages/provider/Employees";
 import Login from "@/pages/auth/Login.tsx";
 import Register from "@/pages/auth/Register.tsx";
 import Terms from "@/pages/Terms.tsx";
+import { CompanyPage } from "./pages/client/Company";
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -32,6 +33,10 @@ const Routes = () => {
           path: "/terms",
           element: <Terms />,
         },
+        {
+          path: "/companies/:companyId",
+          element: <CompanyPage />
+        }
       ],
       errorElement: <NotFound />,
     },

@@ -13,9 +13,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
+    normalizationContext:['groups' => ['group-read']],
     operations: [
         new GetCollection(),
         new Get(),
@@ -29,33 +31,42 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['group-read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['group-read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['group-read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['group-read'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['group-read'])]
     private ?string $kbis = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['group-read'])]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(['group-read'])]
     private ?bool $isVerified = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['group-read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Location::class, orphanRemoval: true)]
+    #[Groups(['group-read'])]
     private Collection $locations;
 
     public function __construct()

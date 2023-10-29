@@ -22,7 +22,7 @@ const Landing = () => {
       </section>
       <section
         id={styles.section2}
-        className="mt-10 bg-muted w-full h-screen px-8 py-32 flex justify-between gap-16"
+        className="mt-10 bg-secondary w-full h-screen px-8 py-32 flex justify-between gap-16"
       >
         <div>
           <h1 className="font-semibold text-5xl leading-relaxed p-6">

@@ -8,7 +8,10 @@ import './i18n'
 
 const queryClient = new QueryClient();
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootDiv = document.getElementById("root")
+rootDiv?.setAttribute('class', 'flex flex-col min-h-screen')
+
+ReactDOM.createRoot(rootDiv!).render(
   <React.StrictMode>
     <React.Suspense fallback="loading">
       <QueryClientProvider client={queryClient}>

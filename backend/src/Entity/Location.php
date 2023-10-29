@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\LocationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 #[ApiResource(
@@ -37,15 +38,19 @@ class Location
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['group-read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['group-read'])]
     private ?string $adresse = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['group-read'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['group-read'])]
     private ?string $zip = null;
 
     #[ORM\Column]
@@ -57,6 +62,10 @@ class Location
     #[ORM\ManyToOne(inversedBy: 'locations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['group-read'])]
+    private ?string $name = null;
 
     public function getId(): ?int
     {
@@ -131,6 +140,18 @@ class Location
     public function setCompany(?Company $company): static
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
