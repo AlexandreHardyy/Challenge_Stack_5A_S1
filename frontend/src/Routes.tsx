@@ -13,6 +13,7 @@ import Register from "@/pages/auth/Register.tsx";
 import Terms from "@/pages/Terms.tsx";
 import CompanyClient from "@/pages/client/Company";
 import AgencyClient from "./pages/client/Company/Agency";
+import Agencies from "@/pages/provider/Agencies";
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -60,6 +61,10 @@ const Routes = () => {
         {
           path: "/provider/employee",
           element: <Employees />,
+        },
+        {
+          path: "/provider/agency",
+          element: <Agencies />,
         },
       ],
       errorElement: <NotFound />,

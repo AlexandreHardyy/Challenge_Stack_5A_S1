@@ -9,6 +9,8 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useState } from "react"
+import { PencilIcon } from "lucide-react"
+import { SelectMultiple } from "@/components/select-multiple"
 
 
 type Employee = {
@@ -17,9 +19,25 @@ type Employee = {
     lastname: string
     email: string
     phone: string
+    agencies?: string[]
 }
+
+const AGENCIES = [
+  {
+    value: "paris",
+    label: "Paris",
+  },
+  {
+    value: "marseille",
+    label: "Marseille",
+  },
+  {
+    value: "chatou",
+    label: "Chatou",
+  }
+]
    
-export const employees: Employee[] = [
+const employees: Employee[] = [
   {
       id: "728ed52f",
       firstname: "noe",
@@ -50,7 +68,7 @@ export const employees: Employee[] = [
   }
 ]
 
-export const columns: ColumnDef<Employee>[] = [
+const columns: ColumnDef<Employee>[] = [
     {
       accessorKey: "id",
       header: ({ column }) => column.toggleVisibility(false)
@@ -94,7 +112,8 @@ const employeeFormSchema = z.object({
   lastname: z.string().min(2, {
     message: "FirstName must be at least 2 characters.",
   }),
-  phone: z.string()
+  phone: z.string(),
+  agencies: z.array(z.string())
 })
 
 const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee, isReadOnly: boolean }) => {
@@ -104,7 +123,8 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee, isReadOnl
       email: employee?.email ?? "",
       firstname: employee?.firstname ?? "",
       lastname: employee?.lastname ?? "",
-      phone: employee?.phone ?? ""
+      phone: employee?.phone ?? "",
+      agencies: employee?.agencies ?? []
     }
   })
 
@@ -154,7 +174,7 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee, isReadOnl
           </FormItem>
         )}
       />
-       <FormField
+      <FormField
         control={form.control}
         name="phone"
         render={({ field }) => (
@@ -167,20 +187,36 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee, isReadOnl
           </FormItem>
         )}
       />
-      <Button type="submit" disabled={isReadOnly}>Add employee</Button>
+      <FormField
+        control={form.control}
+        name="agencies"
+        render={() => {
+          return (
+            <FormItem>
+              <FormLabel>Agencies</FormLabel>
+              <FormControl>
+                <SelectMultiple onChange={(values) => form.setValue('agencies', values)} data={AGENCIES} placeholder="Select agency where the employee works..."/>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )
+        }}
+      />
+
+      {!isReadOnly && <Button type="submit">{employee ? "Update employee" : "Add employee"}</Button>}
       </form>
   </Form>
   )
 }
 
-const ModalFormEmployee = ({ employee } : { employee?: Employee }) => {
+const ModalFormEmployee = ({ employee, variant = 'ghost' } : { employee?: Employee,  variant?: 'ghost' | 'outline' }) => {
   const [ isReadOnly, setIsreadOnly ] = useState(!!employee)
   return (
-    <Dialog>
-      <DialogTrigger><Button variant="outline">{!employee ? "Add new employee": "✏"}</Button></DialogTrigger>
+    <Dialog onOpenChange={(open) => !open && setIsreadOnly(!!employee)}>
+      <DialogTrigger asChild><Button variant={variant} className="px-2">{!employee ? "Add new employee": <PencilIcon />}</Button></DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="pb-4">{!employee ? "Add new employee": <>Your employee {isReadOnly && <Button variant={"ghost"} onClick={() => setIsreadOnly(!isReadOnly)} > ✏ </Button>} </>}</DialogTitle>
+          <DialogTitle className="pb-4">{!employee ? "Add new employee": <>Your employee {isReadOnly && <Button variant={"ghost"} onClick={() => setIsreadOnly(!isReadOnly)} > <PencilIcon /> </Button>} </>}</DialogTitle>
           <DialogDescription>
             <EmployeeForm employee={employee} isReadOnly={isReadOnly} />
           </DialogDescription>
@@ -195,7 +231,7 @@ const Employees = () => {
     <div className="flex flex-col gap-6">
         <h1 className="text-3xl"> Your Employees </h1>
         <div className="self-start w-full max-w-xl">
-            <ModalFormEmployee />
+            <ModalFormEmployee variant="outline" />
         </div>
         <DataTable columns={columns} data={employees} />
       </div>
