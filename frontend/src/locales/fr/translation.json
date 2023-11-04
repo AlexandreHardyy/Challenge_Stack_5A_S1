@@ -11,10 +11,7 @@
     "menu": {
       "services": "Services",
       "FAQ": "FAQ",
-      "about": "À propos",
-      "dashboard": "Dashboard",
-      "employees": "Mes employés",
-      "agencies": "Mes agences"
+      "about": "À propos"
     },
     "cta": {
       "signIn": "Se connecter",
