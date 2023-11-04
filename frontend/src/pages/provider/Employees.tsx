@@ -16,6 +16,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { useState } from "react"
+import { PencilIcon } from "lucide-react"
+import { SelectMultiple } from "@/components/select-multiple"
 
 type Employee = {
   id: string
@@ -23,9 +25,25 @@ type Employee = {
   lastname: string
   email: string
   phone: string
+  agencies?: string[]
 }
 
-export const employees: Employee[] = [
+const AGENCIES = [
+  {
+    value: "paris",
+    label: "Paris",
+  },
+  {
+    value: "marseille",
+    label: "Marseille",
+  },
+  {
+    value: "chatou",
+    label: "Chatou",
+  },
+]
+
+const employees: Employee[] = [
   {
     id: "728ed52f",
     firstname: "noe",
@@ -105,6 +123,7 @@ const employeeFormSchema = z.object({
     message: "FirstName must be at least 2 characters.",
   }),
   phone: z.string(),
+  agencies: z.array(z.string()),
 })
 
 const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnly: boolean }) => {
@@ -115,6 +134,7 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnl
       firstname: employee?.firstname ?? "",
       lastname: employee?.lastname ?? "",
       phone: employee?.phone ?? "",
+      agencies: employee?.agencies ?? [],
     },
   })
 
@@ -177,20 +197,40 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnl
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isReadOnly}>
-          Add employee
-        </Button>
+        <FormField
+          control={form.control}
+          name="agencies"
+          render={() => {
+            return (
+              <FormItem>
+                <FormLabel>Agencies</FormLabel>
+                <FormControl>
+                  <SelectMultiple
+                    onChange={(values) => form.setValue("agencies", values)}
+                    data={AGENCIES}
+                    placeholder="Select agency where the employee works..."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+
+        {!isReadOnly && <Button type="submit">{employee ? "Update employee" : "Add employee"}</Button>}
       </form>
     </Form>
   )
 }
 
-const ModalFormEmployee = ({ employee }: { employee?: Employee }) => {
+const ModalFormEmployee = ({ employee, variant = "ghost" }: { employee?: Employee; variant?: "ghost" | "outline" }) => {
   const [isReadOnly, setIsreadOnly] = useState(!!employee)
   return (
-    <Dialog>
-      <DialogTrigger>
-        <Button variant="outline">{!employee ? "Add new employee" : "✏"}</Button>
+    <Dialog onOpenChange={(open) => !open && setIsreadOnly(!!employee)}>
+      <DialogTrigger asChild>
+        <Button variant={variant} className="px-2">
+          {!employee ? "Add new employee" : <PencilIcon />}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -203,7 +243,7 @@ const ModalFormEmployee = ({ employee }: { employee?: Employee }) => {
                 {isReadOnly && (
                   <Button variant={"ghost"} onClick={() => setIsreadOnly(!isReadOnly)}>
                     {" "}
-                    ✏{" "}
+                    <PencilIcon />{" "}
                   </Button>
                 )}{" "}
               </>
@@ -223,7 +263,7 @@ const Employees = () => {
     <div className="flex flex-col gap-6">
       <h1 className="text-3xl"> Your Employees </h1>
       <div className="self-start w-full max-w-xl">
-        <ModalFormEmployee />
+        <ModalFormEmployee variant="outline" />
       </div>
       <DataTable columns={columns} data={employees} />
     </div>
