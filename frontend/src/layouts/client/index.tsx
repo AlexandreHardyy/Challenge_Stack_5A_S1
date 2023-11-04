@@ -1,6 +1,6 @@
-import Header from "../components/Header.tsx";
+import Header from "./Header.js";
 import { Outlet } from "react-router-dom";
-import Footer from "@/components/Footer.tsx";
+import Footer from "@/layouts/client/Footer.tsx";
 
 const ClientLayout = () => {
   return (

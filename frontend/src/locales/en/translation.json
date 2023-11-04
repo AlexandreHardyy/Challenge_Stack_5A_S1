@@ -15,7 +15,16 @@
     },
     "cta": {
       "signIn": "Sign in",
-      "signUp": "Sign up"
+      "signUp": "Sign up",
+      "logOut": "Log out",
+      "profile": "My profile"
+    }
+  },
+  "sideHeader": {
+    "menu": {
+      "dashboard": "Dashboard",
+      "employees": "My employees",
+      "agencies": "My agencies"
     }
   }
 }

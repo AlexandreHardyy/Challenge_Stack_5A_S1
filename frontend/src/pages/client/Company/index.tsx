@@ -7,7 +7,7 @@ import { AgencyList } from "./driving-school-list";
 import { Ratings } from "./ratings";
 import { Company } from "@/utils/types";
 
-export function CompanyPage () {
+const CompanyPage = () => {
   const { companyId } = useParams()
   
   const url = `${import.meta.env.VITE_API_URL}companies/${companyId}`
@@ -90,3 +90,5 @@ export function CompanyPage () {
     </div>
   )
 }
+
+export default CompanyPage;

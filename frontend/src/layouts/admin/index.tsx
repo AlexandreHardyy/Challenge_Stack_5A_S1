@@ -1,11 +1,11 @@
-import Header from "../components/Header.tsx";
+import SideHeader from "@/layouts/admin/SideHeader";
 import { Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
   return (
     <>
-      <Header />
-      <main className="p-6 mt-6 h-full m-h-[100vh]">
+      <SideHeader />
+      <main className="p-6 mt-6 h-full m-h-[100vh] pl-64">
         <Outlet />
       </main>
     </>
