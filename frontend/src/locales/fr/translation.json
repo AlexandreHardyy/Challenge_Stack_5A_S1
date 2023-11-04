@@ -15,7 +15,16 @@
     },
     "cta": {
       "signIn": "Se connecter",
-      "signUp": "S'inscrire"
+      "signUp": "S'inscrire",
+      "logOut": "Se déconnecter",
+      "profile": "Mon profil"
+    },
+    "sideHeader": {
+      "menu": {
+        "dashboard": "Dashboard",
+        "employees": "Mes employés",
+        "agencies": "Mes agences"
+      }
     }
   }
 }
