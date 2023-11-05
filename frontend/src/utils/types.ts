@@ -5,7 +5,7 @@ export interface Company {
   kbis: string
   phoneNumber: string
   description: string
-  locations: Agency[]
+  agencies: Agency[]
   isVerified: boolean
   createdAt: string
   updatedAt: string
@@ -14,7 +14,27 @@ export interface Company {
 export interface Agency {
   id: number
   name: string
-  adresse: string
+  description?: string
+  address: string
   city: string
   zip: string
+  company: {
+    id: number,
+    categories: Category[]
+  },
+  services: Service[]
+}
+
+export interface Category {
+  id: number,
+  name: string
+}
+
+export interface Service {
+  id: number,
+  name: string,
+  description?: string,
+  duration: number,
+  price: number,
+  category: Category
 }

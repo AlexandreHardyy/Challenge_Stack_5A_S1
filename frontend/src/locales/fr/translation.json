@@ -26,5 +26,26 @@
         "agencies": "Mes agences"
       }
     }
+  },
+  "companyClient": {
+    "section1": {
+      "overallRating": "Note globale",
+      "ratings": "avis"
+    },
+    "section2": {
+      "ourDrivingSchools": "Nos auto-écoles",
+      "searchBarPlaceholder": "Ville ou code postale",
+      "researchCta": "Rechercher"
+    }
+  },
+  "agencyClient": {
+    "ratings": "avis",
+    "gallery": "Galerie",
+    "location": "Localisation",
+    "ourInstructors": "Nos moniteurs"
+  },
+  "ratingsComponent": {
+    "ratings": "Avis",
+    "seeMore": "Voir plus"
   }
 }
