@@ -26,5 +26,26 @@
       "employees": "My employees",
       "agencies": "My agencies"
     }
-  }
+  },
+  "companyClient": {
+    "section1": {
+      "overallRating": "Overall rating",
+      "ratings": "ratings"
+    },
+    "section2": {
+      "ourDrivingSchools": "Our driving schools",
+      "searchBarPlaceholder": "City or zip code",
+      "researchCta": "Research"
+    }
+  },
+  "agencyClient": {
+    "ratings": "ratings",
+    "gallery": "Gallery",
+    "location": "Location",
+    "ourInstructors": "Our instructors"
+  },
+  "ratingsComponent": {
+    "ratings": "Ratings",
+    "seeMore": "See more"
+  } 
 }

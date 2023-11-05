@@ -1,11 +1,14 @@
 import { Agency } from "@/utils/types"
+import { Link, useParams } from "react-router-dom"
 
 export function AgencyList ({agencies}: { agencies?: Agency[] }) {
+  const { companyId } = useParams()
+
   return (
     <div className="flex flex-col gap-[20px] w-[42%] h-[500px] overflow-scroll">
       {agencies?.map(agency=> {
         return (
-          <div className="flex gap-[15px] h-[159px] p-[20px] bg-background rounded-[8px] mr-[20px]">
+          <div key={agency.id} className="flex gap-[15px] h-[159px] p-[20px] bg-background rounded-[8px] mr-[20px]">
             <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 70 70" fill="none">
               <circle cx="35" cy="35" r="35" fill="#E4E4E7"/>
             </svg>
@@ -17,7 +20,7 @@ export function AgencyList ({agencies}: { agencies?: Agency[] }) {
                     <path d="M0.5 7.5C0.5 3.63401 3.63401 0.5 7.5 0.5C11.366 0.5 14.5 3.63401 14.5 7.5C14.5 8.67196 14.2124 9.77529 13.7043 10.7447L7.5 20.0956L1.29569 10.7447C0.787611 9.77529 0.5 8.67196 0.5 7.5Z" stroke="#333333"/>
                     <circle cx="7.5" cy="7.5" r="3" stroke="#333333"/>
                   </svg>
-                  <p className="underline">{agency.adresse}, {agency.zip}{agency.city}</p>
+                  <p className="underline">{agency.address}, {agency.zip} {agency.city}</p>
                 </div>
                 <div className="flex items-center gap-1">
                   <p>2,5</p>
@@ -39,7 +42,7 @@ export function AgencyList ({agencies}: { agencies?: Agency[] }) {
                   <p>(54 avis)</p>
                 </div>
               </div>
-              <a className="font-semibold underline">Consulter la page</a>
+              <p className="font-semibold underline"><Link to={`/companies/${companyId}/agencies/${agency.id}`}>Consulter la page</Link></p>
             </div>
           </div>
         )
