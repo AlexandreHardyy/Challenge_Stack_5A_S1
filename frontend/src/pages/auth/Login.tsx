@@ -1,4 +1,4 @@
-import LoginForm from "@/components/form/LoginForm.tsx";
+import LoginForm from "@/components/form/LoginForm.tsx"
 
 const Login = () => {
   return (
@@ -8,7 +8,7 @@ const Login = () => {
         <LoginForm />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

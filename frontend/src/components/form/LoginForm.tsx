@@ -1,21 +1,14 @@
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button.tsx";
+import * as z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button.tsx"
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string(),
-});
+})
 
 const LoginForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -24,11 +17,11 @@ const LoginForm = () => {
       email: "",
       password: "",
     },
-  });
+  })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  };
+    console.log(values)
+  }
 
   return (
     <>
@@ -64,7 +57,7 @@ const LoginForm = () => {
         </form>
       </Form>
     </>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm

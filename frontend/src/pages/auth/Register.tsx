@@ -1,4 +1,4 @@
-import RegisterForm from "@/components/form/ResgisterForm.tsx";
+import RegisterForm from "@/components/form/ResgisterForm.tsx"
 
 const Register = () => {
   return (
@@ -8,7 +8,7 @@ const Register = () => {
         <RegisterForm />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

@@ -1,6 +1,6 @@
-import Header from "./Header.js";
-import { Outlet } from "react-router-dom";
-import Footer from "@/layouts/client/Footer.tsx";
+import Header from "./Header.js"
+import { Outlet } from "react-router-dom"
+import Footer from "@/layouts/client/Footer.tsx"
 
 const ClientLayout = () => {
   return (
@@ -11,7 +11,7 @@ const ClientLayout = () => {
       </main>
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default ClientLayout;
+export default ClientLayout

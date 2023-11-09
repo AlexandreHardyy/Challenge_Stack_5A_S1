@@ -1,18 +1,11 @@
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button.tsx";
-import { Checkbox } from "@/components/ui/checkbox.tsx";
-import { Link } from "react-router-dom";
+import * as z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button.tsx"
+import { Checkbox } from "@/components/ui/checkbox.tsx"
+import { Link } from "react-router-dom"
 
 const formSchema = z
   .object({
@@ -22,10 +15,7 @@ const formSchema = z
     password: z
       .string()
       .min(8)
-      .regex(
-        /^(?=.*[a-zA-Z])(?=.*\d)/,
-        "Must contain at least one letter and one number",
-      ),
+      .regex(/^(?=.*[a-zA-Z])(?=.*\d)/, "Must contain at least one letter and one number"),
     passwordConfirmation: z.string(),
     cgu: z.boolean(),
   })
@@ -36,7 +26,7 @@ const formSchema = z
   .refine((data) => data.cgu, {
     message: "You must accept the CGU",
     path: ["cgu"],
-  });
+  })
 
 const RegisterForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,11 +39,11 @@ const RegisterForm = () => {
       passwordConfirmation: "",
       cgu: false,
     },
-  });
+  })
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  };
+    console.log(values)
+  }
 
   return (
     <>
@@ -130,10 +120,7 @@ const RegisterForm = () => {
             render={({ field }) => (
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                 <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel>
@@ -151,7 +138,7 @@ const RegisterForm = () => {
         </form>
       </Form>
     </>
-  );
-};
+  )
+}
 
-export default RegisterForm;
+export default RegisterForm
