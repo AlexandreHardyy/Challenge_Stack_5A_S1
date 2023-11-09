@@ -1,4 +1,4 @@
-import LanguageSelector from "@/components/LanguageSelector.tsx";
+import LanguageSelector from "@/components/LanguageSelector.tsx"
 
 const Footer = () => {
   return (
@@ -15,7 +15,7 @@ const Footer = () => {
         <p>roadwise@gmail.com</p>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

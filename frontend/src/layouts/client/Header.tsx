@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button.tsx";
-import { Link } from "react-router-dom";
-import { ModeToggle } from "@/components/Mode-toggle.tsx";
-import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button.tsx"
+import { Link } from "react-router-dom"
+import { ModeToggle } from "@/components/Mode-toggle.tsx"
+import { useTranslation } from "react-i18next"
 
 const Header = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   return (
     <header className="flex px-8 py-4 items-center justify-between sticky top-0 bg-background drop-shadow-md z-50">
       <h1>RodeWise</h1>
@@ -29,7 +29,7 @@ const Header = () => {
         </Button>
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

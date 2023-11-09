@@ -1,5 +1,5 @@
-import SideHeader from "@/layouts/admin/SideHeader";
-import { Outlet } from "react-router-dom";
+import SideHeader from "@/layouts/admin/SideHeader"
+import { Outlet } from "react-router-dom"
 
 const AdminLayout = () => {
   return (
@@ -9,7 +9,7 @@ const AdminLayout = () => {
         <Outlet />
       </main>
     </>
-  );
-};
+  )
+}
 
-export default AdminLayout;
+export default AdminLayout

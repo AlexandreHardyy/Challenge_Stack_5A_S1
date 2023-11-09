@@ -19,22 +19,22 @@ export interface Agency {
   city: string
   zip: string
   company: {
-    id: number,
+    id: number
     categories: Category[]
-  },
+  }
   services: Service[]
 }
 
 export interface Category {
-  id: number,
+  id: number
   name: string
 }
 
 export interface Service {
-  id: number,
-  name: string,
-  description?: string,
-  duration: number,
-  price: number,
+  id: number
+  name: string
+  description?: string
+  duration: number
+  price: number
   category: Category
 }

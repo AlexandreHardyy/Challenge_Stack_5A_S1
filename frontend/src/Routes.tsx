@@ -1,18 +1,18 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
-import AdminLayout from "@/layouts/admin";
-import ClientLayout from "@/layouts/client";
+import AdminLayout from "@/layouts/admin"
+import ClientLayout from "@/layouts/client"
 
-import Landing from "@/pages/Landing";
-import NotFound from "@/pages/NotFound";
-import HomeAdmin from "@/pages/admin/HomeAdmin";
-import HomeProvider from "@/pages/provider/HomeProvider";
-import Employees from "@/pages/provider/Employees";
-import Login from "@/pages/auth/Login.tsx";
-import Register from "@/pages/auth/Register.tsx";
-import Terms from "@/pages/Terms.tsx";
-import CompanyClient from "@/pages/client/Company";
-import AgencyClient from "./pages/client/Company/Agency";
+import Landing from "@/pages/Landing"
+import NotFound from "@/pages/NotFound"
+import HomeAdmin from "@/pages/admin/HomeAdmin"
+import HomeProvider from "@/pages/provider/HomeProvider"
+import Employees from "@/pages/provider/Employees"
+import Login from "@/pages/auth/Login.tsx"
+import Register from "@/pages/auth/Register.tsx"
+import Terms from "@/pages/Terms.tsx"
+import CompanyClient from "@/pages/client/Company"
+import AgencyClient from "./pages/client/Company/Agency"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -37,12 +37,12 @@ const Routes = () => {
         },
         {
           path: "/companies/:companyId",
-          element: <CompanyClient />
+          element: <CompanyClient />,
         },
         {
           path: "/companies/:companyId/agencies/:agencyId",
-          element: <AgencyClient />
-        }
+          element: <AgencyClient />,
+        },
       ],
       errorElement: <NotFound />,
     },
@@ -64,9 +64,9 @@ const Routes = () => {
       ],
       errorElement: <NotFound />,
     },
-  ]);
+  ])
 
-  return <RouterProvider router={router} />;
-};
+  return <RouterProvider router={router} />
+}
 
-export default Routes;
+export default Routes

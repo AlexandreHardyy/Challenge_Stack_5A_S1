@@ -1,8 +1,8 @@
 const HomeClient = () => {
   return (
     <div>
-    <h1>Welcome to Home Client</h1>
-  </div>
+      <h1>Welcome to Home Client</h1>
+    </div>
   )
 }
 
