@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { computeServiceDuration } from "@/utils/helpers"
 import { Service } from "@/utils/types"
-
+import { Link, useParams } from "react-router-dom"
 interface servicesGroupedByCategory {
   categoryName: string
   services: Service[]
 }
 
-export function ServiceList({ services }: { services: Service[] }) {
-  const servicesGroupedByCategory = services.reduce((acc: servicesGroupedByCategory[], curr) => {
+function groupServicesByCategory(services: Service[]) {
+  return services.reduce((acc: servicesGroupedByCategory[], curr) => {
     const index = acc.findIndex((elem) => elem.categoryName === curr.category.name)
     if (index !== -1) {
       acc[index].services = [...acc[index].services, curr]
@@ -21,6 +22,12 @@ export function ServiceList({ services }: { services: Service[] }) {
 
     return acc
   }, [])
+}
+
+export function ServiceList({ services }: { services: Service[] }) {
+  const { companyId, agencyId } = useParams()
+
+  const servicesGroupedByCategory = groupServicesByCategory(services)
 
   return (
     <div className="flex flex-col gap-[30px]">
@@ -38,11 +45,11 @@ export function ServiceList({ services }: { services: Service[] }) {
                         <p className="mt-[5px] text-[16px]">{service.description}</p>
                       </div>
                       <div className="flex gap-[35px] items-center">
-                        <p className="text-[20px] font-bold">
-                          {service.duration >= 1 ? `${service.duration}h` : `${service.duration * 60}min`}
-                        </p>
+                        <p className="text-[20px] font-bold">{computeServiceDuration(service.duration)}</p>
                         <p className="text-[20px] font-bold">{service.price} €</p>
-                        <Button className="bg-primary">Réserver</Button>
+                        <Link to={`/companies/${companyId}/agencies/${agencyId}/services/${service.id}`}>
+                          <Button className="bg-primary">Réserver</Button>
+                        </Link>
                       </div>
                     </div>
                     {index !== category.services.length - 1 && <Separator className="my-[20px] bg-grey-medium" />}

@@ -13,7 +13,8 @@ import Register from "@/pages/auth/Register.tsx"
 import Terms from "@/pages/Terms.tsx"
 import CompanyClient from "@/pages/client/Company"
 import AgencyClient from "./pages/client/Company/Agency"
-import Agencies from "@/pages/provider/Agencies"
+import ServiceClient from "./pages/client/Company/Agency/Service"
+import Agencies from "./pages/provider/Agencies"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -43,6 +44,10 @@ const Routes = () => {
         {
           path: "/companies/:companyId/agencies/:agencyId",
           element: <AgencyClient />,
+        },
+        {
+          path: "/companies/:companyId/agencies/:agencyId/services/:serviceId",
+          element: <ServiceClient />,
         },
       ],
       errorElement: <NotFound />,

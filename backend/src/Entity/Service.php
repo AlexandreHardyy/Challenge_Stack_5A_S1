@@ -3,13 +3,31 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\ServiceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    uriTemplate: '/agencies/{agencyId}/services/{serviceId}',
+    operations: [
+        new Get(
+            openapi: new Operation(
+                tags: [ 'Service', 'Agency' ],
+                summary: 'Returns a service of an agency',
+                description: 'Returns a single service of an agency by providinf the agencyId and the serviceId'
+            )
+        )
+    ],
+    uriVariables: [
+        'agencyId' => new Link(toProperty: 'agency', fromClass: Agency::class),
+        'serviceId' => new Link(fromClass: Service::class)
+    ]
+)]
 class Service
 {
     #[ORM\Id]

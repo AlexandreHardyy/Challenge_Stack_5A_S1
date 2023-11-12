@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\AgencyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -28,26 +29,36 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     uriTemplate: '/companies/{id}/agencies',
     operations: [
-        new GetCollection(description: 'Retrieves all agencies of a Company'),
-        new Post(description: 'Create a new agency for a Company')
+        new GetCollection(
+            openapi: new Operation(
+                tags: [ 'Agency', 'Company' ],
+                summary: 'Returns a list of agencies for a specific company',
+                description: 'Returns a list of agencies for a specific company'
+            )
+        ),
+        // new Post()
     ],
     uriVariables: [
         'id' => new Link(toProperty: 'company', fromClass: Company::class)
-    ],
-    shortName: 'Company'
+    ]
 )]
 #[ApiResource(
     normalizationContext:['groups' => ['agency-group-read']],
-    uriTemplate: '/companies/{idCompany}/agencies/{idAgency}',
+    uriTemplate: '/companies/{companyId}/agencies/{agencyId}',
     operations: [
-        new Get(description: 'Retrieves an agency of a Company'),
-        new Patch()
+        new Get(
+            openapi: new Operation(
+                tags: [ 'Agency', 'Company' ],
+                summary: 'Returns one of the agencies of a company',
+                description: 'Returns a single agency of a company by providing the companyId and the agencyId'
+            )
+        ),
+        // new Patch()
     ],
     uriVariables: [
-        'idCompany' => new Link(toProperty: 'company', fromClass: Company::class),
-        'idAgency' => new Link(fromClass: Agency::class)
-    ],
-    shortName: 'Company'
+        'companyId' => new Link(toProperty: 'company', fromClass: Company::class),
+        'agencyId' => new Link(fromClass: Agency::class)
+    ]
 )]
 class Agency
 {
