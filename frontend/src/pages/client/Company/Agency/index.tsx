@@ -6,12 +6,10 @@ import { Ratings } from "@/components/ratings"
 import { useTranslation } from "react-i18next"
 import { ServiceList } from "./service-list"
 
-function AgencyClient() {
-  const { companyId, agencyId } = useParams()
-  const { t } = useTranslation()
-
+function useFetchAgency(companyId?: string, agencyId?: string) {
   const url = `${import.meta.env.VITE_API_URL}companies/${companyId}/agencies/${agencyId}`
-  const request = useQuery<Agency>(
+
+  return useQuery<Agency>(
     ["getAgency", url],
     async () => {
       const response = await fetch(url)
@@ -25,13 +23,20 @@ function AgencyClient() {
       retry: false,
     }
   )
+}
+
+function AgencyClient() {
+  const { companyId, agencyId } = useParams()
+  const { t } = useTranslation()
+
+  const request = useFetchAgency(companyId, agencyId)
 
   if (request.status === "error") {
     return <h1>WTFFFFF</h1>
   }
 
   return (
-    <div className="flex flex-col gap-[50px] mt-[60px] mb-[83px] text-grey-dark">
+    <div className="flex flex-col gap-[50px] mt-[60px] mb-[83px]">
       <section className="w-[80%] mx-auto md:w-full md:mx-0">
         <h1 className="text-[64px] font-bold ">{request.data?.name}</h1>
         <div className="flex items-center gap-1">

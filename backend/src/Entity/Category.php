@@ -16,23 +16,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     uriTemplate: '/companies/{id}/categories',
     operations: [
-        new Post(description: 'Create a new category for a Company')
+        // new Post()
     ],
     uriVariables: [
         'id' => new Link(toProperty: 'company', fromClass: Company::class)
-    ],
-    shortName: 'Company'
+    ]
 )]
 #[ApiResource(
     uriTemplate: '/companies/{idCompany}/categories/{idCategory}',
     operations: [
-        new Patch()
+        // new Patch()
     ],
     uriVariables: [
         'idCompany' => new Link(toProperty: 'company', fromClass: Company::class),
         'idCategory' => new Link(fromClass: Category::class)
-    ],
-    shortName: 'Company'
+    ]
 )]
 class Category
 {

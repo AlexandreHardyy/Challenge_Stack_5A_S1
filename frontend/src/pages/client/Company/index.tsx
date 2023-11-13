@@ -8,12 +8,10 @@ import { Company } from "@/utils/types"
 import { Ratings } from "@/components/ratings"
 import { useTranslation } from "react-i18next"
 
-function CompanyClient() {
-  const { companyId } = useParams()
-  const { t } = useTranslation()
-
+function useFetchCompany(companyId?: string) {
   const url = `${import.meta.env.VITE_API_URL}companies/${companyId}`
-  const request = useQuery<Company>(
+
+  return useQuery<Company>(
     ["getCompany", url],
     async () => {
       const response = await fetch(url)
@@ -27,13 +25,20 @@ function CompanyClient() {
       retry: false,
     }
   )
+}
+
+function CompanyClient() {
+  const { companyId } = useParams()
+  const { t } = useTranslation()
+
+  const request = useFetchCompany(companyId)
 
   if (request.status === "error") {
     return <h1>WTFFFFF</h1>
   }
 
   return (
-    <div className="flex flex-col gap-[37px] mt-[60px] mb-[83px] text-grey-dark">
+    <div className="flex flex-col gap-[37px] mt-[60px] mb-[83px]">
       <section className="flex justify-between w-[80%] mx-auto gap-[226px] md:w-full md:mx-0">
         <div className="flex flex-col justify-between">
           <div>
