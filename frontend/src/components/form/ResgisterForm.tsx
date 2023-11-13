@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { Link } from "react-router-dom";
+import { Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext.tsx";
 
 const formSchema = z
   .object({
@@ -39,6 +41,8 @@ const formSchema = z
   });
 
 const RegisterForm = () => {
+  const auth = useAuth();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,8 +55,13 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    await auth.signUp({
+      firstname: values.firstname,
+      lastname: values.lastname,
+      email: values.email,
+      password: values.password,
+    });
   };
 
   return (
@@ -147,7 +156,12 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Create my account</Button>
+          <Button disabled={auth.isLoadingRegister} type="submit">
+            {auth.isLoadingRegister && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Create my account
+          </Button>
         </form>
       </Form>
     </>

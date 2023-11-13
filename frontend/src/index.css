@@ -50,7 +50,7 @@
   }
 }
 
- 
+
 @layer base {
   * {
     @apply border-border;
@@ -67,6 +67,11 @@ html, body {
 
 html {
   height: 100vh;
+}
+
+#root {
+  position: relative;
+  min-height: 100vh;
 }
 
 ul {

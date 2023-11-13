@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button.tsx";
+import { Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext.tsx";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -18,6 +20,8 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
+  const auth = useAuth();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -26,8 +30,12 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await auth.signIn(values.email, values.password);
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -54,13 +62,18 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} type="password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Log in</Button>
+          <Button disabled={auth.isLoadingLogin} type="submit">
+            {auth.isLoadingLogin && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Log in
+          </Button>
         </form>
       </Form>
     </>
