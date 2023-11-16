@@ -55,9 +55,7 @@ const Landing = () => {
         </div>
       </section>
       <section className="w-full px-8 py-8 flex justify-between items-center flex-col gap-8">
-        <h1 className="font-semibold text-2xl leading-relaxed">
-          {t("landing.newProvider.title")}
-        </h1>
+        <h1 className="font-semibold text-2xl leading-relaxed">{t("landing.newProvider.title")}</h1>
         <Button>
           <Link to="/provider/new">{t("landing.newProvider.cta")}</Link>
         </Button>

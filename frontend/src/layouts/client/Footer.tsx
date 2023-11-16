@@ -1,8 +1,8 @@
-import LanguageSelector from "@/components/LanguageSelector.tsx";
-import { useTranslation } from "react-i18next";
+import LanguageSelector from "@/components/LanguageSelector.tsx"
+import { useTranslation } from "react-i18next"
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   return (
     <footer className="flex items-center justify-between px-8 py-4 bg-neutral-800 text-white h-28">
       <LanguageSelector />
