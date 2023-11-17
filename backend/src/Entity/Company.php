@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
-    normalizationContext:['groups' => ['company-group-read']],
+    normalizationContext:['groups' => ['group-read']],
     operations: [
         new GetCollection(),
         new Get(),
@@ -31,52 +31,47 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['group-read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read'])]
-    private ?string $name = null;
+    #[Groups(['group-read'])]
+    private ?string $socialReason = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read'])]
+    #[Groups(['group-read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['company-group-read'])]
+    #[Groups(['group-read'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read'])]
-    private ?string $kbis = null;
+    #[Groups(['group-read'])]
+    private ?string $siren = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['company-group-read'])]
+    #[Groups(['group-read'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['company-group-read'])]
+    #[Groups(['group-read'])]
     private ?bool $isVerified = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['company-group-read'])]
+    #[Groups(['group-read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Agency::class, orphanRemoval: true)]
-    #[Groups(['company-group-read'])]
-    private Collection $agencies;
-
-    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class, orphanRemoval: true)]
-    #[Groups(['company-group-read', 'agency-group-read'])]
-    private Collection $categories;
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Location::class, orphanRemoval: true)]
+    #[Groups(['group-read'])]
+    private Collection $locations;
 
     public function __construct()
     {
-        $this->agencies = new ArrayCollection();
-        $this->categories = new ArrayCollection();
+        $this->locations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,14 +79,14 @@ class Company
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getSocialReason(): ?string
     {
-        return $this->name;
+        return $this->socialReason;
     }
 
-    public function setName(string $name): static
+    public function setSocialReason(string $socialReason): static
     {
-        $this->name = $name;
+        $this->socialReason = $socialReason;
 
         return $this;
     }
@@ -120,14 +115,14 @@ class Company
         return $this;
     }
 
-    public function getKbis(): ?string
+    public function getSiren(): ?string
     {
-        return $this->kbis;
+        return $this->siren;
     }
 
-    public function setKbis(string $kbis): static
+    public function setSiren(string $siren): static
     {
-        $this->kbis = $kbis;
+        $this->siren = $siren;
 
         return $this;
     }
@@ -181,59 +176,29 @@ class Company
     }
 
     /**
-     * @return Collection<int, Agency>
+     * @return Collection<int, Location>
      */
-    public function getAgencies(): Collection
+    public function getLocations(): Collection
     {
-        return $this->agencies;
+        return $this->locations;
     }
 
-    public function addAgency(Agency $agency): static
+    public function addLocation(Location $location): static
     {
-        if (!$this->agencies->contains($agency)) {
-            $this->agencies->add($agency);
-            $agency->setCompany($this);
+        if (!$this->locations->contains($location)) {
+            $this->locations->add($location);
+            $location->setCompany($this);
         }
 
         return $this;
     }
 
-    public function removeAgency(Agency $agency): static
+    public function removeLocation(Location $location): static
     {
-        if ($this->agencies->removeElement($agency)) {
+        if ($this->locations->removeElement($location)) {
             // set the owning side to null (unless already changed)
-            if ($agency->getCompany() === $this) {
-                $agency->setCompany(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Category>
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Category $category): static
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-            $category->setCompany($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): static
-    {
-        if ($this->categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
-            if ($category->getCompany() === $this) {
-                $category->setCompany(null);
+            if ($location->getCompany() === $this) {
+                $location->setCompany(null);
             }
         }
 

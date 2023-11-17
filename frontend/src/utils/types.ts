@@ -2,7 +2,7 @@ export interface Company {
   id: number
   name: string
   email: string
-  kbis: string
+  siren: string
   phoneNumber: string
   description: string
   agencies: Agency[]

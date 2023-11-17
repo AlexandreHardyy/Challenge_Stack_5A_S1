@@ -15,6 +15,7 @@ import CompanyClient from "@/pages/client/Company"
 import AgencyClient from "./pages/client/Company/Agency"
 import ServiceClient from "./pages/client/Company/Agency/Service"
 import Agencies from "./pages/provider/Agencies"
+import NewProvider from "@/pages/provider/NewProvider.tsx"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -48,6 +49,10 @@ const Routes = () => {
         {
           path: "/companies/:companyId/agencies/:agencyId/services/:serviceId",
           element: <ServiceClient />,
+        },
+        {
+          path: "/provider/new",
+          element: <NewProvider />,
         },
       ],
       errorElement: <NotFound />,
