@@ -1,26 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   theme: {
     screens: {
-			xl: { max: "1279px" },
-			// => @media (max-width: 1279px) { ... }
+      xl: { max: "1279px" },
+      // => @media (max-width: 1279px) { ... }
 
-			lg: { max: "1023px" },
-			// => @media (max-width: 1023px) { ... }
+      lg: { max: "1023px" },
+      // => @media (max-width: 1023px) { ... }
 
-			md: { max: "767px" },
-			// => @media (max-width: 767px) { ... }
+      md: { max: "767px" },
+      // => @media (max-width: 767px) { ... }
 
-			sm: { max: "639px" },
-			// => @media (max-width: 639px) { ... }
-		},
+      sm: { max: "639px" },
+      // => @media (max-width: 639px) { ... }
+    },
     container: {
       center: true,
       padding: "2rem",
@@ -66,8 +61,8 @@ module.exports = {
         grey: {
           DEFAULT: "hsl(var(--grey))",
           medium: "hsl(var(--grey-medium))",
-          dark: "hsl(var(--grey-dark))"
-        }
+          dark: "hsl(var(--grey-dark))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -76,18 +71,18 @@ module.exports = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: 0 },
+          from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+          to: { height: "0" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-      }
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

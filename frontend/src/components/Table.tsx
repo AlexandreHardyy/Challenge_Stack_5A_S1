@@ -25,7 +25,7 @@ export function DataTable<TData, TValue>({ columns, data, isLoading }: DataTable
   }
 
   if (!data) {
-    return <div> An error occured while fetching </div>
+    return <div> An error occurred while fetching </div>
   }
 
   return (

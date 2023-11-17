@@ -65,6 +65,7 @@
       "errorAccountCreation": "An error has occurred during account creation. Please try again later."
     },
     "cta": {
+      "update": "Update",
       "submit": "Submit",
       "cancel": "Cancel",
       "createMyAccount": "Create my account"
@@ -74,6 +75,10 @@
       "saveProfile": "Save profile",
       "saveSuccess": "Your changes have been saved successfully.",
       "checkEmail": "Please check your email to confirm your account."
+    },
+    "search": {
+      "search": "Search",
+      "searchPlaceholder": "Search"
     }
   },
   "landing": {
@@ -145,8 +150,30 @@
         "title": "Agency",
         "successCreate": "agency created successfully",
         "successUpdate": "agency updated successfully",
-        "error": "an error occured while updating",
+        "error": "an error occurred while updating",
         "addressError": "Your address was not found"
+      }
+    }
+  },
+  "admin": {
+    "homeProvider": {
+      "selectAgencyPlaceholder": "Select an agency",
+      "selectAgencyAll": "All agencies",
+      "dashboard": "Dashboard",
+      "cards": {
+        "totalRevenue": "Total revenue",
+        "subscriptions": "Subscriptions",
+        "sales": "Sales"
+      },
+      "yourServices": {
+        "title": "All Your services",
+        "subtitle_zero": "You don't have any service yet",
+        "subtitle_one": "You have 1 service",
+        "subtitle_other": "You have {{count}} services",
+        "noServices": "No services yet"
+      },
+      "toast": {
+        "error": "Something went wrong with the request (getCompany). Please try again later."
       }
     }
   }
