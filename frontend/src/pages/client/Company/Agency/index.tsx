@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next"
 import { ServiceList } from "./service-list"
 import { Map } from "./map"
 
-function useFetchAgency(companyId?: string, agencyId?: string) {
-  const url = `${import.meta.env.VITE_API_URL}companies/${companyId}/agencies/${agencyId}`
+function useFetchAgency(agencyId?: string) {
+  const url = `${import.meta.env.VITE_API_URL}agencies/${agencyId}`
 
   return useQuery<Agency>(
     ["getAgency", url],
@@ -27,10 +27,10 @@ function useFetchAgency(companyId?: string, agencyId?: string) {
 }
 
 function AgencyClient() {
-  const { companyId, agencyId } = useParams()
+  const { agencyId } = useParams()
   const { t } = useTranslation()
 
-  const request = useFetchAgency(companyId, agencyId)
+  const request = useFetchAgency(agencyId)
 
   if (request.status === "error") {
     return <h1>WTFFFFF</h1>

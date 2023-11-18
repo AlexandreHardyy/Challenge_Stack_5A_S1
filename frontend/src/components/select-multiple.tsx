@@ -8,14 +8,16 @@ import { Command as CommandPrimitive } from "cmdk"
 type SelectData = Record<"value" | "label", string>
 
 type SelectProps = {
-  data: SelectData[]
+  options: SelectData[]
+  defaultData?: SelectData[]
   placeholder: string
+  disabled?: boolean
   onChange: (values: string[]) => void
 }
-export const SelectMultiple = ({ data, placeholder, onChange }: SelectProps) => {
+export const SelectMultiple = ({ options, defaultData = [], placeholder, onChange, disabled = false }: SelectProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<SelectData[]>([])
+  const [selected, setSelected] = useState<SelectData[]>(defaultData)
   const [inputValue, setInputValue] = useState("")
 
   useEffect(() => {
@@ -45,28 +47,28 @@ export const SelectMultiple = ({ data, placeholder, onChange }: SelectProps) => 
     }
   }, [])
 
-  const selectables = data.filter((framework) => !selected.includes(framework))
+  const selectables = options.filter((option) => !selected.includes(option))
 
   return (
     <Command onKeyDown={handleKeyDown} className="overflow-visible bg-transparent">
       <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <div className="flex gap-1 flex-wrap">
-          {selected.map((framework) => {
+          {selected.map((option) => {
             return (
-              <Badge key={framework.value} variant="secondary">
-                {framework.label}
+              <Badge key={option.value} variant="secondary">
+                {option.label}
                 <button
                   className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      handleUnselect(framework)
+                      handleUnselect(option)
                     }
                   }}
                   onMouseDown={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
                   }}
-                  onClick={() => handleUnselect(framework)}
+                  onClick={() => handleUnselect(option)}
                 >
                   <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                 </button>
@@ -81,6 +83,7 @@ export const SelectMultiple = ({ data, placeholder, onChange }: SelectProps) => 
             onBlur={() => setOpen(false)}
             onFocus={() => setOpen(true)}
             placeholder={placeholder}
+            disabled={disabled}
             className="ml-2 bg-transparent outline-none placeholder:text-muted-foreground flex-1"
           />
         </div>
@@ -89,21 +92,21 @@ export const SelectMultiple = ({ data, placeholder, onChange }: SelectProps) => 
         {open && selectables.length > 0 ? (
           <div className="absolute w-full z-10 top-0 rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
             <CommandGroup className="h-full overflow-auto">
-              {selectables.map((framework) => {
+              {selectables.map((option) => {
                 return (
                   <CommandItem
-                    key={framework.value}
+                    key={option.value}
                     onMouseDown={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
                     }}
                     onSelect={() => {
                       setInputValue("")
-                      setSelected((prev) => [...prev, framework])
+                      setSelected((prev) => [...prev, option])
                     }}
                     className={"cursor-pointer"}
                   >
-                    {framework.label}
+                    {option.label}
                   </CommandItem>
                 )
               })}

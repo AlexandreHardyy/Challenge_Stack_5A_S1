@@ -123,5 +123,29 @@
         "error": "An error has occurred. Please try again later."
       }
     }
+  },
+  "ProviderAgencies": {
+    "title": "My agencies",
+    "form": {
+      "name": "Name",
+      "address": "Address",
+      "city": "City",
+      "zip": "Zip Code",
+      "services": "Services",
+      "placeholders": {
+        "services": "Select services available at the agency"
+      },
+      "cta": {
+        "new": "Add new agency",
+        "update": "Update agency"
+      },
+      "toast": {
+        "title": "Agency",
+        "successCreate": "agency created successfully",
+        "successUpdate": "agency updated successfully",
+        "error": "an error occured while updating",
+        "addressError": "Your address was not found"
+      }
+    }
   }
 }
