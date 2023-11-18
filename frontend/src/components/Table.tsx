@@ -1,18 +1,32 @@
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Spinner } from "./loader/Spinner"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data?: TData[]
+  isLoading?: boolean
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, isLoading }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  if (isLoading) {
+    return (
+      <div className="w-full flex justify-center">
+        <Spinner />
+      </div>
+    )
+  }
+
+  if (!data) {
+    return <div> An error occured while fetching </div>
+  }
 
   return (
     <div className="rounded-md border">

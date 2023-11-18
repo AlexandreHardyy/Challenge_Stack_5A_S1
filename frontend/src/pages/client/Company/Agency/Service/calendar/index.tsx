@@ -75,7 +75,7 @@ export default function Calendar(props: CalendarProps) {
 
   useEffect(() => {
     setCalendarValues(computeCalendarHours(weekRange, granularity))
-  }, [weekRange])
+  }, [weekRange, granularity])
 
   return (
     <>

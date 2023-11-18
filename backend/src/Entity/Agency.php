@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
@@ -18,25 +17,44 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AgencyRepository::class)]
-// #[ApiResource(
-//     operations: [
-//         new GetCollection(),
-//         new Get(),
-//         new Delete(),
-//         new Patch()
-//     ]
-// )]
+#[ApiResource(
+    operations: [
+        new Get(
+            normalizationContext:['groups' => ['agency-group-read']],
+            openapi: new Operation(
+                tags: [ 'Agency' ],
+                summary: 'Returns agency by Id',
+                description: 'Returns a single agency provided by the id'
+            )
+        ),
+        new Patch(
+            openapi: new Operation(
+                tags: [ 'Agency' ],
+                summary: 'Update agency by Id',
+                description: 'Update agency provided by the id'
+            )
+        ),
+        new Post(
+            denormalizationContext: ['groups' => 'create-agency'],
+            openapi: new Operation(
+                tags: [ 'Agency' ],
+                summary: 'new agency',
+                description: 'Create a new agency for a company'
+            )
+        ),
+    ]
+)]
 #[ApiResource(
     uriTemplate: '/companies/{id}/agencies',
     operations: [
         new GetCollection(
+            normalizationContext:['groups' => ['agency-group-read']],
             openapi: new Operation(
                 tags: [ 'Agency', 'Company' ],
                 summary: 'Returns a list of agencies for a specific company',
                 description: 'Returns a list of agencies for a specific company'
             )
         ),
-        // new Post()
     ],
     uriVariables: [
         'id' => new Link(toProperty: 'company', fromClass: Company::class)
@@ -46,13 +64,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext:['groups' => ['agency-group-read']],
     uriTemplate: '/companies/{companyId}/agencies/{agencyId}',
     operations: [
-        new Get(
-            openapi: new Operation(
-                tags: [ 'Agency', 'Company' ],
-                summary: 'Returns one of the agencies of a company',
-                description: 'Returns a single agency of a company by providing the companyId and the agencyId'
-            )
-        ),
         // new Patch()
     ],
     uriVariables: [
@@ -69,15 +80,15 @@ class Agency
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
     private ?string $zip = null;
 
     #[ORM\Column]
@@ -90,23 +101,23 @@ class Agency
 
     #[ORM\ManyToOne(inversedBy: 'agencies')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['agency-group-read'])]
+    #[Groups(['agency-group-read', 'create-agency'])]
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['agency-group-read'])]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Service::class, orphanRemoval: true)]
-    #[Groups(['agency-group-read'])]
+    #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'agencies')]
+    #[Groups(['agency-group-read', 'create-agency'])]
     private Collection $services;
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY)]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
     private array $geoloc = [];
 
     public function __construct()
@@ -114,6 +125,18 @@ class Agency
         $this->services = new ArrayCollection();
     }
 
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -227,7 +250,7 @@ class Agency
     {
         if (!$this->services->contains($service)) {
             $this->services->add($service);
-            $service->setAgency($this);
+            $service->addAgency($this);
         }
 
         return $this;
@@ -236,10 +259,7 @@ class Agency
     public function removeService(Service $service): static
     {
         if ($this->services->removeElement($service)) {
-            // set the owning side to null (unless already changed)
-            if ($service->getAgency() === $this) {
-                $service->setAgency(null);
-            }
+            $service->removeAgency($this);
         }
 
         return $this;

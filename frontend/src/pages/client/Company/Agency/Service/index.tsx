@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom"
 import { computeServiceDuration } from "@/utils/helpers"
 import Calendar from "./calendar"
 
-function useFetchService(agencyId?: string, serviceId?: string) {
-  const url = `${import.meta.env.VITE_API_URL}agencies/${agencyId}/services/${serviceId}`
+function useFetchService(serviceId?: string) {
+  const url = `${import.meta.env.VITE_API_URL}services/${serviceId}`
 
   return useQuery<Service>(
     ["getService", url],
@@ -24,9 +24,9 @@ function useFetchService(agencyId?: string, serviceId?: string) {
 }
 
 export default function ServiceClient() {
-  const { agencyId, serviceId } = useParams()
+  const { serviceId } = useParams()
 
-  const request = useFetchService(agencyId, serviceId)
+  const request = useFetchService(serviceId)
 
   if (request.status === "error") {
     return <h1>WTFFFFF</h1>

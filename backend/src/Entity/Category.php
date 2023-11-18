@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\Metadata\Link;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Post;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,7 +16,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     uriTemplate: '/companies/{id}/categories',
     operations: [
-        // new Post()
+        new GetCollection(
+            normalizationContext:['groups' => ['categories-group-read']],
+            openapi: new Operation(
+                tags: [ 'Categories' ],
+                summary: 'Returns a service of an agency',
+                description: 'Returns categories of a company'
+            )
+        )
     ],
     uriVariables: [
         'id' => new Link(toProperty: 'company', fromClass: Company::class)
@@ -37,17 +44,18 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'categories-group-read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'categories-group-read'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Company $company = null;
 
+    #[Groups(['categories-group-read'])]
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Service::class, orphanRemoval: true)]
     private Collection $services;
 

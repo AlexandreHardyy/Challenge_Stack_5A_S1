@@ -4,6 +4,10 @@ api_platform:
     description: This is a sample API built with API Platform
     show_webby: false
 
+    patch_formats:
+        json:     ['application/merge-patch+json']
+        jsonapi:  ['application/vnd.api+json']
+
     defaults:
         stateless: true
         cache_headers:
