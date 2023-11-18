@@ -1,0 +1,19 @@
+name: Notification on pull_request
+
+on:
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Discord notification
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        DISCORD_USERNAME: La Mama Github
+        DISCORD_AVATAR: https://www.parismatch.com/lmnr/var/pm/public/media/image/2022/03/02/07/La-Cuisine-des-Mousquetaires-Que-devient-la-cuisiniere-Maite.jpg?VersionId=Bx1BN4WaCcUbOhuMd3mq5Y9ijidHeqJm
+      uses: Ilshidur/action-discord@master
+      with:
+        args: 'A new pull request has been opened to ${{ github.repository }}: ${{ ${{ github.event.pull_request.title }} }} .'
