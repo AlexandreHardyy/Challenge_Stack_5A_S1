@@ -20,79 +20,7 @@ import { PencilIcon } from "lucide-react"
 import { Agency, Service } from "@/utils/types"
 import { SelectMultiple } from "@/components/select-multiple"
 
-const AGENCIES: Agency[] = [
-  {
-    id: 1,
-    address: "rue des connards",
-    city: "goatam",
-    zip: "78500",
-    name: "Les pecq nos",
-    company: {
-      id: 1,
-      categories: [{ id: 1, name: "permis " }],
-    },
-    services: [
-      { id: 1, name: "voiture", duration: 1, price: 23, description: "test", category: { id: 1, name: "permis" } },
-    ],
-  },
-  {
-    id: 2,
-    address: "rue des connards",
-    city: "goatam",
-    zip: "78500",
-    name: "Les pecq nos",
-    company: {
-      id: 1,
-      categories: [{ id: 1, name: "permis " }],
-    },
-    services: [
-      { id: 1, name: "voiture", duration: 1, price: 23, description: "test", category: { id: 1, name: "permis" } },
-    ],
-  },
-  {
-    id: 3,
-    address: "rue des connards",
-    city: "goatam",
-    zip: "78500",
-    name: "Les pecq nos",
-    company: {
-      id: 1,
-      categories: [{ id: 1, name: "permis " }],
-    },
-    services: [
-      { id: 1, name: "voiture", duration: 1, price: 23, description: "test", category: { id: 1, name: "permis" } },
-    ],
-  },
-  {
-    id: 4,
-    address: "rue des connards",
-    city: "goatam",
-    zip: "78500",
-    name: "Les pecq nos",
-    company: {
-      id: 1,
-      categories: [{ id: 1, name: "permis " }],
-    },
-    services: [
-      { id: 1, name: "voiture", duration: 1, price: 23, description: "test", category: { id: 1, name: "permis" } },
-    ],
-  },
-  {
-    id: 5,
-    address: "rue des connards",
-    city: "goatam",
-    zip: "78500",
-    name: "Les pecq nos",
-    company: {
-      id: 1,
-      categories: [{ id: 1, name: "permis " }],
-    },
-    services: [
-      { id: 1, name: "voiture", duration: 1, price: 23, description: "test", category: { id: 1, name: "permis" } },
-      { id: 1, name: "camion", duration: 1, price: 23, description: "test", category: { id: 1, name: "permis" } },
-    ],
-  },
-]
+const AGENCIES: Agency[] = []
 
 const columns: ColumnDef<Agency>[] = [
   {
@@ -145,6 +73,7 @@ const columns: ColumnDef<Agency>[] = [
             description: val("description"),
             company: val("company"),
             services: val("services"),
+            geoloc: val("geoloc"),
           }}
         />
       )

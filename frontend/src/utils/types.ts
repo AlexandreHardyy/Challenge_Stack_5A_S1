@@ -23,6 +23,7 @@ export interface Agency {
     categories: Category[]
   }
   services: Service[]
+  geoloc: [string, string]
 }
 
 export interface Category {
