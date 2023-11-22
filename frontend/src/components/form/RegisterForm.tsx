@@ -64,8 +64,8 @@ const RegisterForm = () => {
         plainPassword: values.password,
       })
       navigate("/register/welcome")
-    } catch (e: any) {
-      console.log(e)
+    } catch (e) {
+      form.setFocus("firstname")
     }
   }
 

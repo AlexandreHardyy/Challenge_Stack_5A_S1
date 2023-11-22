@@ -41,7 +41,7 @@ const LoginForm = () => {
       const result = await loginMutation.mutateAsync(values)
       setToken(result.data.token)
       navigate("/", { replace: true })
-    } catch (e: any) {
+    } catch (e) {
       form.setFocus("email")
     }
   }
