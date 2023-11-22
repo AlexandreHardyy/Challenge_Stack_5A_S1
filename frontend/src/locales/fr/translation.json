@@ -58,7 +58,7 @@
       "address": "Adresse",
       "city": "Ville",
       "postalCode": "Code postal"
-    }
+    },
     "cta": {
       "submit": "Envoyer",
       "cancel": "Annuler",
