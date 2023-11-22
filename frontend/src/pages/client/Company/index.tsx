@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 import styles from "@/styles/CompanyClient.module.css"
 import { AgencyList } from "./driving-school-list"
-import { Company } from "@/utils/types"
+import { Agency, Company } from "@/utils/types"
 import { Ratings } from "@/components/ratings"
 import { useTranslation } from "react-i18next"
+import { useState } from "react"
+import AgencySearchBar from "./agency-search-bar"
 
 function useFetchCompany(companyId?: string) {
   const url = `${import.meta.env.VITE_API_URL}companies/${companyId}`
@@ -30,6 +30,7 @@ function useFetchCompany(companyId?: string) {
 function CompanyClient() {
   const { companyId } = useParams()
   const { t } = useTranslation()
+  const [filteredAgencies, setFilteredAgencies] = useState<Agency[]>()
 
   const request = useFetchCompany(companyId)
 
@@ -92,15 +93,9 @@ function CompanyClient() {
         <div className="w-[80%] flex flex-col mx-auto gap-[17px] md:w-full md:mx-0">
           <h2 className="text-[32px] font-bold">{t("companyClient.section2.ourDrivingSchools")}</h2>
           <div className="flex flex-col gap-[20px]">
+            <AgencySearchBar agencies={request.data?.agencies ?? []} setFilteredAgencies={setFilteredAgencies} />
             <div className="flex gap-[20px]">
-              <Input
-                placeholder={t("companyClient.section2.searchBarPlaceholder")}
-                className="w-[42%] h-[40px] border-grey-dark p-[9px] rounded-[8px]"
-              />
-              <Button className="bg-primary">{t("companyClient.section2.researchCta")}</Button>
-            </div>
-            <div className="flex gap-[20px]">
-              <AgencyList agencies={request.data?.agencies} />
+              <AgencyList agencies={filteredAgencies ?? request.data?.agencies} />
               <div className="bg-background grow"></div>
             </div>
           </div>

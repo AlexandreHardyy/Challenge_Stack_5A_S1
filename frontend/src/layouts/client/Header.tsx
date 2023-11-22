@@ -14,7 +14,9 @@ const Header = () => {
 
   return (
     <header className="flex px-8 py-4 items-center justify-between sticky top-0 bg-background drop-shadow-md z-50 h-18">
-      <h1>RodeWise</h1>
+      <h1>
+        <Link to="/">RoadWise</Link>
+      </h1>
       <div className="flex gap-8">
         <Button variant="ghost" asChild>
           <Link to="/#">{t("header.menu.services")}</Link>

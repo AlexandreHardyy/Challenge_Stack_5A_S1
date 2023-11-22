@@ -48,7 +48,7 @@ class Company
 
     #[ORM\Column(length: 255)]
     #[Groups(['company-group-read'])]
-    private ?string $kbis = null;
+    private ?string $siren = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['company-group-read'])]
@@ -72,6 +72,9 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class, orphanRemoval: true)]
     #[Groups(['company-group-read', 'agency-group-read'])]
     private Collection $categories;
+
+    #[ORM\Column(length: 255)]
+    private ?string $socialReason = null;
 
     public function __construct()
     {
@@ -120,14 +123,14 @@ class Company
         return $this;
     }
 
-    public function getKbis(): ?string
+    public function getSiren(): ?string
     {
-        return $this->kbis;
+        return $this->siren;
     }
 
-    public function setKbis(string $kbis): static
+    public function setSiren(string $siren): static
     {
-        $this->kbis = $kbis;
+        $this->siren = $siren;
 
         return $this;
     }
@@ -236,6 +239,18 @@ class Company
                 $category->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSocialReason(): ?string
+    {
+        return $this->socialReason;
+    }
+
+    public function setSocialReason(string $socialReason): static
+    {
+        $this->socialReason = $socialReason;
 
         return $this;
     }
