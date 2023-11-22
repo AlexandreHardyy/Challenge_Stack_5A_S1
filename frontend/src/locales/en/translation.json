@@ -47,5 +47,21 @@
   "ratingsComponent": {
     "ratings": "Ratings",
     "seeMore": "See more"
-  } 
+  },
+  "common": {
+    "form": {
+      "firstName": "Firstname",
+      "lastName": "Lastname",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "phoneNumber": "Phone number",
+      "address": "Address",
+      "city": "City",
+      "postalCode": "Postal code"
+    },
+    "cta":{
+      "createMyAccount": "Create my account"
+    }
+  }
 }

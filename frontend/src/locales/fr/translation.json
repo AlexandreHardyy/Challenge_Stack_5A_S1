@@ -47,5 +47,21 @@
   "ratingsComponent": {
     "ratings": "Avis",
     "seeMore": "Voir plus"
+  },
+  "common": {
+    "form": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "phoneNumber": "Numéro de téléphone",
+      "address": "Adresse",
+      "city": "Ville",
+      "postalCode": "Code postal"
+    },
+    "cta": {
+      "createMyAccount": "Créer mon compte"
+    }
   }
 }
