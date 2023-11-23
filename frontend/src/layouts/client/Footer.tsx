@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 const Footer = () => {
   const { t } = useTranslation()
   return (
-    <footer className="flex items-center justify-between px-8 py-4 bg-neutral-800 text-white h-28">
+    <footer className="flex items-center justify-between px-8 py-4 bg-neutral-800 text-white h-24 absolute bottom-0 w-full">
       <LanguageSelector />
       <div>
         <p>{t("footer.menu.knowUs")}</p>

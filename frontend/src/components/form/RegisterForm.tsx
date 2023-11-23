@@ -5,7 +5,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button.tsx"
 import { Checkbox } from "@/components/ui/checkbox.tsx"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { AlertCircle, Loader2 } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx"
+import { useTranslation } from "react-i18next"
+import { useMutation } from "@tanstack/react-query"
+import { register } from "@/services/user/auth.service.ts"
 
 const formSchema = z
   .object({
@@ -29,6 +34,9 @@ const formSchema = z
   })
 
 const RegisterForm = () => {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,12 +49,35 @@ const RegisterForm = () => {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values)
+  const registerMutation = useMutation({
+    mutationFn: (user: { firstname: string; lastname: string; email: string; plainPassword: string }) => {
+      return register(user)
+    },
+  })
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await registerMutation.mutateAsync({
+        firstname: values.firstname,
+        lastname: values.lastname,
+        email: values.email,
+        plainPassword: values.password,
+      })
+      navigate("/register/welcome")
+    } catch (e) {
+      form.setFocus("firstname")
+    }
   }
 
   return (
     <>
+      {registerMutation.isError && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>{t("common.form.error")} !</AlertTitle>
+          <AlertDescription>{t("common.form.errorAccountCreation")}</AlertDescription>
+        </Alert>
+      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -54,7 +85,7 @@ const RegisterForm = () => {
             name="firstname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Firstname</FormLabel>
+                <FormLabel>{t("common.form.firstName")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -67,7 +98,7 @@ const RegisterForm = () => {
             name="lastname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Lastname</FormLabel>
+                <FormLabel>{t("common.form.lastName")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -80,7 +111,7 @@ const RegisterForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("common.form.email")}</FormLabel>
                 <FormControl>
                   <Input {...field} type="email" />
                 </FormControl>
@@ -93,7 +124,7 @@ const RegisterForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("common.form.password")}</FormLabel>
                 <FormControl>
                   <Input {...field} type="password" />
                 </FormControl>
@@ -106,7 +137,7 @@ const RegisterForm = () => {
             name="passwordConfirmation"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel>{t("common.form.confirmPassword")}</FormLabel>
                 <FormControl>
                   <Input {...field} type="password" />
                 </FormControl>
@@ -134,7 +165,10 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Create my account</Button>
+          <Button disabled={registerMutation.isLoading} type="submit">
+            {registerMutation.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {t("common.cta.createMyAccount")}
+          </Button>
         </form>
       </Form>
     </>
