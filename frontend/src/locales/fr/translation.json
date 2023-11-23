@@ -49,7 +49,9 @@
   },
   "common": {
     "form": {
-       "firstName": "Prénom",
+      "register": "S'inscrire",
+      "login": "Se connecter",
+      "firstName": "Prénom",
       "lastName": "Nom",
       "email": "Email",
       "password": "Mot de passe",
@@ -57,12 +59,19 @@
       "phoneNumber": "Numéro de téléphone",
       "address": "Adresse",
       "city": "Ville",
-      "postalCode": "Code postal"
+      "postalCode": "Code postal",
+      "error": "Erreur",
+      "loginOrPassword": "Email ou mot de passe incorrect",
+      "errorAccountCreation": "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard."
     },
     "cta": {
       "submit": "Envoyer",
       "cancel": "Annuler",
       "createMyAccount": "Créer mon compte"
+    },
+    "validation": {
+      "registerSuccess": "Votre compte a été créé avec succès.",
+      "checkEmail": "Veuillez vérifier votre boîte mail pour confirmer votre compte."
     }
   },
   "landing": {

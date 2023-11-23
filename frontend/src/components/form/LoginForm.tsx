@@ -51,8 +51,8 @@ const LoginForm = () => {
       {loginMutation.isError && (
         <Alert variant="destructive" className="mb-4">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Erreur !</AlertTitle>
-          <AlertDescription>Votre login ou mot de passe est incorrect</AlertDescription>
+          <AlertTitle>{t("common.form.error")} !</AlertTitle>
+          <AlertDescription>{t("common.form.loginOrPassword")}</AlertDescription>
         </Alert>
       )}
       <Form {...form}>

@@ -49,6 +49,8 @@
   },
   "common": {
     "form": {
+      "register": "Register",
+      "login": "Login",
       "firstName": "Firstname",
       "lastName": "Lastname",
       "email": "Email",
@@ -57,12 +59,19 @@
       "phoneNumber": "Phone number",
       "address": "Address",
       "city": "City",
-      "postalCode": "Postal code"
+      "postalCode": "Postal code",
+      "error": "Error",
+      "loginOrPassword": "Login or password is incorrect",
+      "errorAccountCreation": "An error has occurred during account creation. Please try again later."
     },
     "cta": {
       "submit": "Submit",
       "cancel": "Cancel",
       "createMyAccount": "Create my account"
+    },
+    "validation": {
+      "registerSuccess": "Your account has been created successfully.",
+      "checkEmail": "Please check your email to confirm your account."
     }
   },
   "landing": {

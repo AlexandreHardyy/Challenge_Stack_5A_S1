@@ -50,7 +50,7 @@ const Header = () => {
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-3">
               <Button variant={"outline"} onClick={() => navigate("/profile")}>
-                Profile
+                {t("header.cta.profile")}
               </Button>
               <Button
                 variant={"outline"}
@@ -59,7 +59,7 @@ const Header = () => {
                   navigate("/", { replace: true })
                 }}
               >
-                Logout
+                {t("header.cta.logOut")}
               </Button>
             </PopoverContent>
           </Popover>

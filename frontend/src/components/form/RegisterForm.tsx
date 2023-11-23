@@ -74,8 +74,8 @@ const RegisterForm = () => {
       {registerMutation.isError && (
         <Alert variant="destructive" className="mb-4">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Erreur !</AlertTitle>
-          <AlertDescription>Impossible de créer votre compte</AlertDescription>
+          <AlertTitle>{t("common.form.error")} !</AlertTitle>
+          <AlertDescription>{t("common.form.errorAccountCreation")}</AlertDescription>
         </Alert>
       )}
       <Form {...form}>
