@@ -5,6 +5,7 @@ import styles from "@/styles/CompanyClient.module.css"
 import { Ratings } from "@/components/ratings"
 import { useTranslation } from "react-i18next"
 import { ServiceList } from "./service-list"
+import { Map } from "./map"
 
 function useFetchAgency(companyId?: string, agencyId?: string) {
   const url = `${import.meta.env.VITE_API_URL}companies/${companyId}/agencies/${agencyId}`
@@ -104,7 +105,9 @@ function AgencyClient() {
             {request.data?.address}, {request.data?.zip} {request.data?.city}
           </p>
         </div>
-        <div className="h-[530px] bg-secondary rounded-[8px]"></div>
+        <div className="h-[530px] bg-secondary rounded-[8px]">
+          {request.data && <Map geoloc={request.data.geoloc} />}
+        </div>
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0 flex flex-col gap-[17px]">
         <h2 className="text-[32px] font-bold">{t("agencyClient.ourInstructors")}</h2>

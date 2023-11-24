@@ -105,6 +105,10 @@ class Agency
     #[Groups(['agency-group-read'])]
     private Collection $services;
 
+    #[ORM\Column(type: Types::SIMPLE_ARRAY)]
+    #[Groups(['company-group-read', 'agency-group-read'])]
+    private array $geoloc = [];
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
@@ -237,6 +241,18 @@ class Agency
                 $service->setAgency(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGeoloc(): array
+    {
+        return $this->geoloc;
+    }
+
+    public function setGeoloc(array $geoloc): static
+    {
+        $this->geoloc = $geoloc;
 
         return $this;
     }

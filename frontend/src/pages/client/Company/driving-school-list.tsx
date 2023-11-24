@@ -5,10 +5,14 @@ export function AgencyList({ agencies }: { agencies?: Agency[] }) {
   const { companyId } = useParams()
 
   return (
-    <div className="flex flex-col gap-[20px] w-[42%] h-[500px] overflow-scroll">
+    <div id="scroll-div" className="flex flex-col gap-[20px] w-[42%] h-[500px] overflow-scroll">
       {agencies?.map((agency) => {
         return (
-          <div key={agency.id} className="flex gap-[15px] h-[159px] p-[20px] bg-background rounded-[8px] mr-[20px]">
+          <div
+            id={`agency-${agency.id}`}
+            key={agency.id}
+            className="flex gap-[15px] h-[159px] p-[20px] bg-background rounded-[8px] mr-[20px]"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 70 70" fill="none">
               <circle cx="35" cy="35" r="35" fill="#E4E4E7" />
             </svg>

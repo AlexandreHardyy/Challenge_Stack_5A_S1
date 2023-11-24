@@ -6,6 +6,7 @@ import { Agency, Company } from "@/utils/types"
 import { Ratings } from "@/components/ratings"
 import { useTranslation } from "react-i18next"
 import { useState } from "react"
+import { Map } from "./map"
 import AgencySearchBar from "./agency-search-bar"
 
 function useFetchCompany(companyId?: string) {
@@ -25,6 +26,21 @@ function useFetchCompany(companyId?: string) {
       retry: false,
     }
   )
+}
+
+function scrollToAgency(agencyId: number) {
+  const agencyDiv = document.getElementById(`agency-${agencyId}`)
+  const scrollDiv = document.getElementById("scroll-div")
+
+  if (agencyDiv && scrollDiv) {
+    console.log(scrollDiv.offsetTop)
+    console.log(agencyDiv.offsetTop)
+    console.log(agencyDiv.offsetTop - scrollDiv.offsetTop)
+    scrollDiv.scrollTo({
+      top: agencyDiv.offsetTop - scrollDiv.offsetTop,
+      behavior: "smooth",
+    })
+  }
 }
 
 function CompanyClient() {
@@ -96,7 +112,11 @@ function CompanyClient() {
             <AgencySearchBar agencies={request.data?.agencies ?? []} setFilteredAgencies={setFilteredAgencies} />
             <div className="flex gap-[20px]">
               <AgencyList agencies={filteredAgencies ?? request.data?.agencies} />
-              <div className="bg-background grow"></div>
+              <div className="bg-background grow rounded-[8px]">
+                {request.data && (
+                  <Map agencies={filteredAgencies ?? request.data.agencies} onClickMarker={scrollToAgency} />
+                )}
+              </div>
             </div>
           </div>
         </div>
