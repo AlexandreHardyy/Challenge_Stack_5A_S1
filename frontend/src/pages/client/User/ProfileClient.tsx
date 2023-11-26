@@ -56,7 +56,7 @@ const ProfileClient = () => {
 
   return (
     <div>
-      <h1 className="px-6 text-3xl font-semibold">Mon profil</h1>
+      <h1 className="px-6 text-3xl font-semibold">{t("header.cta.profile")}</h1>
       <div className="px-6 pt-4">
         {updateProfile.isError && (
           <Alert variant="destructive" className="mb-4">
