@@ -29,9 +29,11 @@ export interface Agency {
 export interface Category {
   id: number
   name: string
+  services?: Service[]
 }
 
 export interface Service {
+  "@id": string
   id: number
   name: string
   description?: string

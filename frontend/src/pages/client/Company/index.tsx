@@ -33,9 +33,6 @@ function scrollToAgency(agencyId: number) {
   const scrollDiv = document.getElementById("scroll-div")
 
   if (agencyDiv && scrollDiv) {
-    console.log(scrollDiv.offsetTop)
-    console.log(agencyDiv.offsetTop)
-    console.log(agencyDiv.offsetTop - scrollDiv.offsetTop)
     scrollDiv.scrollTo({
       top: agencyDiv.offsetTop - scrollDiv.offsetTop,
       behavior: "smooth",

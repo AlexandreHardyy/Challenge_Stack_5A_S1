@@ -44,7 +44,5 @@ export function Map({ geoloc }: { geoloc: [string, string] }) {
     return () => map.remove()
   })
 
-  console.log("Render")
-
   return <div className="map-container" ref={mapContainerRef} />
 }

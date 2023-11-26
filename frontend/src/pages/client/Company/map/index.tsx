@@ -65,7 +65,5 @@ export function Map({ agencies, onClickMarker }: MapProps) {
     return () => map.remove()
   })
 
-  console.log("Render")
-
   return <div className="map-container" ref={mapContainerRef} />
 }

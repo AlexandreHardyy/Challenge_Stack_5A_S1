@@ -207,7 +207,7 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnl
                 <FormControl>
                   <SelectMultiple
                     onChange={(values) => form.setValue("agencies", values)}
-                    data={AGENCIES}
+                    options={AGENCIES}
                     placeholder="Select agency where the employee works..."
                   />
                 </FormControl>
