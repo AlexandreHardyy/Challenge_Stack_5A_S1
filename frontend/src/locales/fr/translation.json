@@ -71,6 +71,8 @@
     },
     "validation": {
       "registerSuccess": "Votre compte a été créé avec succès.",
+      "saveProfile": "Sauvegarder mon profil",
+      "saveSuccess": "Vos modifications ont été enregistrées avec succès.",
       "checkEmail": "Veuillez vérifier votre boîte mail pour confirmer votre compte."
     }
   },

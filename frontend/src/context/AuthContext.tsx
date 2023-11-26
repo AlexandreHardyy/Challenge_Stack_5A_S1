@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import api from "@/utils/api.ts"
+import { getUserMe } from "@/services/user/user.service.ts"
+import { User } from "@/utils/types.ts"
 
 interface AuthContext {
   token: string | null
@@ -7,15 +9,11 @@ interface AuthContext {
   user: User | null
 }
 
-interface User {
-  connected: boolean
-}
-
 const AuthContext = createContext({} as AuthContext)
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken_] = useState(localStorage.getItem("token"))
-  const [user, setUser] = useState<User>({ connected: false })
+  const [user, setUser] = useState<User | null>(null)
 
   const setToken = (newToken: string | null) => {
     setToken_(newToken)
@@ -25,11 +23,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (token) {
       api.defaults.headers.common["Authorization"] = "Bearer " + token
       localStorage.setItem("token", token)
-      setUser({ connected: true })
+      getUserMe().then((res) => {
+        setUser(res.data)
+      })
     } else {
       delete api.defaults.headers.common["Authorization"]
       localStorage.removeItem("token")
-      setUser({ connected: false })
+      setUser(null)
     }
   }, [token])
 

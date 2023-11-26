@@ -28,7 +28,7 @@ const Header = () => {
           <Link to="/#">{t("header.menu.about")}</Link>
         </Button>
       </div>
-      {!auth.user?.connected ? (
+      {!auth.token ? (
         <div className="flex gap-4">
           <ModeToggle />
           <Button variant="secondary" asChild>
@@ -49,11 +49,11 @@ const Header = () => {
               </Avatar>
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-3">
-              <Button variant={"outline"} onClick={() => navigate("/profile")}>
+              <Button variant={"outline"} onClick={() => navigate("/user/profile")}>
                 {t("header.cta.profile")}
               </Button>
               <Button
-                variant={"outline"}
+                variant={"destructive"}
                 onClick={() => {
                   auth.setToken(null)
                   navigate("/", { replace: true })

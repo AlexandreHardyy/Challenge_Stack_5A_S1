@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
@@ -17,12 +18,18 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ApiResource(
     operations: [
+        new GetCollection(normalizationContext: ['groups' => ['read-user']]),
         new Get(normalizationContext: ['groups' => ['read-user']],
                 security: "is_granted('USER_VIEW', object)"),
         new Post(denormalizationContext: ['groups' => ['create-user']]),
         new Patch(denormalizationContext: ['groups' => ['update-user']])
     ],
     normalizationContext: ['groups' => ['read-user']],
+)]
+#[ApiResource(
+    uriTemplate: '/user/me',
+    operations: [new Get(normalizationContext: ['groups' => ['read-user']],
+        security: "is_granted('USER_VIEW', object)"),]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -119,7 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_PROVIDER', 'ROLE_NOT_VERIFIED'];
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }

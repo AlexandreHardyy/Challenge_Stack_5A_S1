@@ -17,6 +17,7 @@ import ServiceClient from "./pages/client/Company/Agency/Service"
 import Agencies from "./pages/provider/Agencies"
 import RegisterSuccess from "@/pages/auth/RegisterSuccess.tsx"
 import NewProvider from "@/pages/provider/NewProvider.tsx"
+import ProfileClient from "@/pages/client/User/ProfileClient.tsx"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -38,6 +39,10 @@ const Routes = () => {
         {
           path: "/register/welcome",
           element: <RegisterSuccess />,
+        },
+        {
+          path: "/user/profile",
+          element: <ProfileClient />,
         },
         {
           path: "/terms",

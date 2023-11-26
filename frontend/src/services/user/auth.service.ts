@@ -16,5 +16,5 @@ export const register = async (user: {
   firstname: string
   lastname: string
 }> => {
-  return api.post("http://localhost:8888/api/users", { json: user })
+  return api.post("http://localhost:8888/api/users", user)
 }

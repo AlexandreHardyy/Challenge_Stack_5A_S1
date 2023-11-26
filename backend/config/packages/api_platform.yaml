@@ -4,6 +4,12 @@ api_platform:
     description: This is a sample API built with API Platform
     show_webby: false
 
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
+
     defaults:
         stateless: true
         cache_headers:
