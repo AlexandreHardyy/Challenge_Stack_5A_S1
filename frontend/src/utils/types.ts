@@ -12,6 +12,7 @@ export interface Company {
 }
 
 export interface Agency {
+  "@id"?: string
   id: number
   name: string
   description?: string
@@ -47,4 +48,5 @@ export interface User {
   firstname: string
   lastname: string
   email: string
+  agencies?: Agency[]
 }

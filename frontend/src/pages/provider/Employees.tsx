@@ -15,66 +15,18 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import React, { useContext, useState } from "react"
 import { PencilIcon } from "lucide-react"
 import { SelectMultiple } from "@/components/select-multiple"
+import { addNewEmployee, updateEmployeeById, useFetchEmployeesByCompany } from "@/services/user/user.service"
+import { Agency, User } from "@/utils/types"
+import { useFetchAgenciesByCompany } from "@/services/agency.service"
+import { UseQueryResult } from "@tanstack/react-query"
+import { Spinner } from "@/components/loader/Spinner"
+import { useToast } from "@/components/ui/use-toast"
+import { useTranslation } from "react-i18next"
 
-type Employee = {
-  id: string
-  firstname: string
-  lastname: string
-  email: string
-  phone: string
-  agencies?: string[]
-}
-
-const AGENCIES = [
-  {
-    value: "paris",
-    label: "Paris",
-  },
-  {
-    value: "marseille",
-    label: "Marseille",
-  },
-  {
-    value: "chatou",
-    label: "Chatou",
-  },
-]
-
-const employees: Employee[] = [
-  {
-    id: "728ed52f",
-    firstname: "noe",
-    lastname: "pigeau",
-    email: "noepigeau@gmail.com",
-    phone: "0712121212",
-  },
-  {
-    id: "728ed52f",
-    firstname: "noe",
-    lastname: "pigeau",
-    email: "noepigeau@gmail.com",
-    phone: "0712121212",
-  },
-  {
-    id: "728ed52f",
-    firstname: "noe",
-    lastname: "pigeau",
-    email: "noepigeau@gmail.com",
-    phone: "0712121212",
-  },
-  {
-    id: "728ed52f",
-    firstname: "noe",
-    lastname: "pigeau",
-    email: "noepigeau@gmail.com",
-    phone: "0712121212",
-  },
-]
-
-export const columns: ColumnDef<Employee>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => column.toggleVisibility(false),
@@ -92,8 +44,11 @@ export const columns: ColumnDef<Employee>[] = [
     header: "Last Name",
   },
   {
-    accessorKey: "phone",
-    header: "Phone Number",
+    accessorKey: "agencies",
+    cell: ({ row }) => {
+      const agencies = row.getValue("agencies") as Agency[]
+      return agencies.map((agency) => agency.name).join(", ")
+    },
   },
   {
     accessorKey: "action",
@@ -106,7 +61,7 @@ export const columns: ColumnDef<Employee>[] = [
             email: val("email"),
             firstname: val("firstname"),
             lastname: val("lastname"),
-            phone: val("phone"),
+            agencies: val("agencies"),
           }}
         />
       )
@@ -122,24 +77,47 @@ const employeeFormSchema = z.object({
   lastname: z.string().min(2, {
     message: "FirstName must be at least 2 characters.",
   }),
-  phone: z.string(),
-  agencies: z.array(z.string()),
+  agencies: z.array(z.string()).optional(),
 })
 
-const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnly: boolean }) => {
+const EmployeeForm = ({ employee, isReadOnly }: { employee?: User; isReadOnly: boolean }) => {
+  const { toast } = useToast()
+  const { agencies, employees } = useContext(EmployeeContext)
+  const { t } = useTranslation()
+
   const form = useForm<z.infer<typeof employeeFormSchema>>({
     resolver: zodResolver(employeeFormSchema),
     defaultValues: {
       email: employee?.email ?? "",
       firstname: employee?.firstname ?? "",
       lastname: employee?.lastname ?? "",
-      phone: employee?.phone ?? "",
-      agencies: employee?.agencies ?? [],
     },
   })
 
-  const onSubmit = (values: z.infer<typeof employeeFormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof employeeFormSchema>) => {
     console.log(values)
+    const result = await (!employee ? addNewEmployee(1, values) : updateEmployeeById(employee!.id, values))
+    if (result.status === 201) {
+      toast({
+        variant: "success",
+        title: t("ProviderAgencies.form.toast.title"),
+        description: t("ProviderAgencies.form.toast.successCreate"),
+      })
+      employees?.refetch()
+    } else if (result.status === 200) {
+      toast({
+        variant: "success",
+        title: t("ProviderAgencies.form.toast.title"),
+        description: t("ProviderAgencies.form.toast.successUpdate"),
+      })
+      employees?.refetch()
+    } else {
+      toast({
+        variant: "destructive",
+        title: t("ProviderAgencies.form.toast.title"),
+        description: t("ProviderAgencies.form.toast.error"),
+      })
+    }
   }
 
   return (
@@ -184,38 +162,35 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnl
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone Number</FormLabel>
-              <FormControl>
-                <Input placeholder="Phone" {...field} readOnly={isReadOnly} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="agencies"
-          render={() => {
-            return (
-              <FormItem>
-                <FormLabel>Agencies</FormLabel>
-                <FormControl>
-                  <SelectMultiple
-                    onChange={(values) => form.setValue("agencies", values)}
-                    options={AGENCIES}
-                    placeholder="Select agency where the employee works..."
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )
-          }}
-        />
+        {employee && (
+          <FormField
+            control={form.control}
+            name="agencies"
+            render={() => {
+              return (
+                <FormItem>
+                  <FormLabel>Agencies</FormLabel>
+                  {agencies && !agencies.isLoading && agencies.data && (
+                    <FormControl>
+                      <SelectMultiple
+                        onChange={(values) => form.setValue("agencies", values)}
+                        options={agencies.data?.map((agency) => ({ value: agency["@id"] ?? "", label: agency.name }))}
+                        defaultData={employee?.agencies?.map((agency) => ({
+                          value: agency["@id"] ?? "",
+                          label: agency.name,
+                        }))}
+                        placeholder="Select agency where the employee works..."
+                        disabled={isReadOnly}
+                      />
+                    </FormControl>
+                  )}
+                  {agencies && agencies.isLoading && <Spinner />}
+                  <FormMessage />
+                </FormItem>
+              )
+            }}
+          />
+        )}
 
         {!isReadOnly && <Button type="submit">{employee ? "Update employee" : "Add employee"}</Button>}
       </form>
@@ -223,7 +198,7 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnl
   )
 }
 
-const ModalFormEmployee = ({ employee, variant = "ghost" }: { employee?: Employee; variant?: "ghost" | "outline" }) => {
+const ModalFormEmployee = ({ employee, variant = "ghost" }: { employee?: User; variant?: "ghost" | "outline" }) => {
   const [isReadOnly, setIsreadOnly] = useState(!!employee)
   return (
     <Dialog onOpenChange={(open) => !open && setIsreadOnly(!!employee)}>
@@ -258,15 +233,25 @@ const ModalFormEmployee = ({ employee, variant = "ghost" }: { employee?: Employe
   )
 }
 
+const EmployeeContext = React.createContext<{
+  employees?: UseQueryResult<User[], unknown>
+  agencies?: UseQueryResult<Agency[], unknown>
+}>({})
+
 const Employees = () => {
+  const employees = useFetchEmployeesByCompany(1)
+  const agencies = useFetchAgenciesByCompany(1)
+
   return (
-    <div className="flex flex-col gap-6">
-      <h1 className="text-3xl"> Your Employees </h1>
-      <div className="self-start w-full max-w-xl">
-        <ModalFormEmployee variant="outline" />
+    <EmployeeContext.Provider value={{ employees, agencies }}>
+      <div className="flex flex-col gap-6">
+        <h1 className="text-3xl"> Your Employees </h1>
+        <div className="self-start w-full max-w-xl">
+          <ModalFormEmployee variant="outline" />
+        </div>
+        <DataTable isLoading={employees.isLoading} columns={columns} data={employees.data} />
       </div>
-      <DataTable columns={columns} data={employees} />
-    </div>
+    </EmployeeContext.Provider>
   )
 }
 

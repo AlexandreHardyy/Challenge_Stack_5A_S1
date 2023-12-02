@@ -7,7 +7,11 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -27,6 +31,46 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     normalizationContext: ['groups' => ['read-user']],
 )]
 #[ApiResource(
+    uriTemplate: '/companies/{id}/users',
+    operations: [
+        new GetCollection(
+            uriVariables: [
+                'id' => new Link(toProperty: 'company', fromClass: Company::class)
+            ],
+            normalizationContext:['groups' => ['read-user']],
+            openapi: new Operation(
+                tags: [ 'Company', 'User' ],
+                summary: 'Returns a list of users for a specific company',
+                description: 'Returns a list of users for a specific company'
+            )
+        )
+    ],
+)]
+#[ApiResource(
+    uriTemplate: '/employees',
+    operations: [
+        new Post(
+            denormalizationContext: [ 'groups' => [ 'create-employee' ] ],
+            openapi: new Operation(
+                tags: [ 'Company', 'User' ],
+                summary: 'create a new employee',
+                description: 'Create a new user for a company'
+            )
+        ),
+        new Patch(
+            uriTemplate: '/employees/{id}',
+            denormalizationContext: [ 'groups' => [ 'create-employee', 'update-employee' ] ],
+            openapi: new Operation(
+                tags: [ 'Company', 'User' ],
+                summary: 'update a employee',
+                description: 'Update a user for a company'
+            )
+        )
+    ],
+    normalizationContext: ['groups' => ['read-user']],
+)]
+
+#[ApiResource(
     uriTemplate: '/user/me',
     operations: [new Get(normalizationContext: ['groups' => ['read-user']],
         security: "is_granted('USER_VIEW', object)"),]
@@ -44,7 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['create-user', 'read-user', 'update-user'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     #[Assert\Email()]
     private ?string $email = null;
@@ -58,18 +102,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Groups(['create-user'])]
-    #[Assert\NotBlank(groups: ['create-user'])]
+    #[Groups([ 'create-user' ])]
+    #[Assert\NotBlank(groups: ['create-user' ])]
     #[Assert\Regex(pattern: '/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}/')]
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 
@@ -81,6 +125,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(['create-employee'])]
+    private ?Company $company = null;
+
+    #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]
+    #[Groups(['read-user', 'update-employee'])]
+    private Collection $agencies;
+
+    public function __construct()
+    {
+        $this->agencies = new ArrayCollection();
+    }
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
@@ -229,6 +286,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Agency>
+     */
+    public function getAgencies(): Collection
+    {
+        return $this->agencies;
+    }
+
+    public function addAgency(Agency $agency): static
+    {
+        if (!$this->agencies->contains($agency)) {
+            $this->agencies->add($agency);
+        }
+
+        return $this;
+    }
+
+    public function removeAgency(Agency $agency): static
+    {
+        $this->agencies->removeElement($agency);
 
         return $this;
     }

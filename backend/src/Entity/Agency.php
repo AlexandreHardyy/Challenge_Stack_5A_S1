@@ -120,9 +120,13 @@ class Agency
     #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
     private array $geoloc = [];
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'agencies')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -273,6 +277,33 @@ class Agency
     public function setGeoloc(array $geoloc): static
     {
         $this->geoloc = $geoloc;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addAgency($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeAgency($this);
+        }
 
         return $this;
     }
