@@ -65,6 +65,7 @@
       "errorAccountCreation": "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard."
     },
     "cta": {
+      "update": "Update",
       "submit": "Envoyer",
       "cancel": "Annuler",
       "createMyAccount": "Créer mon compte"
@@ -74,6 +75,10 @@
       "saveProfile": "Sauvegarder mon profil",
       "saveSuccess": "Vos modifications ont été enregistrées avec succès.",
       "checkEmail": "Veuillez vérifier votre boîte mail pour confirmer votre compte."
+    },
+    "search": {
+      "search": "Rechercher",
+      "searchPlaceholder": "Rechercher"
     }
   },
   "landing": {
@@ -145,6 +150,28 @@
         "successUpdate": "agence mis a jour avec succès",
         "error": "une erreur a eu lieu lors de la mise a jour",
         "addressError": "Votre address n'a pas été trouvé"
+      }
+    }
+  },
+  "admin": {
+    "homeProvider": {
+      "selectAgencyPlaceholder": "Sélectionner une agence",
+      "selectAgencyAll": "Toutes les agences",
+      "dashboard": "Tableau de bord",
+      "cards": {
+        "totalRevenue": "Revenu total",
+        "subscriptions": "Souscriptions",
+        "sales": "Ventes"
+      },
+      "yourServices": {
+        "title": "Tous vos services",
+        "subtitle_zero": "Vous n'avez pas encore de services",
+        "subtitle_one": "Vous avez 1 service",
+        "subtitle_other": "Vous avez {count} services",
+        "noServices": "Vous n'avez pas encore de services"
+      },
+      "toast": {
+        "error": "Une erreur est survenue. Veuillez réessayer plus tard."
       }
     }
   }

@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             openapi: new Operation(
                 tags: [ 'Service' ],
                 summary: 'Returns a service of an agency',
-                description: 'Returns a single service of an agency by providinf the agencyId and the serviceId'
+                description: 'Returns a single service of an agency by providing the agencyId and the serviceId'
             )
         )
     ]
