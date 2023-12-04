@@ -24,7 +24,7 @@ function LanguageSelector() {
           style={{ fontWeight: i18n.language === language ? "bold" : "normal" }}
           type="submit"
           onClick={() => {
-            i18n.changeLanguage(language).then((r) => console.log(r))
+            i18n.changeLanguage(language)
           }}
           disabled={i18n.language === language}
         >

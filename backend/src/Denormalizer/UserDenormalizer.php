@@ -40,7 +40,6 @@ class UserDenormalizer implements DenormalizerInterface
     {
         $user = $this->normalizer->denormalize($data, $type, $format, $context);
 
-
         /** @var User $user */
         $plainPassword = $user->getPlainPassword();
 
@@ -57,6 +56,21 @@ class UserDenormalizer implements DenormalizerInterface
         }
 
         if (!in_array('create-employee', $context) && empty($plainPassword)) {
+            return $user;
+        }
+
+        if (in_array('create-provider', $context['groups']) && !in_array('ROLE_PROVIDER', $user->getRoles())) {
+            $user->setRoles([ 'ROLE_PROVIDER' ]);
+
+            $hashedPassword = $this->hasher->hashPassword($user, $this->generatePassword());
+            $user->setPassword($hashedPassword);
+            $user->eraseCredentials();
+
+            return $user;
+            // @TODO send email to provider with password
+        }
+
+        if (!in_array('create-provider', $context) && empty($plainPassword)) {
             return $user;
         }
 

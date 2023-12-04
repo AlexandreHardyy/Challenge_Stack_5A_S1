@@ -30,6 +30,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     ],
     normalizationContext: ['groups' => ['read-user']],
 )]
+
 #[ApiResource(
     uriTemplate: '/companies/{id}/users',
     operations: [
@@ -46,6 +47,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
         )
     ],
 )]
+
 #[ApiResource(
     uriTemplate: '/employees',
     operations: [
@@ -71,6 +73,30 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 )]
 
 #[ApiResource(
+    uriTemplate: '/providers',
+    operations: [
+        new Post(
+            denormalizationContext: [ 'groups' => [ 'create-provider' ] ],
+            openapi: new Operation(
+                tags: [ 'Company', 'User' ],
+                summary: 'create a new provider',
+                description: 'Create a new user related to a company'
+            )
+        ),
+        new Patch(
+            uriTemplate: '/providers/{id}',
+            denormalizationContext: [ 'groups' => [ 'create-provider', 'update-provider' ] ],
+            openapi: new Operation(
+                tags: [ 'Company', 'User' ],
+                summary: 'update a provider',
+                description: 'Update a user related to a company'
+            )
+        )
+    ],
+    normalizationContext: ['groups' => ['read-user']],
+)]
+
+#[ApiResource(
     uriTemplate: '/user/me',
     operations: [new Get(normalizationContext: ['groups' => ['read-user']],
         security: "is_granted('USER_VIEW', object)"),]
@@ -88,12 +114,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     #[Assert\Email()]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['read-user'])]
     private array $roles = [];
 
     /**
@@ -103,31 +130,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[Groups([ 'create-user' ])]
-    #[Assert\NotBlank(groups: ['create-user' ])]
+    #[Assert\NotBlank(groups: ['create-user'])]
     #[Assert\Regex(pattern: '/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}/')]
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 
     #[ORM\Column]
+    #[Groups(['read-user'])]
     private ?bool $isVerified = false;
 
     #[ORM\Column]
+    #[Groups(['read-user'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['read-user'])]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['create-employee'])]
+    #[Groups(['create-employee', 'create-provider', 'update-provider'])]
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]

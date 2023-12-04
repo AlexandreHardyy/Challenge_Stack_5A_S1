@@ -1,10 +1,10 @@
+import SideHeader from "@/layouts/provider/SideHeader"
 import { Outlet } from "react-router-dom"
-import SideAdminHeader from "@/layouts/admin/SideAdminHeader.tsx"
 
-const AdminLayout = () => {
+const ProviderLayout = () => {
   return (
     <>
-      <SideAdminHeader />
+      <SideHeader />
       <main className="p-6 h-full m-h-[100vh] pl-64">
         <Outlet />
       </main>
@@ -12,4 +12,4 @@ const AdminLayout = () => {
   )
 }
 
-export default AdminLayout
+export default ProviderLayout

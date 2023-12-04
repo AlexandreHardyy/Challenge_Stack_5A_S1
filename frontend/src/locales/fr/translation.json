@@ -9,13 +9,22 @@
       "signIn": "Se connecter",
       "signUp": "S'inscrire",
       "logOut": "Se déconnecter",
-      "profile": "Mon profil"
+      "profile": "Mon profil",
+      "admin": "Admin",
+      "provider": "Prestataire"
     },
     "sideHeader": {
       "menu": {
-        "dashboard": "Dashboard",
+        "dashboard": "Tableau de bord",
         "employees": "Mes employés",
         "agencies": "Mes agences"
+      }
+    },
+    "sideAdminHeader": {
+      "menu": {
+        "dashboard": "Tableau de bord",
+        "companies": "Entreprises",
+        "users": "Utilisateurs"
       }
     }
   },
@@ -62,7 +71,8 @@
       "postalCode": "Code postal",
       "error": "Erreur",
       "loginOrPassword": "Email ou mot de passe incorrect",
-      "errorAccountCreation": "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard."
+      "errorAccountCreation": "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard.",
+      "fetchingError": "Une erreur est survenue. Veuillez réessayer plus tard."
     },
     "cta": {
       "update": "Update",
@@ -100,6 +110,7 @@
       "email": "Email",
       "phoneNumber": "N° de téléphone",
       "socialReason": "Raison sociale",
+      "description": "Description",
       "sirenNumber": "N° SIREN",
       "placeholders": {
         "firstName": "Entrez votre prénom",
@@ -107,6 +118,7 @@
         "email": "Entrez votre email",
         "phoneNumber": "+33 0 00 00 00 00",
         "socialReason": "Entrez votre raison sociale",
+        "description": "Entrez une description de votre auto-école",
         "sirenNumber": "Entrez votre n° de SIREN"
       },
       "cta": {
@@ -138,11 +150,11 @@
       "zip": "Zip Code",
       "services": "Services",
       "placeholders": {
-        "services": "Selectionner les services disponibles a l'agence"
+        "services": "Sélectionnez les services disponibles a l'agence"
       },
       "cta": {
         "new": "Ajouter une agence",
-        "update": "Mettre a jour l'agency"
+        "update": "Mettre a jour l'agence"
       },
       "toast": {
         "title": "Agence",
@@ -153,7 +165,7 @@
       }
     }
   },
-  "admin": {
+  "provider": {
     "homeProvider": {
       "selectAgencyPlaceholder": "Sélectionner une agence",
       "selectAgencyAll": "Toutes les agences",
@@ -172,6 +184,90 @@
       },
       "toast": {
         "error": "Une erreur est survenue. Veuillez réessayer plus tard."
+      }
+    }
+  },
+  "admin": {
+    "users": {
+      "title": "Tous les utilisateurs",
+      "table": {
+        "user": "Utilisateur",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "Email",
+        "roles": "Roles",
+        "isVerified": "Vérifié",
+        "isVerifiedLabel": "Vérifier l'utilisateur",
+        "createdAt": "Créé le",
+        "updatedAt": "Mis à jour le",
+        "actions": "Actions",
+        "placeholders": {
+          "roles": "Sélectionnez les roles de l'utilisateur"
+        },
+        "errors": {
+          "firstName": "Le prénom doit contenir au moins 2 caractères.",
+          "lastName": "Le nom doit contenir au moins 2 caractères."
+        }
+      },
+      "cta": {
+        "new": "Créer un utilisateur",
+        "add": "Ajouter un utilisateur",
+        "edit": "Modifier l'utilisateur"
+      },
+      "toast": {
+        "success": {
+          "title": "Utilisateur",
+          "create": "Utilisateur créé avec succès"
+        },
+        "update": {
+          "title": "Utilisateur",
+          "update": "Utilisateur mis à jour avec succès"
+        },
+        "error": {
+          "title": "Utilisateur",
+          "error": "Une erreur est survenue avec la requête (getUser). Veuillez réessayer plus tard."
+        }
+      }
+    },
+    "companies": {
+      "title": "Toutes les entreprises",
+      "table": {
+        "company": "Entreprise",
+        "socialReason": "Raison sociale",
+        "email": "Email",
+        "phoneNumber": "N° de téléphone",
+        "description": "Description",
+        "sirenNumber": "N° SIREN",
+        "isVerified": "Vérifié",
+        "isVerifiedLabel": "Vérifier l'entreprise",
+        "createdAt": "Créé le",
+        "updatedAt": "Mis à jour le",
+        "actions": "Actions",
+        "errors": {
+          "socialReason": "Social reason must be at least 2 characters.",
+          "phoneNumber": "Le numéro de téléphone doit être au format valide (ex: +33 0 00 00 00 00 or 00 00 00 00 00).",
+          "description": "La description doit contenir au moins 2 caractères.",
+          "sirenNumberRegExp": "Le numéro de SIREN doit être au format valide (ex: 123 456 789)."
+        }
+      },
+      "cta": {
+        "new": "Créer une entreprise",
+        "add": "Ajouter une entreprise",
+        "edit": "Modifier l'entreprise"
+      },
+      "toast": {
+        "success": {
+          "title": "Entreprise",
+          "create": "Entreprise créée avec succès"
+        },
+        "update": {
+          "title": "Entreprise",
+          "update": "Entreprise mise à jour avec succès"
+        },
+        "error": {
+          "title": "Entreprise",
+          "error": "Une erreur est survenue avec la requête (getCompany). Veuillez réessayer plus tard."
+        }
       }
     }
   }

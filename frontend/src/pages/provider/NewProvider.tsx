@@ -8,6 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
+import { addNewCompany, addNewProvider } from "@/services"
 
 /**
  * Verify if the siren is valid
@@ -15,15 +16,15 @@ import { Button } from "@/components/ui/button"
  */
 const verifySiren = async (siren: string) => {
   const token = import.meta.env.VITE_NEXT_PUBLIC_API_ENTREPRISE_TOKEN
-  // const apiUrlProd = `https://entreprise.api.gouv.fr/v3/infogreffe/rcs/unites_legales/${siren}/extrait_kbis`;
-  const apiUrlStaging = `https://staging.entreprise.api.gouv.fr/v3/infogreffe/rcs/unites_legales/${siren}/extrait_kbis`
+  // const apiUrlProdVerifySiren = `https://entreprise.api.gouv.fr/v3/infogreffe/rcs/unites_legales/${siren}/extrait_kbis`;
+  const apiUrlStagingVerifySiren = `https://staging.entreprise.api.gouv.fr/v3/infogreffe/rcs/unites_legales/${siren}/extrait_kbis`
 
   try {
-    const response = await fetch(apiUrlStaging, {
-      // mode: 'no-cors',
+    const response = await fetch(apiUrlStagingVerifySiren, {
       headers: {
+        cors: "no-cors",
         Authorization: `Bearer ${token}`,
-        // 'Access-Control-Allow-Origin': '*',
+        AccessControlAllowOrigin: "*",
       },
     })
     const data = await response.json()
@@ -72,10 +73,8 @@ const NewProvider = () => {
           message: t("newProvider.form.errors.sirenNumberNotValid"),
         }
       ),
-    isVerified: z.boolean(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
-    roles: z.array(z.string()),
+    createdAt: z.string(),
+    updatedAt: z.string(),
   })
 
   const form = useForm<z.infer<typeof newProviderFormSchema>>({
@@ -85,53 +84,27 @@ const NewProvider = () => {
       socialReason: "",
       description: "",
       siren: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       firstname: "",
       lastname: "",
       email: "",
-      isVerified: false,
-      roles: ["PROVIDER", "NOT_VERIFIED"],
     },
   })
 
   const onSubmit = async (values: z.infer<typeof newProviderFormSchema>) => {
-    console.log(values)
     //regarder dans son powerpoint, le denormalizerContext slide 52 pour rendre unique le nom de la société et ne pas ajouter si jamais
-    const companiesUrlApi = `${import.meta.env.VITE_API_URL}companies`
-    const usersUrlApi = `${import.meta.env.VITE_API_URL}users`
-    //envoyer les données au back et créer un provider en bdd via la route /api/companies en post
-    try {
-      const companyResponse = await fetch(companiesUrlApi, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      })
+    const createCompanyRequest = await addNewCompany(values)
 
-      if (companyResponse.status === 201) {
-        const userResponse = await fetch(usersUrlApi, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
+    if (createCompanyRequest.status === 201) {
+      const lastInsertCompanyId: number = createCompanyRequest.data.id
+      const addNewProviderRequest = await addNewProvider(values, lastInsertCompanyId)
+      if (addNewProviderRequest.status === 201) {
+        toast({
+          variant: "success",
+          title: t("newProvider.form.toast.successTitle"),
+          description: t("newProvider.form.toast.success"),
         })
-
-        if (userResponse.status === 201) {
-          toast({
-            variant: "success",
-            title: t("newProvider.form.toast.successTitle"),
-            description: t("newProvider.form.toast.success"),
-          })
-        } else {
-          toast({
-            variant: "destructive",
-            title: t("newProvider.form.toast.errorTitle"),
-            description: t("newProvider.form.toast.error"),
-          })
-        }
       } else {
         toast({
           variant: "destructive",
@@ -139,8 +112,7 @@ const NewProvider = () => {
           description: t("newProvider.form.toast.error"),
         })
       }
-    } catch (error) {
-      console.error(error)
+    } else {
       toast({
         variant: "destructive",
         title: t("newProvider.form.toast.errorTitle"),

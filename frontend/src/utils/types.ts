@@ -1,6 +1,6 @@
 export interface Company {
   id: number
-  name: string
+  socialReason: string
   email: string
   siren: string
   phoneNumber: string
@@ -43,10 +43,22 @@ export interface Service {
   category: Category
 }
 
+export interface Employee {
+  id: number
+  email: string
+  firstname: string
+  lastname: string
+  agencies: Agency[] | undefined
+}
+
 export interface User {
   id: number
   firstname: string
   lastname: string
   email: string
+  roles: string[]
+  isVerified: boolean
+  createdAt: string
+  updatedAt: string
   agencies?: Agency[]
 }

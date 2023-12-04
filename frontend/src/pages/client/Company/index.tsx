@@ -56,7 +56,7 @@ function CompanyClient() {
       <section className="flex justify-between w-[80%] mx-auto gap-[226px] md:w-full md:mx-0">
         <div className="flex flex-col justify-between">
           <div>
-            <h1 className="text-[64px] font-bold ">{request.data?.name}</h1>
+            <h1 className="text-[64px] font-bold ">{request.data?.socialReason}</h1>
             <p className="font-semibold ">{t("companyClient.section1.overallRating")}</p>
             <div className="flex items-center gap-1">
               <p>4,5</p>

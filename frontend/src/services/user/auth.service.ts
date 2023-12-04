@@ -18,3 +18,22 @@ export const register = async (user: {
 }> => {
   return api.post("http://localhost:8888/api/users", user)
 }
+
+type providerForm = {
+  email: string
+  firstname: string
+  lastname: string
+  company?: string
+}
+
+export const addNewProvider = async (body: providerForm, companyId: number) => {
+  body.company = `/api/companies/${companyId}`
+
+  return api
+    .post(`providers`, body, {
+      headers: {
+        "Content-Type": "application/ld+json",
+      },
+    })
+    .catch((error) => error.response)
+}

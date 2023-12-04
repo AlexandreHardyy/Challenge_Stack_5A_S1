@@ -52,6 +52,12 @@ const Header = () => {
               <Button variant={"outline"} onClick={() => navigate("/user/profile")}>
                 {t("header.cta.profile")}
               </Button>
+              <Button variant={"outline"} onClick={() => navigate("/admin")}>
+                {t("header.cta.admin")}
+              </Button>
+              <Button variant={"outline"} onClick={() => navigate("/provider")}>
+                {t("header.cta.provider")}
+              </Button>
               <Button
                 variant={"destructive"}
                 onClick={() => {
