@@ -44,8 +44,7 @@ class UserDenormalizer implements DenormalizerInterface
         /** @var User $user */
         $plainPassword = $user->getPlainPassword();
 
-
-        if (in_array('create-employee', $context) && !in_array('ROLE_EMPLOYEE', $user->getRoles())) {
+        if (in_array('create-employee', $context['groups']) && !in_array('ROLE_EMPLOYEE', $user->getRoles())) {
             $user->setRoles([ 'ROLE_EMPLOYEE' ]);
 
             $hashedPassword = $this->hasher->hashPassword($user, $this->generatePassword());
