@@ -7,6 +7,10 @@ import { ThemeProvider } from "@/components/Theme-provider.tsx"
 import "./i18n"
 import AuthProvider from "@/context/AuthContext.tsx"
 import { Toaster } from "./components/ui/toaster"
+import axios from "axios";
+
+axios.defaults.baseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:8877/api/';
+console.log("test ", import.meta.env.VITE_API_URL)
 
 const queryClient = new QueryClient()
 
