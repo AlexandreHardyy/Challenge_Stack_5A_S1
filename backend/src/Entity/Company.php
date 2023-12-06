@@ -46,7 +46,7 @@ class Company
     #[Groups(['company-group-read'])]
     private ?string $phoneNumber = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Groups(['company-group-read'])]
     private ?string $siren = null;
 
