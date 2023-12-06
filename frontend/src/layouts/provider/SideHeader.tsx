@@ -13,7 +13,7 @@ const SideHeader = () => {
       href: "/provider",
       content: (
         <>
-          <LayoutDashboardIcon /> {t("sideHeader.menu.dashboard")}
+          <LayoutDashboardIcon /> {t("header.sideHeader.menu.dashboard")}
         </>
       ),
     },
@@ -21,7 +21,7 @@ const SideHeader = () => {
       href: "/provider/employee",
       content: (
         <>
-          <Users2Icon /> {t("sideHeader.menu.employees")}
+          <Users2Icon /> {t("header.sideHeader.menu.employees")}
         </>
       ),
     },
@@ -29,7 +29,7 @@ const SideHeader = () => {
       href: "/provider/agency",
       content: (
         <>
-          <HomeIcon /> {t("sideHeader.menu.agencies")}
+          <HomeIcon /> {t("header.sideHeader.menu.agencies")}
         </>
       ),
     },

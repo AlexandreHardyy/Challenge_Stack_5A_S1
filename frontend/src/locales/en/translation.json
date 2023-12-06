@@ -9,14 +9,23 @@
       "signIn": "Sign in",
       "signUp": "Sign up",
       "logOut": "Log out",
-      "profile": "My profile"
-    }
-  },
-  "sideHeader": {
-    "menu": {
-      "dashboard": "Dashboard",
-      "employees": "My employees",
-      "agencies": "My agencies"
+      "profile": "My profile",
+      "admin": "Admin",
+      "provider": "Provider"
+    },
+    "sideHeader": {
+      "menu": {
+        "dashboard": "Dashboard",
+        "employees": "My employees",
+        "agencies": "My agencies"
+      }
+    },
+    "sideAdminHeader": {
+      "menu": {
+        "dashboard": "Dashboard",
+        "companies": "Companies",
+        "users": "Users"
+      }
     }
   },
   "companyClient": {
@@ -62,7 +71,8 @@
       "postalCode": "Postal code",
       "error": "Error",
       "loginOrPassword": "Login or password is incorrect",
-      "errorAccountCreation": "An error has occurred during account creation. Please try again later."
+      "errorAccountCreation": "An error has occurred during account creation. Please try again later.",
+      "fetchingError": "An error has occurred. Please try again later."
     },
     "cta": {
       "update": "Update",
@@ -108,7 +118,7 @@
         "email": "Enter your email",
         "phoneNumber": "+33 0 00 00 00 00",
         "socialReason": "Enter your social reason",
-        "description": "Enter your description",
+        "description": "Enter the description of your driving school company",
         "sirenNumber": "Enter your SIREN number"
       },
       "cta": {
@@ -155,7 +165,7 @@
       }
     }
   },
-  "admin": {
+  "provider": {
     "homeProvider": {
       "selectAgencyPlaceholder": "Select an agency",
       "selectAgencyAll": "All agencies",
@@ -174,6 +184,90 @@
       },
       "toast": {
         "error": "Something went wrong with the request (getCompany). Please try again later."
+      }
+    }
+  },
+  "admin": {
+    "users": {
+      "title": "All users",
+      "table": {
+        "user": "The user",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "roles": "Roles",
+        "isVerified": "Is verified",
+        "isVerifiedLabel": "Verify this user",
+        "createdAt": "Created at",
+        "updatedAt": "Updated at",
+        "actions": "Actions",
+        "placeholders": {
+          "roles": "Select user roles"
+        },
+        "errors": {
+          "firstName": "FirstName must be at least 2 characters.",
+          "lastName": "LastName must be at least 2 characters."
+        }
+      },
+      "cta": {
+        "new": "Create a new user",
+        "add": "Add user",
+        "edit": "Edit user"
+      },
+      "toast": {
+        "success": {
+          "title": "User",
+          "create": "User created successfully"
+        },
+        "update": {
+          "title": "User",
+          "update": "User updated successfully"
+        },
+        "error": {
+          "title": "User",
+          "error": "Something went wrong with the request (getUsers). Please try again later."
+        }
+      }
+    },
+    "companies": {
+      "title": "All companies",
+      "table": {
+        "company": "The company",
+        "socialReason": "Social reason",
+        "email": "Email",
+        "phoneNumber": "Phone number",
+        "description": "Description",
+        "sirenNumber": "N° SIREN",
+        "isVerified": "Is verified",
+        "isVerifiedLabel": "Verify this company",
+        "createdAt": "Created at",
+        "updatedAt": "Updated at",
+        "actions": "Actions",
+        "errors": {
+          "socialReason": "socialReason must be at least 2 characters.",
+          "phoneNumber": "Phone number must be in a valid format (ex: +33 0 00 00 00 00 or 00 00 00 00 00).",
+          "description": "Description must be at least 2 characters.",
+          "sirenNumberRegExp": "Siren number must be in a valid format (ex: 123456789)."
+        }
+      },
+      "cta": {
+        "new": "Create a new company",
+        "add": "Add company",
+        "edit": "Edit company"
+      },
+      "toast": {
+        "success": {
+          "title": "Company",
+          "create": "Company successfully created"
+        },
+        "update": {
+          "title": "Company",
+          "update": "Company successfully updated"
+        },
+        "error": {
+          "title": "Company",
+          "error": "Something went wrong with the request (getCompany). Please try again later."
+        }
       }
     }
   }

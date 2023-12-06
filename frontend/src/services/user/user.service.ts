@@ -27,7 +27,24 @@ export function useFetchEmployeesByCompany(companyId: number) {
     async () => {
       const response = await api.get(`companies/${companyId}/users`)
       if (response.status !== 200) {
-        throw new Error("Something went wrong with the request (getService)")
+        throw new Error("Something went wrong with the request (getUsers)")
+      }
+
+      return response.data["hydra:member"]
+    },
+    {
+      retry: false,
+    }
+  )
+}
+
+export function useFetchUsers() {
+  return useQuery<User[]>(
+    ["getUsers"],
+    async () => {
+      const response = await api.get(`users`)
+      if (response.status !== 200) {
+        throw new Error("Something went wrong with the request (getUsers)")
       }
 
       return response.data["hydra:member"]
@@ -62,6 +79,35 @@ export const addNewEmployee = async (companyId: number, body: EmployeeForm) => {
     .post(`employees`, body, {
       headers: {
         "Content-Type": "application/ld+json",
+      },
+    })
+    .catch((err) => err.response)
+}
+
+type UserForm = {
+  firstname: string
+  lastname: string
+  email: string
+  roles: string[]
+  isVerified: boolean
+  updatedAt?: string
+}
+
+export const addNewUser = async (body: UserForm) => {
+  return api
+    .post(`users`, body, {
+      headers: {
+        "Content-Type": "application/ld+json",
+      },
+    })
+    .catch((err) => err.response)
+}
+
+export const updateUserById = async (userId: number, body: UserForm) => {
+  return api
+    .patch(`users/${userId}`, body, {
+      headers: {
+        "Content-Type": "application/merge-patch+json",
       },
     })
     .catch((err) => err.response)

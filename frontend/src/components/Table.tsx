@@ -9,7 +9,7 @@ interface DataTableProps<TData, TValue> {
   isLoading?: boolean
 }
 
-export function DataTable<TData, TValue>({ columns, data, isLoading }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, isLoading }: Readonly<DataTableProps<TData, TValue>>) {
   const table = useReactTable({
     data: data ?? [],
     columns,

@@ -30,14 +30,14 @@ const HomeProvider = () => {
         <div className="flex h-16 items-center px-4 gap-4">
           <Select defaultValue={"AllAgencies"} onValueChange={(value) => setSelectedAgency(value)}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder={t("admin.homeProvider.selectAgencyPlaceholder")} />
+              <SelectValue placeholder={t("provider.homeProvider.selectAgencyPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {companyRequest.isLoading ? (
                 <Loader />
               ) : (
                 <>
-                  <SelectItem value="AllAgencies">{t("admin.homeProvider.selectAgencyAll")}</SelectItem>
+                  <SelectItem value="AllAgencies">{t("provider.homeProvider.selectAgencyAll")}</SelectItem>
                   {company?.agencies.map((agency: Agency) => (
                     <SelectItem key={agency.id} value={agency.name}>
                       {agency.name}
@@ -63,7 +63,7 @@ const HomeProvider = () => {
         <div className="grid gap-4 grid-cols-4 lg:grid-cols-2">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{t("admin.homeProvider.cards.totalRevenue")}</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("provider.homeProvider.cards.totalRevenue")}</CardTitle>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -84,7 +84,7 @@ const HomeProvider = () => {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{t("admin.homeProvider.cards.subscriptions")}</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("provider.homeProvider.cards.subscriptions")}</CardTitle>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -107,7 +107,7 @@ const HomeProvider = () => {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{t("admin.homeProvider.cards.sales")}</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("provider.homeProvider.cards.sales")}</CardTitle>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -164,9 +164,9 @@ const HomeProvider = () => {
             ) : (
               <>
                 <CardHeader>
-                  <CardTitle>{t("admin.homeProvider.yourServices.title")}</CardTitle>
+                  <CardTitle>{t("provider.homeProvider.yourServices.title")}</CardTitle>
                   <CardDescription>
-                    {t("admin.homeProvider.yourServices.subtitle", { count: servicesNumber })}
+                    {t("provider.homeProvider.yourServices.subtitle", { count: servicesNumber })}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -174,7 +174,9 @@ const HomeProvider = () => {
                     <YourServices agencies={agencies} selectedAgency={selectedAgency} />
                   ) : (
                     <div className="flex flex-col items-center justify-center h-32">
-                      <p className="text-sm text-muted-foreground">{t("admin.homeProvider.yourServices.noServices")}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {t("provider.homeProvider.yourServices.noServices")}
+                      </p>
                     </div>
                   )}
                 </CardContent>

@@ -36,7 +36,7 @@ class Company
 
     #[ORM\Column(length: 255)]
     #[Groups(['company-group-read'])]
-    private ?string $name = null;
+    private ?string $socialReason = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['company-group-read'])]
@@ -56,9 +56,10 @@ class Company
 
     #[ORM\Column]
     #[Groups(['company-group-read'])]
-    private ?bool $isVerified = null;
+    private ?bool $isVerified = false;
 
     #[ORM\Column]
+    #[Groups(['company-group-read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
@@ -73,10 +74,8 @@ class Company
     #[Groups(['company-group-read', 'agency-group-read'])]
     private Collection $categories;
 
-    #[ORM\Column(length: 255)]
-    private ?string $socialReason = null;
-
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: User::class)]
+    #[Groups(['company-group-read'])]
     private Collection $users;
 
     public function __construct()
@@ -89,18 +88,6 @@ class Company
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getEmail(): ?string

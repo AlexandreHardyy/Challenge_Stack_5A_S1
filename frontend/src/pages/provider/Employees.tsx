@@ -19,7 +19,7 @@ import React, { useContext, useState } from "react"
 import { PencilIcon } from "lucide-react"
 import { SelectMultiple } from "@/components/select-multiple"
 import { addNewEmployee, updateEmployeeById, useFetchEmployeesByCompany } from "@/services/user/user.service"
-import { Agency, User } from "@/utils/types"
+import { Agency, Employee, User } from "@/utils/types"
 import { useFetchAgenciesByCompany } from "@/services/agency.service"
 import { UseQueryResult } from "@tanstack/react-query"
 import { Spinner } from "@/components/loader/Spinner"
@@ -80,7 +80,7 @@ const employeeFormSchema = z.object({
   agencies: z.array(z.string()).optional(),
 })
 
-const EmployeeForm = ({ employee, isReadOnly }: { employee?: User; isReadOnly: boolean }) => {
+const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnly: boolean }) => {
   const { toast } = useToast()
   const { agencies, employees } = useContext(EmployeeContext)
   const { t } = useTranslation()
@@ -95,7 +95,6 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: User; isReadOnly: b
   })
 
   const onSubmit = async (values: z.infer<typeof employeeFormSchema>) => {
-    console.log(values)
     const result = await (!employee ? addNewEmployee(1, values) : updateEmployeeById(employee!.id, values))
     if (result.status === 201) {
       toast({
@@ -198,10 +197,10 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: User; isReadOnly: b
   )
 }
 
-const ModalFormEmployee = ({ employee, variant = "ghost" }: { employee?: User; variant?: "ghost" | "outline" }) => {
-  const [isReadOnly, setIsreadOnly] = useState(!!employee)
+const ModalFormEmployee = ({ employee, variant = "ghost" }: { employee?: Employee; variant?: "ghost" | "outline" }) => {
+  const [isReadOnly, setIsReadOnly] = useState(!!employee)
   return (
-    <Dialog onOpenChange={(open) => !open && setIsreadOnly(!!employee)}>
+    <Dialog onOpenChange={(open) => !open && setIsReadOnly(!!employee)}>
       <DialogTrigger asChild>
         <Button variant={variant} className="px-2">
           {!employee ? "Add new employee" : <PencilIcon />}
@@ -216,7 +215,7 @@ const ModalFormEmployee = ({ employee, variant = "ghost" }: { employee?: User; v
               <>
                 Your employee{" "}
                 {isReadOnly && (
-                  <Button variant={"ghost"} onClick={() => setIsreadOnly(!isReadOnly)}>
+                  <Button variant={"ghost"} onClick={() => setIsReadOnly(!isReadOnly)}>
                     {" "}
                     <PencilIcon />{" "}
                   </Button>

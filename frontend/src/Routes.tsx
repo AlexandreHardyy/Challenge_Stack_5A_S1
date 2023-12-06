@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
-import AdminLayout from "@/layouts/admin"
+import ProviderLayout from "@/layouts/provider"
 import ClientLayout from "@/layouts/client"
+import AdminLayout from "@/layouts/admin"
 
 import Landing from "@/pages/Landing"
 import NotFound from "@/pages/NotFound"
@@ -18,6 +19,8 @@ import Agencies from "./pages/provider/Agencies"
 import RegisterSuccess from "@/pages/auth/RegisterSuccess.tsx"
 import NewProvider from "@/pages/provider/NewProvider.tsx"
 import ProfileClient from "@/pages/client/User/ProfileClient.tsx"
+import Users from "@/pages/admin/Users.tsx"
+import Companies from "@/pages/admin/companies.tsx"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -68,12 +71,8 @@ const Routes = () => {
       errorElement: <NotFound />,
     },
     {
-      element: <AdminLayout />,
+      element: <ProviderLayout />,
       children: [
-        {
-          path: "/admin",
-          element: <HomeAdmin />,
-        },
         {
           path: "/provider",
           element: <HomeProvider />,
@@ -88,6 +87,23 @@ const Routes = () => {
         },
       ],
       errorElement: <NotFound />,
+    },
+    {
+      element: <AdminLayout />,
+      children: [
+        {
+          path: "/admin",
+          element: <HomeAdmin />,
+        },
+        {
+          path: "/admin/companies",
+          element: <Companies />,
+        },
+        {
+          path: "/admin/users",
+          element: <Users />,
+        },
+      ],
     },
   ])
 

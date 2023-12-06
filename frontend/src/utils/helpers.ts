@@ -9,3 +9,7 @@ export function computeServiceDuration(duration: number) {
 
   return duration % MINUTES_IN_ONE_HOUR ? `${durationInHour}:${duration % MINUTES_IN_ONE_HOUR}` : `${durationInHour}h`
 }
+
+export function formatDate(date: string) {
+  return new Date(date).toLocaleDateString("fr-FR")
+}
