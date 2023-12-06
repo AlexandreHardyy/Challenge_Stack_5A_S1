@@ -18,7 +18,7 @@ interface ConfirmationModalProps {
   instructorId?: number
   agency: Agency
   onModalOpenChange: (value: boolean) => void
-  sessionsReftech: () => void
+  sessionsReFetch: () => void
 }
 
 export default function ConfirmationModal({
@@ -28,8 +28,8 @@ export default function ConfirmationModal({
   instructorId,
   agency,
   onModalOpenChange,
-  sessionsReftech,
-}: ConfirmationModalProps) {
+  sessionsReFetch,
+}: Readonly<ConfirmationModalProps>) {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const sessionMutation = useAddSession({
@@ -41,20 +41,20 @@ export default function ConfirmationModal({
         description: "Your session has been reserved. You will receive soon a confirmation email",
       })
       onModalOpenChange(false)
-      sessionsReftech()
+      sessionsReFetch()
     },
     onError: () => {
       setIsLoading(false)
       toast({
         variant: "destructive",
-        title: "An error occured!",
-        description: "An error occured during your session reservation.",
+        title: "An error occurred!",
+        description: "An error occurred during your session reservation.",
       })
       onModalOpenChange(false)
     },
   })
 
-  // TODO: should not retrieve agencies with 0 intrsuctors
+  // TODO: should not retrieve agencies with 0 instructors
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onModalOpenChange}>

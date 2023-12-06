@@ -2,7 +2,7 @@ import api from "@/utils/api"
 import { Agency } from "@/utils/types"
 import { useQuery } from "@tanstack/react-query"
 
-export function useFetchAgenciesByCompany(companyId: number) {
+export function useFetchAgenciesByCompany(companyId?: number) {
   return useQuery<Agency[]>(
     ["getAgencies"],
     async () => {

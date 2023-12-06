@@ -62,6 +62,7 @@ export interface User {
   createdAt: string
   updatedAt: string
   agencies?: Agency[]
+  company?: Company
 }
 
 export interface Session {

@@ -34,7 +34,7 @@ class DataFixtures extends Fixture
         $company2 = new Company();
         $company2->setSocialReason('José Auto');
         $company2->setEmail('joseauto@gmail.com');
-        $company2->setPhoneNumber('0781055200');
+        $company2->setPhoneNumber('0750926755');
         $company2->setDescription('Ceci est une Entreprise d\'auto-école comprenant différentes agences');
         $company2->setIsVerified(true);
         $company2->setSiren('223456789');

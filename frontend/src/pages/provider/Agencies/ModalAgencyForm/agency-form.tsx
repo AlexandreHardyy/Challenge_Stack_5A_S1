@@ -1,92 +1,16 @@
-import { DataTable } from "@/components/Table"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { useForm } from "react-hook-form"
-import { ColumnDef } from "@tanstack/react-table"
 import * as z from "zod"
-
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import React, { useContext, useState } from "react"
-import { PencilIcon } from "lucide-react"
-import { Agency, Category, Service } from "@/utils/types"
-import { SelectMultiple } from "@/components/select-multiple"
-import { addNewAgency, updateAgencyById, useFetchAgenciesByCompany } from "@/services/agency.service"
-import { useFetchServicesByCompany } from "@/services/services.service"
-import { UseQueryResult } from "@tanstack/react-query"
-import { useToast } from "@/components/ui/use-toast"
+import { Agency, Category, Service } from "@/utils/types.ts"
 import { useTranslation } from "react-i18next"
-
-const columns: ColumnDef<Agency>[] = [
-  {
-    accessorKey: "id",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-  },
-  {
-    accessorKey: "address",
-    header: "Address",
-  },
-  {
-    accessorKey: "city",
-    header: "City",
-  },
-  {
-    accessorKey: "zip",
-    header: "Zip code",
-  },
-  {
-    accessorKey: "description",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
-  {
-    accessorKey: "company",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
-  {
-    accessorKey: "geoloc",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
-  {
-    accessorKey: "services",
-    cell: ({ row }) => {
-      const services = row.getValue("services") as Service[]
-      return services.map((service) => service.name).join(", ")
-    },
-  },
-  {
-    accessorKey: "action",
-    header: "Action",
-    cell: ({ row: { getValue: val } }) => {
-      return (
-        <ModalFormAgency
-          agency={{
-            id: val("id"),
-            address: val("address"),
-            city: val("city"),
-            zip: val("zip"),
-            name: val("name"),
-            description: val("description"),
-            company: val("company"),
-            services: val("services"),
-            geoloc: val("geoloc"),
-          }}
-        />
-      )
-    },
-  },
-]
+import { useToast } from "@/components/ui/use-toast.ts"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import React, { useContext } from "react"
+import { addNewAgency, updateAgencyById } from "@/services"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form.tsx"
+import { Input } from "@/components/ui/input.tsx"
+import { SelectMultiple } from "@/components/select-multiple.tsx"
+import { Button } from "@/components/ui/button.tsx"
+import { UseQueryResult } from "@tanstack/react-query"
 
 const agencyFormSchema = z.object({
   name: z.string().min(1),
@@ -96,7 +20,12 @@ const agencyFormSchema = z.object({
   services: z.array(z.string()),
 })
 
-const AgencyForm = ({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boolean }) => {
+const AgencyContext = React.createContext<{
+  services?: UseQueryResult<Category[], unknown>
+  agencies?: UseQueryResult<Agency[], unknown>
+}>({})
+
+export default function AgencyForm({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boolean }) {
   const { t } = useTranslation()
   const { toast } = useToast()
 
@@ -234,64 +163,3 @@ const AgencyForm = ({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boole
     </Form>
   )
 }
-
-const ModalFormAgency = ({ agency, variant = "ghost" }: { agency?: Agency; variant?: "ghost" | "outline" }) => {
-  const [isReadOnly, setIsreadOnly] = useState(!!agency)
-  const { t } = useTranslation()
-  return (
-    <Dialog onOpenChange={(open) => !open && setIsreadOnly(!!agency)}>
-      <DialogTrigger asChild>
-        <Button variant={variant} className="px-2">
-          {!agency ? t("ProviderAgencies.form.cta.new") : <PencilIcon />}
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="pb-4">
-            {!agency ? (
-              t("ProviderAgencies.form.cta.new")
-            ) : (
-              <>
-                Your agency{" "}
-                {isReadOnly && (
-                  <Button variant={"ghost"} onClick={() => setIsreadOnly(!isReadOnly)}>
-                    {" "}
-                    <PencilIcon />{" "}
-                  </Button>
-                )}{" "}
-              </>
-            )}
-          </DialogTitle>
-          <DialogDescription>
-            <AgencyForm agency={agency} isReadOnly={isReadOnly} />
-          </DialogDescription>
-        </DialogHeader>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-const AgencyContext = React.createContext<{
-  services?: UseQueryResult<Category[], unknown>
-  agencies?: UseQueryResult<Agency[], unknown>
-}>({})
-
-const Agencies = () => {
-  const agencies = useFetchAgenciesByCompany(1)
-  const services = useFetchServicesByCompany(1)
-  const { t } = useTranslation()
-
-  return (
-    <AgencyContext.Provider value={{ services, agencies }}>
-      <div className="flex flex-col gap-6">
-        <h1 className="text-3xl"> {t("ProviderAgencies.title")} </h1>
-        <div className="self-start w-full max-w-xl">
-          <ModalFormAgency variant="outline" />
-        </div>
-        <DataTable isLoading={agencies.isLoading} columns={columns} data={agencies.data} />
-      </div>
-    </AgencyContext.Provider>
-  )
-}
-
-export default Agencies
