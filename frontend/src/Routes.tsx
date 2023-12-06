@@ -20,8 +20,8 @@ import Agencies from "@/pages/provider/Agencies"
 import RegisterSuccess from "@/pages/auth/RegisterSuccess.tsx"
 import NewProvider from "@/pages/provider/NewProvider.tsx"
 import ProfileClient from "@/pages/client/User/ProfileClient.tsx"
-import Users from "@/pages/admin/Users.tsx"
-import Companies from "@/pages/admin/companies.tsx"
+import Users from "@/pages/admin/Users"
+import Companies from "@/pages/admin/Companies"
 
 const Routes = () => {
   const router = createBrowserRouter([

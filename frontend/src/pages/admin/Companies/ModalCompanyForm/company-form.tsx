@@ -1,92 +1,14 @@
-import { DataTable } from "@/components/Table"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { useForm } from "react-hook-form"
-import { ColumnDef } from "@tanstack/react-table"
 import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
-import { PencilIcon } from "lucide-react"
-import { addNewCompany, updateCompanyById, useFetchCompanies } from "@/services"
-import { Checkbox } from "@/components/ui/checkbox.tsx"
+import { t } from "i18next"
 import { Company } from "@/utils/types.ts"
-import { formatDate } from "@/utils/helpers.ts"
-import { Spinner } from "@/components/loader/Spinner.tsx"
+import { addNewCompany, updateCompanyById, useFetchCompanies } from "@/services"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "@/components/ui/use-toast.ts"
-import { t, TFunction } from "i18next"
-import { useTranslation } from "react-i18next"
-
-function companiesColumns(t: TFunction<"translation", undefined>): ColumnDef<Company>[] {
-  return [
-    {
-      accessorKey: "id",
-      header: ({ column }) => column.toggleVisibility(false),
-    },
-    {
-      accessorKey: "socialReason",
-      header: t("admin.companies.table.socialReason"),
-    },
-    {
-      accessorKey: "email",
-      header: t("admin.companies.table.email"),
-    },
-    {
-      accessorKey: "phoneNumber",
-      header: t("admin.companies.table.phoneNumber"),
-    },
-    {
-      accessorKey: "description",
-      header: t("admin.companies.table.description"),
-    },
-    {
-      accessorKey: "siren",
-      header: t("admin.companies.table.sirenNumber"),
-    },
-    {
-      accessorKey: "isVerified",
-      header: t("admin.companies.table.isVerified"),
-    },
-    {
-      accessorKey: "createdAt",
-      header: t("admin.companies.table.createdAt"),
-    },
-    {
-      accessorKey: "updatedAt",
-      header: t("admin.companies.table.updatedAt"),
-    },
-    {
-      accessorKey: "actions",
-      header: t("admin.companies.table.actions"),
-      cell: ({ row: { getValue: val } }) => {
-        return (
-          <ModalFormCompany
-            company={{
-              id: val("id"),
-              socialReason: val("socialReason"),
-              email: val("email"),
-              phoneNumber: val("phoneNumber"),
-              description: val("description"),
-              siren: val("siren"),
-              agencies: val("agencies"),
-              isVerified: val("isVerified"),
-              createdAt: val("createdAt"),
-              updatedAt: val("updatedAt"),
-            }}
-          />
-        )
-      },
-    },
-  ]
-}
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form.tsx"
+import { Input } from "@/components/ui/input.tsx"
+import { Checkbox } from "@/components/ui/checkbox.tsx"
+import { Button } from "@/components/ui/button.tsx"
 
 const companyFormSchema = z.object({
   socialReason: z.string().min(2, {
@@ -108,7 +30,7 @@ const companyFormSchema = z.object({
   updatedAt: z.string(),
 })
 
-const CompanyForm = ({ company, isReadOnly }: { company?: Company; isReadOnly: boolean }) => {
+export default function CompanyForm({ company, isReadOnly }: { company?: Company; isReadOnly: boolean }) {
   const companies = useFetchCompanies()
   const form = useForm<z.infer<typeof companyFormSchema>>({
     resolver: zodResolver(companyFormSchema),
@@ -238,76 +160,3 @@ const CompanyForm = ({ company, isReadOnly }: { company?: Company; isReadOnly: b
     </Form>
   )
 }
-
-const ModalFormCompany = ({ company, variant = "ghost" }: { company?: Company; variant?: "ghost" | "outline" }) => {
-  const [isReadOnly, setIsReadOnly] = useState(!!company)
-  return (
-    <Dialog onOpenChange={(open) => !open && setIsReadOnly(!!company)}>
-      <DialogTrigger asChild>
-        <Button variant={variant} className="px-2">
-          {!company ? t("admin.companies.cta.new") : <PencilIcon />}
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="pb-4">
-            {!company ? (
-              t("admin.companies.cta.new")
-            ) : (
-              <>
-                <div className="flex items-center">
-                  <h2>{t("admin.companies.table.company")}</h2>
-                  {isReadOnly && (
-                    <Button variant={"ghost"} onClick={() => setIsReadOnly(!isReadOnly)}>
-                      <PencilIcon />
-                    </Button>
-                  )}{" "}
-                </div>
-              </>
-            )}
-          </DialogTitle>
-          <DialogDescription>
-            <CompanyForm company={company} isReadOnly={isReadOnly} />
-          </DialogDescription>
-        </DialogHeader>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-const Companies = () => {
-  const { t } = useTranslation()
-  const companiesRequest = useFetchCompanies()
-
-  if (companiesRequest.status === "error") {
-    return <div>{t("common.form.fetchingError")}</div>
-  }
-
-  if (companiesRequest.isLoading) {
-    return (
-      <div className="flex justify-center items-center h-[100vh]">
-        <Spinner />
-      </div>
-    )
-  }
-
-  const companies: Company[] = companiesRequest.data
-
-  const formattedCompanies: Company[] = companies.map((company: Company) => ({
-    ...company,
-    createdAt: formatDate(company.createdAt),
-    updatedAt: formatDate(company.updatedAt),
-  }))
-
-  return (
-    <div className="flex flex-col gap-6">
-      <h1 className="text-3xl">{t("admin.companies.title")}</h1>
-      <div className="self-start w-full max-w-xl">
-        <ModalFormCompany variant="outline" />
-      </div>
-      <DataTable isLoading={companiesRequest.isLoading} columns={companiesColumns(t)} data={formattedCompanies} />
-    </div>
-  )
-}
-
-export default Companies

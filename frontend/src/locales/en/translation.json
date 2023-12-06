@@ -107,7 +107,9 @@
     "search": {
       "search": "Search",
       "searchPlaceholder": "Search"
-    }
+    },
+    "userNotLogged": "You are not logged in.",
+    "loading": "Loading..."
   },
   "landing": {
     "title": "Book, Drive, Succeed. Your Future on the Fast Lane!",
@@ -186,9 +188,9 @@
   "employeePage": {
     "title": "Manage your employee",
     "subTitle": "Update his schedule",
-    "fetchError": "An error occured while fetching employee",
+    "fetchError": "An error occurred while fetching employee",
     "form": {
-      "info": "Select a start hour and an end hour where your employee works for a specifique date range",
+      "info": "Select a start hour and an end hour where your employee works for a specific date range",
       "start": "Start Hour",
       "end": "End Hour",
       "agency": "Agency",
@@ -200,7 +202,7 @@
     "toast": {
       "title": "Agence",
       "successUpdate": "Employee schedule has been updated successfully",
-      "error": "An error occured while updating employee schedule"
+      "error": "An error occurred while updating employee schedule"
     }
   },
   "provider": {

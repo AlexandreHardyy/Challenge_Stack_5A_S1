@@ -120,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['read-user'])]
+    #[Groups(['read-user', 'update-user'])]
     private array $roles = [];
 
     /**
@@ -145,7 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastname = null;
 
     #[ORM\Column]
-    #[Groups(['read-user'])]
+    #[Groups(['read-user', 'update-user'])]
     private ?bool $isVerified = false;
 
     #[ORM\Column]
@@ -153,11 +153,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['read-user'])]
+    #[Groups(['read-user', 'update-user'])]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['create-employee', 'create-provider', 'update-provider'])]
+    #[Groups(['read-user', 'create-employee', 'create-provider', 'update-provider'])]
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]
