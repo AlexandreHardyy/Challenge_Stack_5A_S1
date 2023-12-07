@@ -34,7 +34,6 @@ class UserVoter extends Voter
         if (!$user instanceof UserInterface) {
             return false;
         }
-
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case self::EDIT:
@@ -45,6 +44,9 @@ class UserVoter extends Voter
             case self::VIEW:
                 if($user->getUserIdentifier() === $subject->getUserIdentifier())
                     return true;
+                else if($this->security->isGranted('ROLE_PROVIDER')) {
+                    return true;  // @TODO
+                }
                 else if($this->security->isGranted('ROLE_ADMIN'))
                     return true;
                 break;

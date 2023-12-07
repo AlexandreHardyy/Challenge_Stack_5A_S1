@@ -21,6 +21,17 @@ export const updateUser = async (
   return api.patch(`users/${id}`, data)
 }
 
+export function useFetchUserById(id: number) {
+  return useQuery<User>(["getUserById"], async () => {
+    const response = await api.get(`users/${id}`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getService)")
+    }
+
+    return response.data
+  })
+}
+
 export function useFetchEmployeesByCompany(companyId: number) {
   return useQuery<User[]>(
     ["getUsers"],

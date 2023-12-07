@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import React, { useContext, useState } from "react"
-import { PencilIcon } from "lucide-react"
+import { EyeIcon, PencilIcon } from "lucide-react"
 import { SelectMultiple } from "@/components/select-multiple"
 import { addNewEmployee, updateEmployeeById, useFetchEmployeesByCompany } from "@/services/user/user.service"
 import { Agency, Employee, User } from "@/utils/types"
@@ -25,6 +25,7 @@ import { UseQueryResult } from "@tanstack/react-query"
 import { Spinner } from "@/components/loader/Spinner"
 import { useToast } from "@/components/ui/use-toast"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -55,15 +56,21 @@ export const columns: ColumnDef<User>[] = [
     header: "Action",
     cell: ({ row: { getValue: val } }) => {
       return (
-        <ModalFormEmployee
-          employee={{
-            id: val("id"),
-            email: val("email"),
-            firstname: val("firstname"),
-            lastname: val("lastname"),
-            agencies: val("agencies"),
-          }}
-        />
+        <div className="flex items-center gap-4">
+          <ModalFormEmployee
+            employee={{
+              id: val("id"),
+              email: val("email"),
+              firstname: val("firstname"),
+              lastname: val("lastname"),
+              agencies: val("agencies"),
+            }}
+          />
+          <Link to={`/provider/employee/${val("id")}`}>
+            {" "}
+            <EyeIcon />{" "}
+          </Link>
+        </div>
       )
     },
   },

@@ -1,6 +1,6 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search } from "@/components/ui/search"
-import { DateRangePicker } from "@/components/ui/date-range-picker"
+import { DateRangePickerCustom } from "@/components/ui/date-range-picker-custom"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Overview, YourServices } from "@/components/dashboard-provider"
 import { useTranslation } from "react-i18next"
@@ -47,7 +47,7 @@ const HomeProvider = () => {
               )}
             </SelectContent>
           </Select>
-          <DateRangePicker
+          <DateRangePickerCustom
             onUpdate={({ range: values }) => console.log(values)}
             initialDateFrom={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}
             initialDateTo={new Date()}
