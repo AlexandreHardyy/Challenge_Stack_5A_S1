@@ -123,10 +123,14 @@ class Agency
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'agencies')]
     private Collection $users;
 
+    #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Schedule::class, orphanRemoval: true)]
+    private Collection $schedules;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->schedules = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -303,6 +307,36 @@ class Agency
     {
         if ($this->users->removeElement($user)) {
             $user->removeAgency($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Schedule>
+     */
+    public function getSchedules(): Collection
+    {
+        return $this->schedules;
+    }
+
+    public function addSchedule(Schedule $schedule): static
+    {
+        if (!$this->schedules->contains($schedule)) {
+            $this->schedules->add($schedule);
+            $schedule->setAgency($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSchedule(Schedule $schedule): static
+    {
+        if ($this->schedules->removeElement($schedule)) {
+            // set the owning side to null (unless already changed)
+            if ($schedule->getAgency() === $this) {
+                $schedule->setAgency(null);
+            }
         }
 
         return $this;

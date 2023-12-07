@@ -165,6 +165,26 @@
       }
     }
   },
+  "employeePage": {
+    "title": "Gerer ton salarié",
+    "subTitle": "Mettre a jour son emploi du temps",
+    "fetchError": "Une error a eu lieu lors de la récupération de l'utilisateur",
+    "form": {
+      "info": "Selectionner un interval de temps ou vous voulez modifier l'emploi du temps de votre employer",
+      "start": "Heure de début",
+      "end": "Heure de fin",
+      "agency": "Agence",
+      "dateRange": "Date",
+      "cta": {
+        "add": "Mettre a jour"
+      }
+    },
+    "toast": {
+      "title": "Agence",
+      "successUpdate": "L'emploi de temps du salarié a été mis a jour avec succès",
+      "error": "Une erreur a eu lieu lors de la mis a jour de l'emploi du temps"
+    }
+  },
   "provider": {
     "homeProvider": {
       "selectAgencyPlaceholder": "Sélectionner une agence",

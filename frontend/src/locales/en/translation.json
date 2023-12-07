@@ -165,6 +165,26 @@
       }
     }
   },
+  "employeePage": {
+    "title": "Manage your employee",
+    "subTitle": "Update his schedule",
+    "fetchError": "An error occured while fetching employee",
+    "form": {
+      "info": "Select a start hour and an end hour where your employee works for a specifique date range",
+      "start": "Start Hour",
+      "end": "End Hour",
+      "agency": "Agency",
+      "dateRange": "Date Range",
+      "cta": {
+        "add": "Update schedule"
+      }
+    },
+    "toast": {
+      "title": "Agence",
+      "successUpdate": "Employee schedule has been updated successfully",
+      "error": "An error occured while updating employee schedule"
+    }
+  },
   "provider": {
     "homeProvider": {
       "selectAgencyPlaceholder": "Select an agency",

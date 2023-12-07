@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/Theme-provider.tsx"
 import "./i18n"
 import AuthProvider from "@/context/AuthContext.tsx"
 import { Toaster } from "./components/ui/toaster"
+import { ReactQueryContext } from "./context/ReactQueryContext"
 
 const queryClient = new QueryClient()
 
@@ -18,10 +19,12 @@ ReactDOM.createRoot(rootDiv!).render(
     <React.Suspense fallback="loading">
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-          <AuthProvider>
-            <Routes />
-            <Toaster />
-          </AuthProvider>
+          <ReactQueryContext>
+            <AuthProvider>
+              <Routes />
+              <Toaster />
+            </AuthProvider>
+          </ReactQueryContext>
         </ThemeProvider>
       </QueryClientProvider>
     </React.Suspense>
