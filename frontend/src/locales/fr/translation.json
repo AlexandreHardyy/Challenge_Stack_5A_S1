@@ -62,13 +62,15 @@
       "postalCode": "Code postal",
       "error": "Erreur",
       "loginOrPassword": "Email ou mot de passe incorrect",
-      "errorAccountCreation": "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard."
+      "errorAccountCreation": "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard.",
+      "forgotPassword": "Mot de passe oublié"
     },
     "cta": {
       "update": "Update",
       "submit": "Envoyer",
       "cancel": "Annuler",
-      "createMyAccount": "Créer mon compte"
+      "createMyAccount": "Créer mon compte",
+      "sendEmail": "Envoyer un email"
     },
     "validation": {
       "registerSuccess": "Votre compte a été créé avec succès.",
