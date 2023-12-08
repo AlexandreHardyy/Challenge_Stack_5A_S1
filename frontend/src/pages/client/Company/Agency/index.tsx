@@ -1,36 +1,17 @@
-import { Agency } from "@/utils/types"
-import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 import styles from "@/styles/CompanyClient.module.css"
 import { Ratings } from "@/components/ratings"
 import { useTranslation } from "react-i18next"
 import { ServiceList } from "./service-list"
 import { Map } from "./map"
-
-function useFetchAgency(agencyId?: string) {
-  const url = `${import.meta.env.VITE_API_URL}agencies/${agencyId}`
-
-  return useQuery<Agency>(
-    ["getAgency", url],
-    async () => {
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw new Error("Something went wrong with the request (getAgency)")
-      }
-
-      return response.json()
-    },
-    {
-      retry: false,
-    }
-  )
-}
+import { InstructorsList } from "./instructors-list"
+import { useFetchAgencyById } from "@/services/agency.service"
 
 function AgencyClient() {
   const { agencyId } = useParams()
   const { t } = useTranslation()
 
-  const request = useFetchAgency(agencyId)
+  const request = useFetchAgencyById(agencyId)
 
   if (request.status === "error") {
     return <h1>WTFFFFF</h1>
@@ -111,40 +92,7 @@ function AgencyClient() {
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0 flex flex-col gap-[17px]">
         <h2 className="text-[32px] font-bold">{t("agencyClient.ourInstructors")}</h2>
-        <div className="flex gap-[40px]">
-          <div className="flex flex-col items-center gap-[15px]">
-            <img
-              className="rounded-[200px] w-[200px] h-[200px]"
-              alt="monititor-picture"
-              src="https://yt3.googleusercontent.com/bVsqJPvzGWmifywdIj9srMNA-39rStHuPm4KOuVac9CVM3uMegew_he4Btnq4EdMfwBsEexMmQ=s900-c-k-c0x00ffffff-no-rj"
-            />
-            <p>Nom Prénom</p>
-          </div>
-          <div className="flex flex-col items-center gap-[15px]">
-            <img
-              className="rounded-[200px] w-[200px] h-[200px]"
-              alt="monititor-picture"
-              src="https://yt3.googleusercontent.com/bVsqJPvzGWmifywdIj9srMNA-39rStHuPm4KOuVac9CVM3uMegew_he4Btnq4EdMfwBsEexMmQ=s900-c-k-c0x00ffffff-no-rj"
-            />
-            <p>Nom Prénom</p>
-          </div>
-          <div className="flex flex-col items-center gap-[15px]">
-            <img
-              className="rounded-[200px] w-[200px] h-[200px]"
-              alt="monititor-picture"
-              src="https://yt3.googleusercontent.com/bVsqJPvzGWmifywdIj9srMNA-39rStHuPm4KOuVac9CVM3uMegew_he4Btnq4EdMfwBsEexMmQ=s900-c-k-c0x00ffffff-no-rj"
-            />
-            <p>Nom Prénom</p>
-          </div>
-          <div className="flex flex-col items-center gap-[15px]">
-            <img
-              className="rounded-[200px] w-[200px] h-[200px]"
-              alt="monititor-picture"
-              src="https://yt3.googleusercontent.com/bVsqJPvzGWmifywdIj9srMNA-39rStHuPm4KOuVac9CVM3uMegew_he4Btnq4EdMfwBsEexMmQ=s900-c-k-c0x00ffffff-no-rj"
-            />
-            <p>Nom Prénom</p>
-          </div>
-        </div>
+        {request.data?.users && <InstructorsList instructors={request.data.users} />}
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0">
         <Ratings />

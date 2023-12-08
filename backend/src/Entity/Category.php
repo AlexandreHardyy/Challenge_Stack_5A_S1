@@ -19,11 +19,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(
             normalizationContext:['groups' => ['categories-group-read']],
             openapi: new Operation(
-                tags: [ 'Categories' ],
+                tags: [ 'Category' ],
                 summary: 'Returns a service of an agency',
                 description: 'Returns categories of a company'
             )
-        )
+        ),
     ],
     uriVariables: [
         'id' => new Link(toProperty: 'company', fromClass: Company::class)

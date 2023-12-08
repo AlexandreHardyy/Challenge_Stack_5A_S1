@@ -28,6 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ]
 )]
 #[ApiResource(
+    # problem here
     uriTemplate: '/companies/{id}/services',
     operations: [
         new Post(
@@ -74,9 +75,13 @@ class Service
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'services')]
     private Collection $agencies;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: Session::class, orphanRemoval: true)]
+    private Collection $sessions;
+
     public function __construct()
     {
         $this->agencies = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -164,6 +169,36 @@ class Service
     public function removeAgency(Agency $agency): static
     {
         $this->agencies->removeElement($agency);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Session>
+     */
+    public function getSessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addSession(Session $session): static
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions->add($session);
+            $session->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSession(Session $session): static
+    {
+        if ($this->sessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getService() === $this) {
+                $session->setService(null);
+            }
+        }
 
         return $this;
     }

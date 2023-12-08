@@ -25,6 +25,7 @@ export interface Agency {
   }
   services: Service[]
   geoloc: [string, string]
+  users?: Pick<User, "id" | "firstname" | "lastname">[]
 }
 
 export interface Category {
@@ -61,4 +62,14 @@ export interface User {
   createdAt: string
   updatedAt: string
   agencies?: Agency[]
+}
+
+export interface Session {
+  student: User
+  instructor: User
+  startDate: string
+  endDate: string
+  service: Service
+  Agency: Agency
+  status: string
 }

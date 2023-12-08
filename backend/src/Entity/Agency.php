@@ -121,16 +121,21 @@ class Agency
     private array $geoloc = [];
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'agencies')]
+    #[Groups(['agency-group-read'])]
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Schedule::class, orphanRemoval: true)]
     private Collection $schedules;
+    
+    #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Session::class, orphanRemoval: true)]
+    private Collection $sessions;
 
     public function __construct()
     {
         $this->services = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->schedules = new ArrayCollection();
+        $this->sessions = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -330,12 +335,41 @@ class Agency
         return $this;
     }
 
+    /**
+     * @return Collection<int, Session>
+     */
+    public function getSessions(): Collection
+    {
+        return $this->sessions;
+    }
+
+    public function addSession(Session $session): static
+    {
+        if (!$this->sessions->contains($session)) {
+            $this->sessions->add($session);
+            $session->setAgency($this);
+        }
+
+        return $this;
+    }
+
     public function removeSchedule(Schedule $schedule): static
     {
         if ($this->schedules->removeElement($schedule)) {
             // set the owning side to null (unless already changed)
             if ($schedule->getAgency() === $this) {
                 $schedule->setAgency(null);
+            }
+        }
+
+        return $this;
+    }
+    public function removeSession(Session $session): static
+    {
+        if ($this->sessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getAgency() === $this) {
+                $session->setAgency(null);
             }
         }
 
