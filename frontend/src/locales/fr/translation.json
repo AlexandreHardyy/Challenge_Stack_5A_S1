@@ -45,6 +45,24 @@
     "location": "Localisation",
     "ourInstructors": "Nos moniteurs"
   },
+  "serviceClient": {
+    "details": "Détails",
+    "title": "Titre",
+    "duration": "Durée",
+    "price": "Prix",
+    "description": "Description",
+    "instructorsSelector": {
+      "instructors": "Instructeurs",
+      "placeholder": "Séléctionnez un instructeur",
+      "noPreferences": "Pas de préférences"
+    },
+    "calendarModal": {
+      "summary": "Récapitulatif",
+      "serviceName": "Nom du service",
+      "duration": "Durée",
+      "date": "date"
+    }
+  },
   "ratingsComponent": {
     "ratings": "Avis",
     "seeMore": "Voir plus"

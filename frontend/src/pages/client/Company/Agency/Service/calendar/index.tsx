@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button"
 import { DateTime } from "luxon"
 import { useEffect, useState } from "react"
 import ConfirmationModal from "./modal"
-import { Service } from "@/utils/types"
+import { Agency, Service, Session } from "@/utils/types"
 
-// TODO: Remove after employees implementation
+// TODO: Remove after employees implementation (compute max begining hour and max end hour)
 const BEGINNING_HOUR = 8
 const BEGINNING_MINUTE = 0
 const END_HOUR = 18
@@ -12,6 +12,10 @@ const END_MINUTE = 0
 
 interface CalendarProps {
   service: Service
+  agency: Agency
+  existingSessions: Session[]
+  selectedInstructorId?: string
+  sessionsRefetch: () => void
 }
 
 interface WeekRange {
@@ -45,17 +49,54 @@ function computeCalendarHours(weekRange: WeekRange, granularity: number) {
   return calendarValues
 }
 
-export default function Calendar(props: CalendarProps) {
-  const { service } = props
+function checkIsSessionNotAvailable(sessionStart: DateTime, sessionEnd: DateTime, existingSessions: Session[]) {
+  return existingSessions.some((existingSession) => {
+    const existingSessionStart = DateTime.fromJSDate(new Date(existingSession.startDate))
+    const existingSessionEnd = DateTime.fromJSDate(new Date(existingSession.endDate))
+    if (existingSessionEnd <= sessionStart) return false
+    if (existingSessionStart >= sessionEnd) return false
+
+    return true
+  })
+}
+
+function checkNotAvailableSessionByInstructor(
+  intructorIds: number[],
+  sessionStart: DateTime,
+  sessionEnd: DateTime,
+  existingSessions: Session[]
+) {
+  return intructorIds.map((instructorId) => {
+    return {
+      instructorId,
+      notAvailable: checkIsSessionNotAvailable(
+        sessionStart,
+        sessionEnd,
+        existingSessions.filter((existingSession) => existingSession.instructor.id === instructorId)
+      ),
+    }
+  })
+}
+
+export default function Calendar({
+  service,
+  agency,
+  selectedInstructorId,
+  existingSessions,
+  sessionsRefetch,
+}: CalendarProps) {
   const granularity = service.duration
 
   const [weekRange, setWeekRange] = useState({
     beginningOfTheWeek: DateTime.now().startOf("day"),
     endOfTheWeek: DateTime.now().plus({ day: 6 }).startOf("day"),
   })
-  const [calendarValues, setCalendarValues] = useState(computeCalendarHours(weekRange, granularity))
+  const [sessions, setSessions] = useState(computeCalendarHours(weekRange, granularity))
   const [hourSelected, setHourSelected] = useState<DateTime>(DateTime.now())
+  const [chosenInstructorIdForSession, setChosenInstructorIdForSession] = useState<number>()
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const instructorIds = selectedInstructorId ? [parseInt(selectedInstructorId)] : agency.users!.map((user) => user.id)
 
   function modifyWeekRange(type: "previous" | "next") {
     setWeekRange({
@@ -68,13 +109,14 @@ export default function Calendar(props: CalendarProps) {
     })
   }
 
-  function onHourSelected(datetime: DateTime) {
+  function onHourSelected(datetime: DateTime, availableInstructors: number[]) {
     setHourSelected(datetime)
+    setChosenInstructorIdForSession(availableInstructors[Math.floor(Math.random() * availableInstructors!.length)])
     setIsModalOpen(true)
   }
 
   useEffect(() => {
-    setCalendarValues(computeCalendarHours(weekRange, granularity))
+    setSessions(computeCalendarHours(weekRange, granularity))
   }, [weekRange, granularity])
 
   return (
@@ -83,7 +125,10 @@ export default function Calendar(props: CalendarProps) {
         service={service}
         hourSelected={hourSelected}
         isModalOpen={isModalOpen}
+        agency={agency}
+        instructorId={chosenInstructorIdForSession}
         onModalOpenChange={setIsModalOpen}
+        sessionsReftech={sessionsRefetch}
       />
       <div className="flex gap-1">
         <Button
@@ -94,7 +139,7 @@ export default function Calendar(props: CalendarProps) {
           {"<"}
         </Button>
         <div className="flex gap-8">
-          {calendarValues.map((day) => {
+          {sessions.map((day) => {
             return (
               <div key={day.weekday.weekdayShort} className="flex flex-col gap-4">
                 <div className="text-center">
@@ -105,8 +150,27 @@ export default function Calendar(props: CalendarProps) {
                 </div>
                 <div className="flex flex-col gap-2">
                   {day.splittedDayByInterval.map((hour) => {
+                    // TODO: remove "!"
+                    const notAvailableSessionByInstructor = checkNotAvailableSessionByInstructor(
+                      instructorIds,
+                      hour,
+                      hour.plus({ minute: service.duration }),
+                      existingSessions
+                    )
+
+                    const isSessionNotAvailable = notAvailableSessionByInstructor.every((item) => item.notAvailable)
+
+                    const availableInstructors = notAvailableSessionByInstructor
+                      .filter((item) => !item.notAvailable)
+                      .map((item) => item.instructorId)
+
                     return (
-                      <Button key={hour.toMillis()} size="sm" onClick={() => onHourSelected(hour)}>
+                      <Button
+                        disabled={isSessionNotAvailable}
+                        key={hour.toMillis()}
+                        size="sm"
+                        onClick={() => onHourSelected(hour, availableInstructors)}
+                      >
                         {hour.toFormat("HH':'mm")}
                       </Button>
                     )

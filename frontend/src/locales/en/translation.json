@@ -45,6 +45,24 @@
     "location": "Location",
     "ourInstructors": "Our instructors"
   },
+  "serviceClient": {
+    "details": "Details",
+    "title": "Title",
+    "duration": "Duration",
+    "price": "Price",
+    "description": "Description",
+    "instructorsSelector": {
+      "instructors": "Instructors",
+      "placeholder": "Select an instructor",
+      "noPreferences": "No preferences"
+    },
+    "calendarModal": {
+      "summary": "Summary",
+      "serviceName": "Service name",
+      "duration": "Duration",
+      "date": "date"
+    }
+  },
   "ratingsComponent": {
     "ratings": "Ratings",
     "seeMore": "See more"

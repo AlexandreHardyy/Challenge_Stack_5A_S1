@@ -19,6 +19,25 @@ export function useFetchAgenciesByCompany(companyId: number) {
   )
 }
 
+export function useFetchAgencyById(agencyId?: string) {
+  const url = `${import.meta.env.VITE_API_URL}agencies/${agencyId}`
+
+  return useQuery<Agency>(
+    ["getAgency", url],
+    async () => {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error("Something went wrong with the request (getAgency)")
+      }
+
+      return response.json()
+    },
+    {
+      retry: false,
+    }
+  )
+}
+
 type AgencyForm = {
   name: string
   address: string

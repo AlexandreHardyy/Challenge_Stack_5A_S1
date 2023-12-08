@@ -110,7 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read-user'])]
+    #[Groups(['read-user', 'agency-group-read', 'session-group-read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -135,12 +135,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 
@@ -164,9 +164,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read-user', 'update-employee'])]
     private Collection $agencies;
 
+    #[ORM\OneToMany(mappedBy: 'student', targetEntity: Session::class, orphanRemoval: true)]
+    private Collection $studentSessions;
+
+    #[ORM\OneToMany(mappedBy: 'instructor', targetEntity: Session::class, orphanRemoval: true)]
+    private Collection $instructorSessions;
+
     public function __construct()
     {
         $this->agencies = new ArrayCollection();
+        $this->studentSessions = new ArrayCollection();
+        $this->instructorSessions = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -352,6 +360,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeAgency(Agency $agency): static
     {
         $this->agencies->removeElement($agency);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Session>
+     */
+    public function getStudentSessions(): Collection
+    {
+        return $this->studentSessions;
+    }
+
+    public function addStudentSessions(Session $session): static
+    {
+        if (!$this->studentSessions->contains($session)) {
+            $this->studentSessions->add($session);
+            $session->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudentSessions(Session $session): static
+    {
+        if ($this->studentSessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getStudent() === $this) {
+                $session->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+     /**
+     * @return Collection<int, Session>
+     */
+    public function getInstructorSessions(): Collection
+    {
+        return $this->instructorSessions;
+    }
+
+    public function addInstructorSessions(Session $session): static
+    {
+        if (!$this->instructorSessions->contains($session)) {
+            $this->instructorSessions->add($session);
+            $session->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInstructorSessions(Session $session): static
+    {
+        if ($this->instructorSessions->removeElement($session)) {
+            // set the owning side to null (unless already changed)
+            if ($session->getStudent() === $this) {
+                $session->setStudent(null);
+            }
+        }
 
         return $this;
     }
