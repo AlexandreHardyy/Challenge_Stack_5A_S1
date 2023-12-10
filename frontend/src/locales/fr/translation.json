@@ -106,10 +106,9 @@
     },
     "search": {
       "search": "Rechercher",
-      "searchPlaceholder": "Rechercher"
-    },
-    "userNotLogged": "Vous n'êtes pas connecté.",
-    "loading": "Chargement..."
+      "searchPlaceholder": "Rechercher",
+      "loading": "Chargement..."
+    }
   },
   "landing": {
     "title": "Réservez, Roulez, Réussissez. Votre Avenir sur la Voie Rapide !",

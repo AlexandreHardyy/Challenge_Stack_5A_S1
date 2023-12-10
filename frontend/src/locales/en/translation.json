@@ -106,10 +106,9 @@
     },
     "search": {
       "search": "Search",
-      "searchPlaceholder": "Search"
-    },
-    "userNotLogged": "You are not logged in.",
-    "loading": "Loading..."
+      "searchPlaceholder": "Search",
+      "loading": "Loading..."
+    }
   },
   "landing": {
     "title": "Book, Drive, Succeed. Your Future on the Fast Lane!",
