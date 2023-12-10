@@ -57,7 +57,7 @@ export default function ServiceClient() {
                   )
                 : requestSessions.data
             }
-            sessionsRefetch={requestSessions.refetch}
+            sessionsReFetch={requestSessions.refetch}
             selectedInstructorId={selectedInstructor}
           />
         )}
