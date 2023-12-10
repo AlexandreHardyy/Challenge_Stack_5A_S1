@@ -106,7 +106,8 @@
     },
     "search": {
       "search": "Rechercher",
-      "searchPlaceholder": "Rechercher"
+      "searchPlaceholder": "Rechercher",
+      "loading": "Chargement..."
     }
   },
   "landing": {
