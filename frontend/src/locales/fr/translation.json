@@ -53,7 +53,7 @@
     "description": "Description",
     "instructorsSelector": {
       "instructors": "Instructeurs",
-      "placeholder": "Séléctionnez un instructeur",
+      "placeholder": "Sélectionnez un instructeur",
       "noPreferences": "Pas de préférences"
     },
     "calendarModal": {
@@ -185,11 +185,11 @@
     }
   },
   "employeePage": {
-    "title": "Gerer ton salarié",
+    "title": "Gérer son salarié",
     "subTitle": "Mettre a jour son emploi du temps",
     "fetchError": "Une error a eu lieu lors de la récupération de l'utilisateur",
     "form": {
-      "info": "Selectionner un interval de temps ou vous voulez modifier l'emploi du temps de votre employer",
+      "info": "Sélectionner un interval de temps ou vous voulez modifier l'emploi du temps de votre employer",
       "start": "Heure de début",
       "end": "Heure de fin",
       "agency": "Agence",

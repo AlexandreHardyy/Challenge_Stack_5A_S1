@@ -22,14 +22,20 @@ export const updateUser = async (
 }
 
 export function useFetchUserById(id: number) {
-  return useQuery<User>(["getUserById"], async () => {
-    const response = await api.get(`users/${id}`)
-    if (response.status !== 200) {
-      throw new Error("Something went wrong with the request (getService)")
-    }
+  return useQuery<User>(
+    ["getUserById"],
+    async () => {
+      const response = await api.get(`users/${id}`)
+      if (response.status !== 200) {
+        throw new Error("Something went wrong with the request (getService)")
+      }
 
-    return response.data
-  })
+      return response.data
+    },
+    {
+      retry: false,
+    }
+  )
 }
 
 export function useFetchEmployeesByCompany(companyId: number) {

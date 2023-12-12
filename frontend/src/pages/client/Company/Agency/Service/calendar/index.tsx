@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import ConfirmationModal from "./modal"
 import { Agency, Service, Session } from "@/utils/types"
 
-// TODO: Remove after employees implementation (compute max begining hour and max end hour)
+// TODO: Remove after employees implementation (compute max beginning hour and max end hour)
 const BEGINNING_HOUR = 8
 const BEGINNING_MINUTE = 0
 const END_HOUR = 18
@@ -15,7 +15,7 @@ interface CalendarProps {
   agency: Agency
   existingSessions: Session[]
   selectedInstructorId?: string
-  sessionsRefetch: () => void
+  sessionsReFetch: () => void
 }
 
 interface WeekRange {
@@ -29,18 +29,18 @@ function computeCalendarHours(weekRange: WeekRange, granularity: number) {
   const endOfWeek = weekRange.endOfTheWeek.set({ hour: END_HOUR, minute: END_MINUTE })
 
   const calendarValues = []
-  let splittedDayByInterval = []
+  let splitDayByInterval = []
 
   while (dayIndex.diff(endOfWeek).toMillis() <= 0) {
-    splittedDayByInterval.push(dayIndex)
+    splitDayByInterval.push(dayIndex)
     dayIndex = dayIndex.plus({ minute: granularity })
 
     if (dayIndex.diff(endOfDay).toMillis() > 0) {
       calendarValues.push({
         weekday: dayIndex,
-        splittedDayByInterval,
+        splitDayByInterval,
       })
-      splittedDayByInterval = []
+      splitDayByInterval = []
       dayIndex = dayIndex.plus({ day: 1 }).set({ hour: BEGINNING_HOUR, minute: BEGINNING_MINUTE })
       endOfDay = dayIndex.set({ hour: END_HOUR, minute: END_MINUTE })
     }
@@ -61,12 +61,12 @@ function checkIsSessionNotAvailable(sessionStart: DateTime, sessionEnd: DateTime
 }
 
 function checkNotAvailableSessionByInstructor(
-  intructorIds: number[],
+  instructorIds: number[],
   sessionStart: DateTime,
   sessionEnd: DateTime,
   existingSessions: Session[]
 ) {
-  return intructorIds.map((instructorId) => {
+  return instructorIds.map((instructorId) => {
     return {
       instructorId,
       notAvailable: checkIsSessionNotAvailable(
@@ -83,7 +83,7 @@ export default function Calendar({
   agency,
   selectedInstructorId,
   existingSessions,
-  sessionsRefetch,
+  sessionsReFetch,
 }: CalendarProps) {
   const granularity = service.duration
 
@@ -128,7 +128,7 @@ export default function Calendar({
         agency={agency}
         instructorId={chosenInstructorIdForSession}
         onModalOpenChange={setIsModalOpen}
-        sessionsReftech={sessionsRefetch}
+        sessionsReFetch={sessionsReFetch}
       />
       <div className="flex gap-1">
         <Button
@@ -149,7 +149,7 @@ export default function Calendar({
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
-                  {day.splittedDayByInterval.map((hour) => {
+                  {day.splitDayByInterval.map((hour) => {
                     // TODO: remove "!"
                     const notAvailableSessionByInstructor = checkNotAvailableSessionByInstructor(
                       instructorIds,

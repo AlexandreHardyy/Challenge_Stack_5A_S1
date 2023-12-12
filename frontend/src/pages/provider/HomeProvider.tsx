@@ -8,15 +8,18 @@ import { Company, Agency } from "@/utils/types.ts"
 import { useFetchCompany, useFetchAgenciesByCompany } from "@/services"
 import { useState } from "react"
 import { Loader } from "@/components/ui/loader.tsx"
+import { useAuth } from "@/context/AuthContext.tsx"
 
 const HomeProvider = () => {
   const { t } = useTranslation()
-  const companyRequest = useFetchCompany("1")
-  const agenciesRequest = useFetchAgenciesByCompany(1)
+  const [selectedAgency, setSelectedAgency] = useState("AllAgencies")
+
+  const { user } = useAuth()
+
+  const companyRequest = useFetchCompany(user?.company?.id)
+  const agenciesRequest = useFetchAgenciesByCompany(user?.company?.id)
   const company: Company | null = companyRequest.status === "success" ? companyRequest.data : null
   const agencies: Agency[] | null = agenciesRequest.status === "success" ? agenciesRequest.data : null
-
-  const [selectedAgency, setSelectedAgency] = useState("AllAgencies")
 
   const servicesNumber = agencies
     ? selectedAgency === "AllAgencies"
