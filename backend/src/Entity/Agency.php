@@ -105,7 +105,7 @@ class Agency
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'create-agency', 'read-user'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

@@ -3,7 +3,7 @@ import { Session } from "@/utils/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { DateTime } from "luxon"
 
-export function useFetchSessionsByAgencyService(agencyId?: string, serviceId?: string) {
+export function useFetchSessionsByAgencyService(agencyId?: string) {
   // return useQuery<Session[]>(
   //   ["getSessions"],
   //   async () => {
@@ -19,11 +19,13 @@ export function useFetchSessionsByAgencyService(agencyId?: string, serviceId?: s
   //   }
   // )
 
-  if (!agencyId || !serviceId) {
-    throw new Error("agency and service must be specifief")
-  }
+  ///////////
 
-  const url = `${import.meta.env.VITE_API_URL}sessions?agency=${agencyId}&service=${serviceId}&status=created`
+  // if (!agencyId || !serviceId) {
+  //   throw new Error("agency and service must be specifief")
+  // }
+
+  const url = `${import.meta.env.VITE_API_URL}sessions?agency=${agencyId}&status=created`
 
   return useQuery<Session[]>(
     ["getSessions", url],
@@ -61,7 +63,9 @@ export function useAddSession({ onSuccess, onError }: { onSuccess: () => void; o
             "Content-Type": "application/ld+json",
           },
         })
-        .catch((err) => err.response),
+        .catch((err) => {
+          throw new Error(err.response)
+        }),
     onSuccess,
     onError,
     retry: false,

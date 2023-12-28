@@ -98,8 +98,15 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ApiResource(
     uriTemplate: '/user/me',
-    operations: [new Get(normalizationContext: ['groups' => ['read-user']],
-        security: "is_granted('USER_VIEW', object)"),]
+    operations: [
+        new Get(
+            normalizationContext: [
+                'groups' => ['read-user'],
+                'enable_max_depth' => true,
+            ],
+            security: "is_granted('USER_VIEW', object)"
+        ),
+    ]
 )]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -110,7 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read-user', 'agency-group-read', 'session-group-read'])]
+    #[Groups(['read-user', 'agency-group-read', 'session-group-read', 'session-group-read-collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -168,6 +175,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $studentSessions;
 
     #[ORM\OneToMany(mappedBy: 'instructor', targetEntity: Session::class, orphanRemoval: true)]
+    // SECURITY need to know how to give another group when you need to see just the instrucor session
+    #[Groups(['read-user'])]
     private Collection $instructorSessions;
 
     public function __construct()

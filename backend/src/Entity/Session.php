@@ -6,22 +6,27 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\Metadata\Link;
 use App\Repository\SessionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[ApiResource(
+    paginationEnabled: false,
     operations: [
         new Post(validationContext: ['groups' => ['session-create']]),
+        new Get(
+            normalizationContext: ['groups' => ['session-group-read']],
+            security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
+        ),
         new GetCollection(
-            normalizationContext: ['groups' => ['session-group-read']]
+            normalizationContext: ['groups' => ['session-group-read-collection']]
         )
     ]
 )]
@@ -31,36 +36,43 @@ class Session
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['session-group-read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'read-user'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'studentSessions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[MaxDepth(1)]
+    // SECURIDAD
+    #[Groups(['session-group-read', 'read-user'])]
     private ?User $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'instructorSessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['session-group-read'])]
+    #[MaxDepth(1)]
+    #[Groups(['session-group-read', 'session-group-read-collection'])]
     private ?User $instructor = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'read-user'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'read-user'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
+    // SECUTITY
+    #[Groups(['session-group-read', 'session-group-read-collection', 'read-user'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['session-group-read', 'read-user'])]
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session-group-read'])]
+    #[Groups(['session-group-read', 'read-user'])]
     private ?string $status = null;
 
     public function getId(): ?int
@@ -157,8 +169,8 @@ class Session
     {
         $toCreate = $this;
         if ($this->getInstructor()->getInstructorSessions()->filter(function(Session $session) use($toCreate){
-            if ($session->getEndDate() < $toCreate->getStartDate()) return false;
-            if ($session->getStartDate() > $toCreate->getEndDate()) return false;
+            if ($session->getEndDate() <= $toCreate->getStartDate()) return false;
+            if ($session->getStartDate() >= $toCreate->getEndDate()) return false;
 
             return true;
         })->count()) {

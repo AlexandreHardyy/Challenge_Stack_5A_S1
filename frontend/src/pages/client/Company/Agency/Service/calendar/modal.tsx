@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { toast } from "@/components/ui/use-toast"
+import { useAuth } from "@/context/AuthContext"
 import { useAddSession } from "@/services/sessions.service"
-import { getUserMe } from "@/services/user/user.service"
 import { computeServiceDuration } from "@/utils/helpers"
 import { Agency, Service } from "@/utils/types"
 import { Loader2 } from "lucide-react"
@@ -30,6 +30,7 @@ export default function ConfirmationModal({
   onModalOpenChange,
   sessionsReFetch,
 }: Readonly<ConfirmationModalProps>) {
+  const user = useAuth().user
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const sessionMutation = useAddSession({
@@ -78,9 +79,9 @@ export default function ConfirmationModal({
             disabled={isLoading}
             onClick={async () => {
               setIsLoading(true)
-              const user = (await getUserMe()).data
               sessionMutation.mutate({
-                student: `/api/users/${user.id}`,
+                // TODO: remove "!"
+                student: `/api/users/${user!.id}`,
                 instructor: `/api/users/${instructorId}`,
                 service: `/api/services/${service.id}`,
                 agency: `/api/agencies/${agency.id}`,

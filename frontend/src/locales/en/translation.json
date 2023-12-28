@@ -17,7 +17,8 @@
       "menu": {
         "dashboard": "Dashboard",
         "employees": "My employees",
-        "agencies": "My agencies"
+        "agencies": "My agencies",
+        "planning": "My planning"
       }
     },
     "sideAdminHeader": {
@@ -223,6 +224,17 @@
       },
       "toast": {
         "error": "Something went wrong with the request (getCompany). Please try again later."
+      }
+    },
+    "myPlanning": {
+      "sessionDetails": {
+        "date": "Date",
+        "noSessionSelected": "Select a session to see more infos",
+        "agency": "Agency",
+        "studentDetails": "Student details",
+        "firstname": "Firstname",
+        "lastname": "Lastname",
+        "mail": "Mail"
       }
     }
   },

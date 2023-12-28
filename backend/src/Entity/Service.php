@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -52,7 +51,7 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['agency-group-read', 'categories-group-read'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'read-user'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

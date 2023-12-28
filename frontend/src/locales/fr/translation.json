@@ -17,7 +17,8 @@
       "menu": {
         "dashboard": "Tableau de bord",
         "employees": "Mes employés",
-        "agencies": "Mes agences"
+        "agencies": "Mes agences",
+        "planning": "Mon planning"
       }
     },
     "sideAdminHeader": {
@@ -223,6 +224,17 @@
       },
       "toast": {
         "error": "Une erreur est survenue. Veuillez réessayer plus tard."
+      }
+    },
+    "myPlanning": {
+      "sessionDetails": {
+        "date": "Date",
+        "noSessionSelected": "Séléctionnez une session pour voir plus d'infos",
+        "agency": "Agence",
+        "studentDetails": "Détails de l'élève",
+        "firstname": "Prénom",
+        "lastname": "Nom",
+        "mail": "Email"
       }
     }
   },
