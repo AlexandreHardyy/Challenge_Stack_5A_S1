@@ -21,9 +21,10 @@ import RegisterSuccess from "@/pages/auth/RegisterSuccess.tsx"
 import NewProvider from "@/pages/provider/NewProvider.tsx"
 import ProfileClient from "@/pages/client/User/ProfileClient.tsx"
 import EmployeePlanning from "./pages/provider/EmployeePlanning"
-import Companies from "./pages/admin/Companies"
-import Users from "./pages/admin/Users"
 import Search from "./pages/client/Search"
+import Users from "@/pages/admin/Users"
+import Companies from "@/pages/admin/Companies"
+import Services from "@/pages/provider/services"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -99,6 +100,10 @@ const Routes = () => {
         {
           path: "/provider/planning",
           element: <EmployeePlanning />,
+        },
+        {
+          path: "/provider/service",
+          element: <Services />,
         },
       ],
       errorElement: <NotFound />,

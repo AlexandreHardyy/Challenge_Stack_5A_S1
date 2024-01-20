@@ -18,7 +18,8 @@
         "dashboard": "Tableau de bord",
         "employees": "Mes employés",
         "agencies": "Mes agences",
-        "planning": "Mon planning"
+        "planning": "Mon planning",
+        "services": "Mes services"
       }
     },
     "sideAdminHeader": {
@@ -213,6 +214,33 @@
         "successUpdate": "agence mis a jour avec succès",
         "error": "une erreur a eu lieu lors de la mise a jour",
         "addressError": "Votre address n'a pas été trouvé"
+      }
+    }
+  },
+  "providerService": {
+    "title": "Mes services",
+    "form": {
+      "name": "Nom",
+      "duration": "Durée",
+      "price": "Prix",
+      "description": "Description",
+      "cta": {
+        "newService": "Ajouter service",
+        "updateService": "Modifier service",
+        "newCategory": "Ajouter categorie",
+        "updateCategory": "Modifier categorie"
+      },
+      "toastCategory": {
+        "title": "Categorie",
+        "successCreate": "categorie créée avec succès",
+        "successUpdate": "categorie modifiée avec succès",
+        "error": "une erreur a eu lieu"
+      },
+      "toastService": {
+        "title": "Service",
+        "successCreate": "service créé avec succès",
+        "successUpdate": "service modifié avec succès",
+        "error": "une erreur a eu lieu"
       }
     }
   },

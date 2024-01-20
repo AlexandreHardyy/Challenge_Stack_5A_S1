@@ -6,6 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +15,26 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[ApiResource(
+    operations: [
+        new Post(
+            denormalizationContext: ['groups' => 'create-category'],
+            openapi: new Operation(
+                tags: ['Category'],
+                summary: 'new category',
+                description: 'Create a new category for a company'
+            )
+        ),
+        new Patch(
+            denormalizationContext: ['groups' => 'update-category'],
+            openapi: new Operation(
+                tags: ['Category'],
+                summary: 'Update category',
+                description: 'Update a category'
+            )
+        )
+    ]
+)]
 #[ApiResource(
     uriTemplate: '/companies/{id}/categories',
     operations: [
@@ -29,16 +51,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'id' => new Link(toProperty: 'company', fromClass: Company::class)
     ]
 )]
-#[ApiResource(
-    uriTemplate: '/companies/{idCompany}/categories/{idCategory}',
-    operations: [
-        // new Patch()
-    ],
-    uriVariables: [
-        'idCompany' => new Link(toProperty: 'company', fromClass: Company::class),
-        'idCategory' => new Link(fromClass: Category::class)
-    ]
-)]
 class Category
 {
     #[ORM\Id]
@@ -48,15 +60,16 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read', 'categories-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'categories-group-read', 'create-category', 'update-category'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['create-category'])]
     private ?Company $company = null;
 
-    #[Groups(['categories-group-read'])]
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Service::class, orphanRemoval: true)]
+    #[Groups(['categories-group-read'])]
     private Collection $services;
 
     public function __construct()
