@@ -18,7 +18,8 @@
         "dashboard": "Dashboard",
         "employees": "My employees",
         "agencies": "My agencies",
-        "planning": "My planning"
+        "planning": "My planning",
+        "services": "My services"
       }
     },
     "sideAdminHeader": {
@@ -213,6 +214,33 @@
         "successUpdate": "agency updated successfully",
         "error": "an error occurred while updating",
         "addressError": "Your address was not found"
+      }
+    }
+  },
+  "providerService": {
+    "title": "My services",
+    "form": {
+      "name": "Name",
+      "duration": "Duration",
+      "price": "Price",
+      "description": "Description",
+      "cta": {
+        "newService": "Add new service",
+        "updateService": "Update service",
+        "newCategory": "Add new category",
+        "updateCategory": "Update category"
+      },
+      "toastCategory": {
+        "title": "Category",
+        "successCreate": "category created successfully",
+        "successUpdate": "category updated successfully",
+        "error": "an error occurred"
+      },
+      "toastService": {
+        "title": "Service",
+        "successCreate": "service created successfully",
+        "successUpdate": "service updated successfully",
+        "error": "an error occurred"
       }
     }
   },

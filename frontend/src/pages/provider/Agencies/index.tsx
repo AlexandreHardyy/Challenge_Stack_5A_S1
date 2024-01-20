@@ -2,11 +2,11 @@ import { DataTable } from "@/components/Table"
 import { ColumnDef } from "@tanstack/react-table"
 import { Agency, Category, Service } from "@/utils/types"
 import { useFetchAgenciesByCompany } from "@/services/agency.service"
-import { useFetchServicesByCompany } from "@/services/services.service"
 import { UseQueryResult } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import ModalAgencyForm from "./ModalAgencyForm"
 import React from "react"
+import { useFetchServicesByCompany } from "@/services/category.service"
 
 const columns: ColumnDef<Agency>[] = [
   {

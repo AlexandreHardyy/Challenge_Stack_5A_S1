@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\ServiceRepository;
@@ -19,29 +20,30 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(
             openapi: new Operation(
-                tags: [ 'Service' ],
+                tags: ['Service'],
                 summary: 'Returns a service of an agency',
                 description: 'Returns a single service of an agency by providing the agencyId and the serviceId'
             )
-        )
-    ]
-)]
-#[ApiResource(
-    # problem here
-    uriTemplate: '/companies/{id}/services',
-    operations: [
+        ),
         new Post(
+            denormalizationContext: ['groups' => 'create-service'],
             openapi: new Operation(
-                tags: [ 'Service' ],
+                tags: ['Service'],
                 summary: 'new service',
                 description: 'Create a new service for a company'
             )
         ),
-    ],
-    uriVariables: [
-        'id' => new Link(toProperty: 'company', fromClass: Company::class)
+        new Patch(
+            denormalizationContext: ['groups' => 'create-service'],
+            openapi: new Operation(
+                tags: ['Service'],
+                summary: 'new service',
+                description: 'Create a new service for a company'
+            )
+        ),
     ]
 )]
+
 class Service
 {
     #[ORM\Id]
@@ -51,24 +53,24 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['agency-group-read', 'categories-group-read', 'read-user'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'read-user', 'create-service'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['agency-group-read', 'categories-group-read'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'create-service'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'categories-group-read'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'create-service'])]
     private ?float $duration = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'categories-group-read'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'create-service'])]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['agency-group-read'])]
+    #[Groups(['agency-group-read', 'create-service'])]
     private ?Category $category = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'services')]
