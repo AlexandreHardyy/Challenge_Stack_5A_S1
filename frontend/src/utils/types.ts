@@ -5,7 +5,6 @@ export interface Company {
   siren: string
   phoneNumber: string
   description: string
-  categories: Category[]
   agencies: Agency[]
   isVerified: boolean
   createdAt: string

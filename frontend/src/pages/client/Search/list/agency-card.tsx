@@ -4,12 +4,15 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Agency } from "@/utils/types"
 import { Link } from "react-router-dom"
 import { useSearchFiltersContext } from "../search-filters-context"
+import { useTranslation } from "react-i18next"
 
 type AgencyCardProps = {
   agency: Agency
 }
 
 function AgencyCard({ agency }: AgencyCardProps) {
+  const { t } = useTranslation()
+
   const { filters, setFilters } = useSearchFiltersContext()
   const categoriesNames = new Set(agency.services.map((service) => service.category.name))
 
@@ -45,7 +48,8 @@ function AgencyCard({ agency }: AgencyCardProps) {
           <CardHeader>
             <CardTitle>{agency.name}</CardTitle>
             <CardDescription>
-              Address: {agency.address} | City: {agency.city} | Zip code: {agency.zip}
+              {t("searchClient.list.agencyCard.address")}: {agency.address} | {t("searchClient.list.agencyCard.city")}:{" "}
+              {agency.city} | {t("searchClient.list.agencyCard.zip")}: {agency.zip}
             </CardDescription>
           </CardHeader>
           <CardContent>{agency.description}</CardContent>

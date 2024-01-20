@@ -29,6 +29,37 @@
       }
     }
   },
+  "searchClient": {
+    "form": {
+      "categoryToggle": "Category",
+      "locationToggle": "Location",
+      "nameInput": "Name",
+      "nameInputPlaceholder": "The Company or Agency name",
+      "categoryInput": "Category",
+      "categoryInputPlaceholder": "Category of service",
+      "addressInput": "Address",
+      "addressInputPlaceholder": "Enter a streat name",
+      "cityInput": "City",
+      "cityInputPlaceholder": "Enter a city name",
+      "zipInput": "Zip code",
+      "zipInputPlaceholder": "Enter a zip code",
+      "submitInput": "Submit"
+    },
+    "list": {
+      "loading": "Loading...",
+      "error": "An error occured",
+      "noData": "No data",
+      "companyCard": {
+        "email": "email",
+        "phoneNumber": "Phone number"
+      },
+      "agencyCard": {
+        "address": "Address",
+        "city": "City",
+        "zip": "Zip code"
+      }
+    }
+  },
   "companyClient": {
     "section1": {
       "overallRating": "Overall rating",

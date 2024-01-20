@@ -3,6 +3,7 @@ import CompanyCard from "./company-card"
 import AgencyCard from "./agency-card"
 import { Agency, Company } from "@/utils/types"
 import { useSearchFiltersContext } from "../search-filters-context"
+import { useTranslation } from "react-i18next"
 
 function buildCards(companiesData?: Company[], agenciesData?: Agency[]) {
   const cards = []
@@ -19,6 +20,8 @@ function buildCards(companiesData?: Company[], agenciesData?: Agency[]) {
 }
 
 function CompaniesAgenciesList() {
+  const { t } = useTranslation()
+
   const { filters } = useSearchFiltersContext()
 
   const {
@@ -47,7 +50,7 @@ function CompaniesAgenciesList() {
     true
   )
 
-  const isRequestSended =
+  const isRequestNotSended =
     companiesDataStatus === "loading" &&
     agenciesDataStatus === "loading" &&
     !isFetchingCompaniesData &&
@@ -55,12 +58,33 @@ function CompaniesAgenciesList() {
   const isLoading = isFetchingCompaniesData || isFetchingAgenciesData
   const isError = companiesDataStatus === "error" || agenciesDataStatus === "error"
 
+  if (isError) {
+    return (
+      <section className="flex flex-col gap-2">
+        <p>{t("searchClient.list.error")}</p>
+      </section>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <section className="flex flex-col gap-2">
+        <p>{t("searchClient.list.loading")}</p>
+      </section>
+    )
+  }
+
+  if (isRequestNotSended || (companiesData?.length === 0 && agenciesData?.length === 0)) {
+    return (
+      <section className="flex flex-col gap-2">
+        <p>{t("searchClient.list.noData")}</p>
+      </section>
+    )
+  }
+
   return (
     <section className="flex flex-col gap-2">
-      {(isRequestSended || (companiesData?.length === 0 && agenciesData?.length === 0)) && <p>No data</p>}
-      {isLoading && <p>Loading...</p>}
-      {isError && <p>An error occured</p>}
-      {(companiesData || agenciesData) && !isLoading && buildCards(companiesData, agenciesData)}
+      {(companiesData || agenciesData) && buildCards(companiesData, agenciesData)}
     </section>
   )
 }

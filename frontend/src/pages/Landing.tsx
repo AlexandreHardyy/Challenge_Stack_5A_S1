@@ -13,7 +13,9 @@ const Landing = () => {
         <div>
           <h1 className="font-semibold text-5xl leading-relaxed">{t("landing.title")}</h1>
           <p className="py-4 text-xl text-foreground">{t("landing.subtitle")}</p>
-          <Button>{t("landing.ctaDiscover")}</Button>
+          <Button>
+            <Link to={"/search"}>{t("landing.ctaDiscover")}</Link>
+          </Button>
         </div>
         <img src={UndrawMeeting} className="w-2/5" alt="image homapage" />
       </section>
