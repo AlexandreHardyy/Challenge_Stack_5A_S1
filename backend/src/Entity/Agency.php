@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
@@ -25,6 +27,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 tags: [ 'Agency' ],
                 summary: 'Returns agency by Id',
                 description: 'Returns a single agency provided by the id'
+            )
+        ),
+        new GetCollection(
+            normalizationContext:['groups' => ['agency-group-read']],
+            openapi: new Operation(
+                tags: [ 'Agency' ],
+                summary: 'Returns agencies',
+                description: 'Returns several agencies'
             )
         ),
         new Patch(
@@ -71,6 +81,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'agencyId' => new Link(fromClass: Agency::class)
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'services.category.name' => 'partial', 'address' => 'partial', 'city' => 'partial', 'zip' => 'partial',])]
 class Agency
 {
     #[ORM\Id]
