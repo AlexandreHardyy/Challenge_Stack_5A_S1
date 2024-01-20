@@ -41,41 +41,42 @@ export function useFetchAgencyById(agencyId?: string) {
 type FetchAgenciesQueryParams = {
   name?: string
   "services.category.name"?: string
-  address?: string,
-  city?: string,
+  address?: string
+  city?: string
   zip?: string
 }
 
-export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldWaitQueryParams = false,) {
+export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldWaitQueryParams = false) {
   let url = "agencies"
-  const isQueryParamsDefined = !!(queryParams && Object.values(queryParams).find((value) => value !== undefined && value !== ''))
-
-  console.log(isQueryParamsDefined)
+  const isQueryParamsDefined = !!(
+    queryParams && Object.values(queryParams).find((value) => value !== undefined && value !== "")
+  )
 
   //TODO: add pagination
   if (isQueryParamsDefined) {
-    const formatedQueryParams = Object.entries(queryParams).filter(([_key, value]) => value !== undefined).map(([key, value]) => {
-      return `${key}=${value}`
-    }).join('&')
+    const formatedQueryParams = Object.entries(queryParams)
+      .filter(([_key, value]) => value !== undefined)
+      .map(([key, value]) => {
+        return `${key}=${value}`
+      })
+      .join("&")
 
     url += `?${formatedQueryParams}`
   }
 
-  return useQuery(
-    {
-      queryKey: ['agencies', url],
-      queryFn :async ({ queryKey }): Promise<Agency[]> => {
-        const [_key, url] = queryKey
-        const response = await api.get(url)
-        if (response.status !== 200) {
-          throw new Error("Something went wrong with the request (getAgencies)")
-        }
-        return response.data["hydra:member"]
-      },
-      retry: false,
-      enabled: shouldWaitQueryParams ? isQueryParamsDefined : undefined
-    }
-  )
+  return useQuery({
+    queryKey: ["agencies", url],
+    queryFn: async ({ queryKey }): Promise<Agency[]> => {
+      const [_key, url] = queryKey
+      const response = await api.get(url)
+      if (response.status !== 200) {
+        throw new Error("Something went wrong with the request (getAgencies)")
+      }
+      return response.data["hydra:member"]
+    },
+    retry: false,
+    enabled: shouldWaitQueryParams ? isQueryParamsDefined : undefined,
+  })
 }
 
 type AgencyForm = {

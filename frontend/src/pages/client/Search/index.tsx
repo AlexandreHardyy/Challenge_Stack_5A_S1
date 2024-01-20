@@ -1,25 +1,18 @@
-import { useState } from "react"
 import SearchForm from "./search-form"
 import CompaniesAgenciesList from "./list/list"
+import { SearchFiltersProvider } from "./search-filters-context"
 
-export type searchFilters = {
-  name?: string,
-  category?: string,
-  address?: string,
-  city?: string,
-  zip?: string
-}
-
-function Search () {
-  const [ filters, setFilters ] = useState<searchFilters>({})
-
-  console.log(filters)
-
+function Search() {
   return (
-    <div>
-      <SearchForm setFilters={setFilters} />
-      <CompaniesAgenciesList filters={filters} />
-    </div>
+    <SearchFiltersProvider>
+      <div className="flex">
+        <section className="flex flex-col gap-4 grow px-6">
+          <SearchForm />
+          <CompaniesAgenciesList />
+        </section>
+        <section className="w-1/3 bg-secondary h-screen"></section>
+      </div>
+    </SearchFiltersProvider>
   )
 }
 

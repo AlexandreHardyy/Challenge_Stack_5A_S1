@@ -56,7 +56,7 @@ const Routes = () => {
         },
         {
           path: "/search",
-          element: <Search />
+          element: <Search />,
         },
         {
           path: "/companies/:companyId",

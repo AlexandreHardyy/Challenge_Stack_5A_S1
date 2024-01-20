@@ -3,52 +3,60 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { Agency } from "@/utils/types"
 import { Link } from "react-router-dom"
+import { useSearchFiltersContext } from "../search-filters-context"
 
 type AgencyCardProps = {
   agency: Agency
 }
 
-function AgencyCard ({ agency }: AgencyCardProps) {
-  const categories = new Set(agency.services.map(service => service.category.name))
+function AgencyCard({ agency }: AgencyCardProps) {
+  const { filters, setFilters } = useSearchFiltersContext()
+  const categoriesNames = new Set(agency.services.map((service) => service.category.name))
+
+  function onSetCategory(categoryName: string) {
+    setFilters({
+      ...filters,
+      category: categoryName,
+    })
+  }
 
   return (
     <Card className="flex items-center">
-      <Carousel className="w-[92px] flex flex-col">
-        <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index}>
-              <img  
-                alt="companylogo"
-                className="rounded-[92px] w-[92px] h-[92px]"
-                src="https://www.autoecole-du-griffe.fr/images/logo_auto-ecole_griffe__large.png"
-              />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <div>
-          <CarouselPrevious className="static -translate-y-0" />
-          <CarouselNext className="static -translate-y-0"/>
+      <Carousel className="w-[92px] h-full flex flex-col">
+        <div className="flex grow items-center">
+          <CarouselContent>
+            {Array.from({ length: 5 }).map((_, index) => (
+              <CarouselItem key={index}>
+                <img
+                  alt="companylogo"
+                  src="https://www.autoecole-du-griffe.fr/images/logo_auto-ecole_griffe__large.png"
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </div>
+        <div className="flex">
+          <CarouselPrevious className="grow rounded-none rounded-bl-[8px] static -translate-y-0" />
+          <CarouselNext className="grow rounded-none static -translate-y-0" />
         </div>
       </Carousel>
       <div>
         <Link to={`/companies/${agency.company.id}/agencies/${agency.id}`}>
           <CardHeader>
             <CardTitle>{agency.name}</CardTitle>
-            <CardDescription>Address: {agency.address} | City: {agency.city} | Zip code: {agency.zip}</CardDescription>
+            <CardDescription>
+              Address: {agency.address} | City: {agency.city} | Zip code: {agency.zip}
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            {agency.description}
-          </CardContent>
+          <CardContent>{agency.description}</CardContent>
         </Link>
         <CardFooter>
-          <div>
-            {Array.from(categories).map(category => {
+          <div className="flex gap-1">
+            {Array.from(categoriesNames).map((categoryName) => {
               return (
-                <Badge asChild key={category}>
+                <Badge asChild key={categoryName}>
                   {/* TODO: onClick set category filter */}
-                  <button onClick={() => console.log(category)} >
-                    {category}
-                  </button>
+                  <button onClick={() => onSetCategory(categoryName)}>{categoryName}</button>
                 </Badge>
               )
             })}
