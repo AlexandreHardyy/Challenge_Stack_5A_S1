@@ -63,14 +63,16 @@ export interface User {
   updatedAt: string
   agencies?: Agency[]
   company?: Company
+  instructorSessions?: Session[]
 }
 
 export interface Session {
+  id: number
   student: User
   instructor: User
   startDate: string
   endDate: string
   service: Service
-  Agency: Agency
+  agency: Agency
   status: string
 }

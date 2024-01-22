@@ -13,11 +13,13 @@ export default function ServiceClient() {
   const [selectedInstructor, setSelectedInstructor] = useState<string>()
 
   const requestAgency = useFetchAgencyById(agencyId)
-  const requestSessions = useFetchSessionsByAgencyService(agencyId, serviceId)
+  const requestSessions = useFetchSessionsByAgencyService(agencyId)
 
   if (requestAgency.status === "error" || requestSessions.status === "error") {
     return <h1>WTFFFFF</h1>
   }
+
+  console.log(requestSessions.data)
 
   const service = requestAgency.data?.services.find((service) => service.id === parseInt(serviceId!))
 

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button.tsx"
 import { Link, useLocation } from "react-router-dom"
 import { ModeToggle } from "@/components/Mode-toggle.tsx"
 import { useTranslation } from "react-i18next"
-import { HomeIcon, LayoutDashboardIcon, LogOutIcon, UserCircle2Icon, Users2Icon } from "lucide-react"
+import { CalendarDaysIcon, HomeIcon, LayoutDashboardIcon, LogOutIcon, UserCircle2Icon, Users2Icon } from "lucide-react"
 
 const SideHeader = () => {
   const { t } = useTranslation()
@@ -30,6 +30,14 @@ const SideHeader = () => {
       content: (
         <>
           <HomeIcon /> {t("header.sideHeader.menu.agencies")}
+        </>
+      ),
+    },
+    {
+      href: "/provider/planning",
+      content: (
+        <>
+          <CalendarDaysIcon /> {t("header.sideHeader.menu.planning")}
         </>
       ),
     },
