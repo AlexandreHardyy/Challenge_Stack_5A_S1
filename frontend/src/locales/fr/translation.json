@@ -29,6 +29,37 @@
       }
     }
   },
+  "searchClient": {
+    "form": {
+      "categoryToggle": "Categorie",
+      "locationToggle": "Localisation",
+      "nameInput": "Nom",
+      "nameInputPlaceholder": "Le nom de l'agence ou de la companie",
+      "categoryInput": "Categorie",
+      "categoryInputPlaceholder": "Categorie de service",
+      "addressInput": "Adresse",
+      "addressInputPlaceholder": "Entrez une adresse",
+      "cityInput": "Ville",
+      "cityInputPlaceholder": "Entrez le nom d'une ville",
+      "zipInput": "Zip code",
+      "zipInputPlaceholder": "Entrez un code zip",
+      "submitInput": "Rechercher"
+    },
+    "list": {
+      "loading": "Chargement...",
+      "error": "Une erreur est survenue",
+      "noData": "Pas de données",
+      "companyCard": {
+        "email": "Mail",
+        "phoneNumber": "N° de téléphone"
+      },
+      "agencyCard": {
+        "address": "Adresse",
+        "city": "Ville",
+        "zip": "Zip code"
+      }
+    }
+  },
   "companyClient": {
     "section1": {
       "overallRating": "Note globale",

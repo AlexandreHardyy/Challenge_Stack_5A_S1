@@ -23,6 +23,7 @@ import ProfileClient from "@/pages/client/User/ProfileClient.tsx"
 import EmployeePlanning from "./pages/provider/EmployeePlanning"
 import Companies from "./pages/admin/Companies"
 import Users from "./pages/admin/Users"
+import Search from "./pages/client/Search"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -52,6 +53,10 @@ const Routes = () => {
         {
           path: "/terms",
           element: <Terms />,
+        },
+        {
+          path: "/search",
+          element: <Search />,
         },
         {
           path: "/companies/:companyId",

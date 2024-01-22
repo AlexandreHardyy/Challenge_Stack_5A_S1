@@ -25,20 +25,57 @@ export function useFetchCompany(companyId?: number) {
   )
 }
 
-export function useFetchCompanies() {
-  return useQuery<Company[]>(
-    ["getCompanies"],
-    async () => {
-      const response = await api.get(`companies`)
+export function useFetchCompanies(
+  queryParams?: { socialReason?: string; ["categories.name"]?: string },
+  shouldWaitQueryParams = false
+) {
+  let url = "companies"
+  const isQueryParamsDefined = !!(
+    queryParams &&
+    Object.keys(queryParams).length > 0 &&
+    Object.values(queryParams).find((value) => value !== undefined && value !== "")
+  )
+
+  //TODO: add pagination
+  if (isQueryParamsDefined) {
+    const formatedQueryParams = Object.entries(queryParams)
+      .filter(([_key, value]) => value !== undefined)
+      .map(([key, value]) => {
+        return `${key}=${value}`
+      })
+      .join("&")
+
+    url += `?${formatedQueryParams}`
+  }
+
+  return useQuery({
+    queryKey: ["companies", url],
+    queryFn: async ({ queryKey }): Promise<Company[]> => {
+      const [_key, url] = queryKey
+      const response = await api.get(url)
       if (response.status !== 200) {
         throw new Error("Something went wrong with the request (getCompanies)")
       }
       return response.data["hydra:member"]
     },
-    {
-      retry: false,
-    }
-  )
+    retry: false,
+    enabled: shouldWaitQueryParams ? isQueryParamsDefined : undefined,
+  })
+
+  // return useQuery<Company[]>(
+  //   ["getCompanies"],
+  //   async (queryParams) => {
+
+  //     const response = await api.get("companies")
+  //     if (response.status !== 200) {
+  //       throw new Error("Something went wrong with the request (getCompanies)")
+  //     }
+  //     return response.data["hydra:member"]
+  //   },
+  //   {
+  //     retry: false,
+  //   }
+  // )
 }
 
 type companyForm = {
