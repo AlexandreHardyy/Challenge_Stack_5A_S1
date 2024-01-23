@@ -17,7 +17,7 @@ export default function ModalFormAgency({
   agency,
   variant = "ghost",
 }: {
-  agency?: Agency
+  agency?: Pick<Agency, "id" | "address" | "city" | "zip" | "name" | "description" | "company" | "services" | "geoloc">
   variant?: "ghost" | "outline"
 }) {
   const [isReadOnly, setIsReadOnly] = useState(!!agency)

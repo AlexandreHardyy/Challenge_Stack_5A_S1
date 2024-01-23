@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { DateTime } from "luxon"
 import { useEffect, useState } from "react"
 import ConfirmationModal from "./modal"
-import { Agency, Service, Session } from "@/utils/types"
+import { Agency, Employee, Schedule, Service, Session } from "@/utils/types"
 
 // TODO: Remove after employees implementation (compute max beginning hour and max end hour)
 const BEGINNING_HOUR = 8
@@ -21,6 +21,13 @@ interface CalendarProps {
 interface WeekRange {
   beginningOfTheWeek: DateTime
   endOfTheWeek: DateTime
+}
+
+interface ParsedSchedule {
+  id: number
+  startHour: DateTime
+  endHour: DateTime
+  employee: Pick<Employee, "id" | "firstname" | "lastname">
 }
 
 function computeCalendarHours(weekRange: WeekRange, granularity: number) {
@@ -49,6 +56,14 @@ function computeCalendarHours(weekRange: WeekRange, granularity: number) {
   return calendarValues
 }
 
+function checkIsSessionInSchedules(sessionStart: DateTime, sessionEnd: DateTime, schedules: ParsedSchedule[]) {
+  return schedules.some((schedule) => {
+    if (sessionStart >= schedule.startHour && sessionEnd <= schedule.endHour) return true
+
+    return false
+  })
+}
+
 function checkIsSessionNotAvailable(sessionStart: DateTime, sessionEnd: DateTime, existingSessions: Session[]) {
   return existingSessions.some((existingSession) => {
     const existingSessionStart = DateTime.fromJSDate(new Date(existingSession.startDate))
@@ -64,18 +79,54 @@ function checkNotAvailableSessionByInstructor(
   instructorIds: number[],
   sessionStart: DateTime,
   sessionEnd: DateTime,
-  existingSessions: Session[]
+  existingSessions: Session[],
+  schedules: ParsedSchedule[]
 ) {
   return instructorIds.map((instructorId) => {
     return {
       instructorId,
-      notAvailable: checkIsSessionNotAvailable(
+      instructorNotAvailable: checkIsSessionNotAvailable(
         sessionStart,
         sessionEnd,
         existingSessions.filter((existingSession) => existingSession.instructor.id === instructorId)
       ),
+      instructorIsWorking: checkIsSessionInSchedules(
+        sessionStart,
+        sessionEnd,
+        schedules.filter((schedule) => schedule.employee.id === instructorId)
+      ),
     }
   })
+}
+
+function retrieveSchedules(
+  schedules: Schedule[],
+  weekRange: { beginningOfTheWeek: DateTime; endOfTheWeek: DateTime },
+  selectedInstructorId?: number
+): ParsedSchedule[] {
+  return schedules
+    .filter((schedule) => {
+      if (
+        DateTime.fromISO(schedule.date) >= weekRange.beginningOfTheWeek &&
+        DateTime.fromISO(schedule.date) <= weekRange.endOfTheWeek
+      ) {
+        if (selectedInstructorId) {
+          return schedule.employee.id === selectedInstructorId
+        }
+
+        return true
+      }
+
+      return false
+    })
+    .map((schedule) => {
+      return {
+        id: schedule.id,
+        startHour: DateTime.fromISO(schedule.date).set({ hour: schedule.startHour }),
+        endHour: DateTime.fromISO(schedule.date).set({ hour: schedule.endHour }),
+        employee: schedule.employee,
+      }
+    })
 }
 
 export default function Calendar({
@@ -97,6 +148,13 @@ export default function Calendar({
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const instructorIds = selectedInstructorId ? [parseInt(selectedInstructorId)] : agency.users!.map((user) => user.id)
+  const schedules = retrieveSchedules(
+    agency.schedules,
+    weekRange,
+    selectedInstructorId ? parseInt(selectedInstructorId) : undefined
+  )
+
+  console.log(schedules)
 
   function modifyWeekRange(type: "previous" | "next") {
     setWeekRange({
@@ -151,17 +209,24 @@ export default function Calendar({
                 <div className="flex flex-col gap-2">
                   {day.splitDayByInterval.map((hour) => {
                     // TODO: remove "!"
-                    const notAvailableSessionByInstructor = checkNotAvailableSessionByInstructor(
+                    const sessionAvailabilityByInstructor = checkNotAvailableSessionByInstructor(
                       instructorIds,
                       hour,
                       hour.plus({ minute: service.duration }),
-                      existingSessions
+                      existingSessions,
+                      schedules
+                    ).filter((sessionAvailability) => sessionAvailability.instructorIsWorking)
+
+                    if (!sessionAvailabilityByInstructor.length) {
+                      return <div key={hour.toMillis()} className="h-9 rounded-[8px] px-3 bg-secondary"></div>
+                    }
+
+                    const isSessionNotAvailable = sessionAvailabilityByInstructor.every(
+                      (item) => item.instructorNotAvailable
                     )
 
-                    const isSessionNotAvailable = notAvailableSessionByInstructor.every((item) => item.notAvailable)
-
-                    const availableInstructors = notAvailableSessionByInstructor
-                      .filter((item) => !item.notAvailable)
+                    const availableInstructors = sessionAvailabilityByInstructor
+                      .filter((item) => !item.instructorNotAvailable)
                       .map((item) => item.instructorId)
 
                     return (
