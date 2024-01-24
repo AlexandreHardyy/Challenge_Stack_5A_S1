@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 #[AsController]
-class AddSquedule extends AbstractController
+class AddSchedule extends AbstractController
 {
     private EntityManagerInterface $entityManager;
 

@@ -6,7 +6,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
-use App\Controller\AddSquedule;
+use App\Controller\AddSchedule;
 use App\Repository\ScheduleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(
             name: 'schedules', 
             uriTemplate: '/schedules', 
-            controller: AddSquedule::class,
+            controller: AddSchedule::class,
             input: ScheduleInput::class,
             openapi: new Operation(
                 tags: [ 'Schedule' ],

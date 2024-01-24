@@ -20,7 +20,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
     
-    App\Controller\AddSquedule:
+    App\Controller\AddSchedule:
         autowire: true
 
     App\EventSubscriber\UserRoleModifier:
