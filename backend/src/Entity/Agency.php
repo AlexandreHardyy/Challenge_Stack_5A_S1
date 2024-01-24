@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: AgencyRepository::class)]
 #[ApiResource(
@@ -58,7 +59,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     uriTemplate: '/companies/{id}/agencies',
     operations: [
         new GetCollection(
-            normalizationContext:['groups' => ['agency-group-read']],
+            normalizationContext:['groups' => ['agency-group-read'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Agency', 'Company' ],
                 summary: 'Returns a list of agencies for a specific company',
@@ -132,10 +133,13 @@ class Agency
     private array $geoloc = [];
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'agencies')]
+    #[MaxDepth(1)]
     #[Groups(['agency-group-read'])]
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Schedule::class, orphanRemoval: true)]
+    #[MaxDepth(1)]
+    #[Groups(['agency-group-read'])]
     private Collection $schedules;
     
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Session::class, orphanRemoval: true)]
@@ -375,6 +379,7 @@ class Agency
 
         return $this;
     }
+
     public function removeSession(Session $session): static
     {
         if ($this->sessions->removeElement($session)) {

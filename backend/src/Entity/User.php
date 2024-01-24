@@ -19,11 +19,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => ['read-user']]),
-        new Get(normalizationContext: ['groups' => ['read-user']],
+        new GetCollection(normalizationContext: ['groups' => ['read-user'], 'enable_max_depth' => true]),
+        new Get(normalizationContext: ['groups' => ['read-user'], 'enable_max_depth' => true],
                 security: "is_granted('USER_VIEW', object)"),
         new Post(denormalizationContext: ['groups' => ['create-user']]),
         new Patch(denormalizationContext: ['groups' => ['update-user']])
@@ -38,7 +39,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
             uriVariables: [
                 'id' => new Link(toProperty: 'company', fromClass: Company::class)
             ],
-            normalizationContext:['groups' => ['read-user']],
+            normalizationContext:['groups' => ['read-user'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Company', 'User' ],
                 summary: 'Returns a list of users for a specific company',
@@ -108,6 +109,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
         ),
     ]
 )]
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(['email'])]
@@ -175,15 +177,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $studentSessions;
 
     #[ORM\OneToMany(mappedBy: 'instructor', targetEntity: Session::class, orphanRemoval: true)]
-    // SECURITY need to know how to give another group when you need to see just the instrucor session
-    #[Groups(['read-user'])]
+    // TODO: Find a better way than MaxDepth
+    #[MaxDepth(1)]
+    #[Groups(['employee:read'])]
     private Collection $instructorSessions;
+
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Schedule::class, orphanRemoval: true)]
+    #[MaxDepth(1)]
+    #[Groups(['employee:read'])]
+    private Collection $schedules;
 
     public function __construct()
     {
         $this->agencies = new ArrayCollection();
         $this->studentSessions = new ArrayCollection();
         $this->instructorSessions = new ArrayCollection();
+        $this->schedules = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -427,6 +436,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($session->getStudent() === $this) {
                 $session->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Schedule>
+     */
+    public function getSchedules(): Collection
+    {
+        return $this->schedules;
+    }
+
+    public function addSchedule(Schedule $schedule): static
+    {
+        if (!$this->schedules->contains($schedule)) {
+            $this->schedules->add($schedule);
+            $schedule->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSchedule(Schedule $schedule): static
+    {
+        if ($this->schedules->removeElement($schedule)) {
+            // set the owning side to null (unless already changed)
+            if ($schedule->getEmployee() === $this) {
+                $schedule->setEmployee(null);
             }
         }
 

@@ -58,6 +58,7 @@ export const columns: ColumnDef<User>[] = [
       return (
         <div className="flex items-center gap-4">
           <ModalFormEmployee
+            // WTFF is that ???
             employee={{
               id: val("id"),
               email: val("email"),
@@ -87,7 +88,13 @@ const employeeFormSchema = z.object({
   agencies: z.array(z.string()).optional(),
 })
 
-const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnly: boolean }) => {
+const EmployeeForm = ({
+  employee,
+  isReadOnly,
+}: {
+  employee?: Pick<Employee, "id" | "email" | "firstname" | "lastname" | "agencies">
+  isReadOnly: boolean
+}) => {
   const { toast } = useToast()
   const { agencies, employees } = useContext(EmployeeContext)
   const { t } = useTranslation()
@@ -204,7 +211,13 @@ const EmployeeForm = ({ employee, isReadOnly }: { employee?: Employee; isReadOnl
   )
 }
 
-const ModalFormEmployee = ({ employee, variant = "ghost" }: { employee?: Employee; variant?: "ghost" | "outline" }) => {
+const ModalFormEmployee = ({
+  employee,
+  variant = "ghost",
+}: {
+  employee?: Pick<Employee, "id" | "email" | "firstname" | "lastname" | "agencies">
+  variant?: "ghost" | "outline"
+}) => {
   const [isReadOnly, setIsReadOnly] = useState(!!employee)
   return (
     <Dialog onOpenChange={(open) => !open && setIsReadOnly(!!employee)}>

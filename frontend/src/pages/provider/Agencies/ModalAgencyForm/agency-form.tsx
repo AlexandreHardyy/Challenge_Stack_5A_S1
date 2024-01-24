@@ -25,7 +25,13 @@ const AgencyContext = React.createContext<{
   agencies?: UseQueryResult<Agency[], unknown>
 }>({})
 
-export default function AgencyForm({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boolean }) {
+export default function AgencyForm({
+  agency,
+  isReadOnly,
+}: {
+  agency?: Pick<Agency, "id" | "address" | "city" | "zip" | "name" | "description" | "company" | "services" | "geoloc">
+  isReadOnly: boolean
+}) {
   const { t } = useTranslation()
   const { toast } = useToast()
 

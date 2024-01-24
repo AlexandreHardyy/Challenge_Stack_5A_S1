@@ -36,14 +36,14 @@ class Session
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'read-user'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'studentSessions')]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
     // SECURIDAD
-    #[Groups(['session-group-read', 'read-user'])]
+    #[Groups(['session-group-read', 'employee:read'])]
     private ?User $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'instructorSessions')]
@@ -53,26 +53,26 @@ class Session
     private ?User $instructor = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'read-user'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'read-user'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
     // SECUTITY
-    #[Groups(['session-group-read', 'session-group-read-collection', 'read-user'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['session-group-read', 'read-user'])]
+    #[Groups(['session-group-read', 'employee:read'])]
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session-group-read', 'read-user'])]
+    #[Groups(['session-group-read', 'employee:read'])]
     private ?string $status = null;
 
     public function getId(): ?int
