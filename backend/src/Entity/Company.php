@@ -16,10 +16,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
-    normalizationContext:['groups' => ['company-group-read']],
+    normalizationContext:['groups' => ['company-group-read'], 'enable_max_depth' => true,],
     operations: [
         new GetCollection(),
         new Get(),
@@ -78,6 +79,7 @@ class Company
     private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: User::class)]
+    #[MaxDepth(1)]
     #[Groups(['company-group-read'])]
     private Collection $users;
 
