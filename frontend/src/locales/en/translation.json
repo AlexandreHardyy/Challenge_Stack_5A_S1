@@ -286,6 +286,7 @@
       }
     },
     "myPlanning": {
+      "workDay": "Work day",
       "sessionDetails": {
         "date": "Date",
         "noSessionSelected": "Select a session to see more infos",
@@ -293,7 +294,14 @@
         "studentDetails": "Student details",
         "firstname": "Firstname",
         "lastname": "Lastname",
-        "mail": "Mail"
+        "mail": "Mail",
+        "modal": {
+          "confirmationText": "Are you sure you want to cancel this session ?",
+          "toastSuccessTitle": "This session has been cancelled !",
+          "toastSuccessDescription": "Your session has been cancelled. You will receive soon a notification email",
+          "toastErrorTitle": "An error occurred !",
+          "toastErrorDescription": "An error occurred during your session cancellation."
+        }
       }
     }
   },

@@ -6,9 +6,9 @@ import { Employee, Session } from "@/utils/types"
 import { useTranslation } from "react-i18next"
 
 function EmployeeCalendar({ setSelectedSession }: { setSelectedSession: (session: Session) => void }) {
-  const instructor = useAuth().user as Employee | null
-  console.log(instructor)
   const { t } = useTranslation()
+
+  const instructor = useAuth().user as Employee | null
 
   if (!instructor) {
     return <h1>{t("common.search.loading")}</h1>
@@ -20,12 +20,13 @@ function EmployeeCalendar({ setSelectedSession }: { setSelectedSession: (session
       start: instructorSession.startDate,
       end: instructorSession.endDate,
       session: instructorSession,
+      backgroundColor: instructorSession.status === "cancelled" ? "#ef4444" : "#1AB24C",
     }
   })
 
   const scheduleEvents = instructor.schedules.map((schedule) => {
     return {
-      title: `Work day ${schedule.startHour}H - ${schedule.endHour}H`,
+      title: `${t("provider.myPlanning.workDay")} ${schedule.startHour}H - ${schedule.endHour}H`,
       start: schedule.date,
       end: schedule.date,
       allDay: true,

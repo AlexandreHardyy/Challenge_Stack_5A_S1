@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\SessionRepository;
 use Doctrine\DBAL\Types\Types;
@@ -27,6 +28,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['session-group-read-collection']]
+        ),
+        new Patch(
+            denormalizationContext: ['groups' => ['session-group-update']],
+            security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
         )
     ]
 )]
@@ -72,7 +77,7 @@ class Session
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session-group-read', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-update', 'employee:read'])]
     private ?string $status = null;
 
     public function getId(): ?int

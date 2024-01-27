@@ -29,7 +29,7 @@ export default function ConfirmationModal({
   agency,
   onModalOpenChange,
   sessionsReFetch,
-}: Readonly<ConfirmationModalProps>) {
+}: ConfirmationModalProps) {
   const user = useAuth().user
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
