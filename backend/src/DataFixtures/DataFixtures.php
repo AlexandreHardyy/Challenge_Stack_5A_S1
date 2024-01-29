@@ -7,6 +7,7 @@ use App\Entity\Company;
 use App\Entity\Agency;
 use App\Entity\Category;
 use App\Entity\Service;
+use App\Entity\Session;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -223,6 +224,89 @@ class DataFixtures extends Fixture
         $manager->persist($service6);
         $manager->persist($service7);
         $manager->persist($service8);
+
+        $manager->flush();
+
+        $session1 = new Session();
+        $session1->setStudent($user);
+        $session1->setInstructor($user2);
+        $session1->setStartDate(new \DateTimeImmutable('2023-06-01 10:00:00'));
+        $session1->setEndDate(new \DateTimeImmutable('2023-06-01 11:00:00'));
+        $session1->setService($service1);
+        $session1->setAgency($agency1);
+        $session1->setStatus('created');
+
+        $session2 = new Session();
+        $session2->setStudent($user);
+        $session2->setInstructor($user2);
+        $session2->setStartDate(new \DateTimeImmutable('2023-06-01 14:00:00'));
+        $session2->setEndDate(new \DateTimeImmutable('2023-06-01 16:00:00'));
+        $session2->setService($service2);
+        $session2->setAgency($agency1);
+        $session2->setStatus('created');
+
+        $session3 = new Session();
+        $session3->setStudent($user);
+        $session3->setInstructor($user2);
+        $session3->setStartDate(new \DateTimeImmutable('2023-06-02 10:00:00'));
+        $session3->setEndDate(new \DateTimeImmutable('2023-06-02 11:00:00'));
+        $session3->setService($service3);
+        $session3->setAgency($agency2);
+        $session3->setStatus('created');
+
+        $session4 = new Session();
+        $session4->setStudent($user);
+        $session4->setInstructor($user2);
+        $session4->setStartDate(new \DateTimeImmutable('2023-06-02 14:00:00'));
+        $session4->setEndDate(new \DateTimeImmutable('2023-06-02 16:00:00'));
+        $session4->setService($service4);
+        $session4->setAgency($agency2);
+        $session4->setStatus('created');
+
+        $session5 = new Session();
+        $session5->setStudent($user);
+        $session5->setInstructor($user2);
+        $session5->setStartDate(new \DateTimeImmutable('2024-01-31 10:00:00'));
+        $session5->setEndDate(new \DateTimeImmutable('2024-01-31 11:00:00'));
+        $session5->setService($service5);
+        $session5->setAgency($agency3);
+        $session5->setStatus('created');
+
+        $session6 = new Session();
+        $session6->setStudent($user);
+        $session6->setInstructor($user2);
+        $session6->setStartDate(new \DateTimeImmutable('2024-01-31 14:00:00'));
+        $session6->setEndDate(new \DateTimeImmutable('2024-01-31 16:00:00'));
+        $session6->setService($service6);
+        $session6->setAgency($agency3);
+        $session6->setStatus('created');
+
+        $session7 = new Session();
+        $session7->setStudent($user);
+        $session7->setInstructor($user2);
+        $session7->setStartDate(new \DateTimeImmutable('2024-02-01 10:00:00'));
+        $session7->setEndDate(new \DateTimeImmutable('2024-02-01 11:00:00'));
+        $session7->setService($service7);
+        $session7->setAgency($agency4);
+        $session7->setStatus('created');
+
+        $session8 = new Session();
+        $session8->setStudent($user);
+        $session8->setInstructor($user2);
+        $session8->setStartDate(new \DateTimeImmutable('2024-02-01 14:00:00'));
+        $session8->setEndDate(new \DateTimeImmutable('2024-02-01 16:00:00'));
+        $session8->setService($service8);
+        $session8->setAgency($agency4);
+        $session8->setStatus('created');
+
+        $manager->persist($session1);
+        $manager->persist($session2);
+        $manager->persist($session3);
+        $manager->persist($session4);
+        $manager->persist($session5);
+        $manager->persist($session6);
+        $manager->persist($session7);
+        $manager->persist($session8);
 
         $manager->flush();
     }

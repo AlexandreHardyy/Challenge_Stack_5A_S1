@@ -10,6 +10,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\UserRepository;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -39,12 +42,12 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             uriVariables: [
                 'id' => new Link(toProperty: 'company', fromClass: Company::class)
             ],
-            normalizationContext:['groups' => ['read-user'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Company', 'User' ],
                 summary: 'Returns a list of users for a specific company',
                 description: 'Returns a list of users for a specific company'
-            )
+            ),
+            normalizationContext: ['groups' => ['read-user'], 'enable_max_depth' => true]
         )
     ],
 )]
@@ -53,18 +56,16 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     uriTemplate: '/employees',
     operations: [
         new Post(
-            security: "is_granted('USER_CREATE', object)",
-            denormalizationContext: [ 'groups' => [ 'create-employee' ] ],
             openapi: new Operation(
                 tags: [ 'User' ],
                 summary: 'create a new employee',
                 description: 'Create a new user for a company'
-            )
+            ),
+            denormalizationContext: [ 'groups' => [ 'create-employee' ] ],
+            security: "is_granted('USER_CREATE', object)"
         ),
         new Patch(
-            security: "is_granted('USER_EDIT', object)",
             uriTemplate: '/employees/{id}',
-            denormalizationContext: [ 'groups' => [ 'create-employee', 'update-employee' ] ],
             openapi: new Operation(
                 tags: [ 'User' ],
                 summary: 'update a employee',
@@ -91,21 +92,21 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     uriTemplate: '/providers',
     operations: [
         new Post(
-            denormalizationContext: [ 'groups' => [ 'create-provider' ] ],
             openapi: new Operation(
                 tags: [ 'Company', 'User' ],
                 summary: 'create a new provider',
                 description: 'Create a new user related to a company'
-            )
+            ),
+            denormalizationContext: [ 'groups' => [ 'create-provider' ] ]
         ),
         new Patch(
             uriTemplate: '/providers/{id}',
-            denormalizationContext: [ 'groups' => [ 'create-provider', 'update-provider' ] ],
             openapi: new Operation(
                 tags: [ 'Company', 'User' ],
                 summary: 'update a provider',
                 description: 'Update a user related to a company'
-            )
+            ),
+            denormalizationContext: [ 'groups' => [ 'create-provider', 'update-provider' ] ]
         )
     ],
 )]
@@ -114,8 +115,9 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     uriTemplate: '/user/me',
     operations: [
         new Get(
+            name: "get_me",
             normalizationContext: [
-                'groups' => ['read-user', 'employee:read', 'read-media_object'],
+                'groups' => ['read-user', 'read-media_object'],
                 'enable_max_depth' => true,
             ],
             security: "is_granted('USER_VIEW', object)"
@@ -138,7 +140,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'company-group-read'])]
     #[Assert\NotBlank(groups: ['create-user'])]
-    #[Assert\Email()]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -146,7 +148,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var ?string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
@@ -172,17 +174,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     #[Groups(['read-user'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['read-user', 'update-user'])]
-    private ?\DateTimeInterface $updatedAt = null;
+    private ?DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[Groups(['employee:read', 'create-employee', 'create-provider', 'update-provider'])]
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]
+    #[MaxDepth(1)]
     #[Groups(['employee:read', 'update-employee'])]
     private Collection $agencies;
 
@@ -248,9 +251,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\PreUpdate]
     public function updatedTimestamps(): void
     {
-        $this->setUpdatedAt(new \DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
         if ($this->getCreatedAt() === null) {
-            $this->setCreatedAt(new \DateTimeImmutable('now'));
+            $this->setCreatedAt(new DateTimeImmutable('now'));
         }
     }
 
@@ -371,24 +374,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $plainPassword;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    public function setUpdatedAt(DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -429,6 +432,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->agencies->removeElement($agency);
 
         return $this;
+    }
+
+    public function getStudent(Session $object): bool
+    {
+        if ($this->getId() === $object->getId()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -19,49 +19,49 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
-            security: "is_granted('CATEGORY_CREATE', object)",
-            denormalizationContext: ['groups' => 'create-category'],
             openapi: new Operation(
                 tags: ['Category'],
                 summary: 'new category',
                 description: 'Create a new category for a company'
-            )
+            ),
+            denormalizationContext: ['groups' => 'create-category'],
+            security: "is_granted('CATEGORY_CREATE', object)"
         ),
         new Patch(
-            security: "is_granted('CATEGORY_EDIT', object)",
-            denormalizationContext: ['groups' => 'update-category'],
             openapi: new Operation(
                 tags: ['Category'],
                 summary: 'Update category',
                 description: 'Update a category'
-            )          
+            ),
+            denormalizationContext: ['groups' => 'update-category'],
+            security: "is_granted('CATEGORY_EDIT', object)"
         ),
         new Delete(
-            security: "is_granted('CATEGORY_EDIT', object)",
             openapi: new Operation(
                 tags: ['Category'],
                 summary: 'Delete category',
                 description: 'Delete a category'
-            )
+            ),
+            security: "is_granted('CATEGORY_EDIT', object)"
         )
     ]
 )]
 #[ApiResource(
     uriTemplate: '/companies/{id}/categories',
-    security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
-            normalizationContext:['groups' => ['categories-group-read']],
             openapi: new Operation(
                 tags: [ 'Category' ],
                 summary: 'Returns a service of an agency',
                 description: 'Returns categories of a company'
-            )
+            ),
+            normalizationContext: ['groups' => ['categories-group-read']]
         ),
     ],
     uriVariables: [
         'id' => new Link(toProperty: 'company', fromClass: Company::class)
-    ]
+    ],
+    security: "is_granted('ROLE_USER')"
 )]
 class Category
 {

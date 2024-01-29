@@ -28,13 +28,13 @@ function AgencyClient() {
     )
   }
 
-  const totalRatings = agencyRequest.data?.sessions.reduce((acc, session) => {
+  const totalRatings = agencyRequest.data?.sessions?.reduce((acc, session) => {
     if (session.ratingService) {
       return acc + session.ratingService.rating
     }
     return acc
   }, 0)
-  const totalSessions = agencyRequest.data.sessions.filter((session) => session.ratingService).length
+  const totalSessions = agencyRequest.data.sessions?.filter((session) => session.ratingService).length
   const averageRating = () => (totalRatings && totalSessions ? totalRatings / totalSessions : 0)
 
   return (

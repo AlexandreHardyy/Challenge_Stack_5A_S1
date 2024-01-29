@@ -2,6 +2,7 @@ import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Spinner } from "./loader/Spinner"
+import { useState } from "react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -10,10 +11,15 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data, isLoading }: Readonly<DataTableProps<TData, TValue>>) {
+  const [rowSelection, setRowSelection] = useState({})
   const table = useReactTable({
     data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onRowSelectionChange: setRowSelection,
+    state: {
+      rowSelection,
+    },
   })
 
   if (isLoading) {
