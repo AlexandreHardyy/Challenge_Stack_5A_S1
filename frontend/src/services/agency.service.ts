@@ -1,6 +1,9 @@
+import { useToast } from "@/components/ui/use-toast"
 import api from "@/utils/api"
 import { Agency } from "@/utils/types"
-import { useQuery } from "@tanstack/react-query"
+import { AgencyFormSchema } from "@/zod-schemas/agency"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useTranslation } from "react-i18next"
 
 export function useFetchAgenciesByCompany(companyId?: number) {
   return useQuery<Agency[]>(
@@ -20,22 +23,14 @@ export function useFetchAgenciesByCompany(companyId?: number) {
 }
 
 export function useFetchAgencyById(agencyId?: string) {
-  const url = `${import.meta.env.VITE_API_URL}agencies/${agencyId}`
-
-  return useQuery<Agency>(
-    ["getAgency", url],
-    async () => {
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw new Error("Something went wrong with the request (getAgency)")
-      }
-
-      return response.json()
-    },
-    {
-      retry: false,
+  return useQuery<Agency>(["getAgency"], async () => {
+    const response = await api.get(`agencies/${agencyId}`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getAgency)")
     }
-  )
+
+    return response.data
+  })
 }
 
 type FetchAgenciesQueryParams = {
@@ -55,7 +50,7 @@ export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldW
   //TODO: add pagination
   if (isQueryParamsDefined) {
     const formatedQueryParams = Object.entries(queryParams)
-      .filter(([_key, value]) => value !== undefined)
+      .filter(([, value]) => value !== undefined)
       .map(([key, value]) => {
         return `${key}=${value}`
       })
@@ -65,9 +60,8 @@ export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldW
   }
 
   return useQuery({
-    queryKey: ["agencies", url],
-    queryFn: async ({ queryKey }): Promise<Agency[]> => {
-      const [_key, url] = queryKey
+    queryKey: ["getAgencies"],
+    queryFn: async (): Promise<Agency[]> => {
       const response = await api.get(url)
       if (response.status !== 200) {
         throw new Error("Something went wrong with the request (getAgencies)")
@@ -79,35 +73,94 @@ export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldW
   })
 }
 
-type AgencyForm = {
-  name: string
-  address: string
-  city: string
-  zip: string
-  services: string[]
-  company?: string
-  createdAt?: string
-  updatedAt?: string
+export const useAddAgency = () => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (body: AgencyFormSchema) => {
+      const result = await api
+        .post(`agencies`, body, {
+          headers: {
+            "Content-Type": "application/ld+json",
+          },
+        })
+        .catch((err) => err.response)
+      if (result.status === 201) {
+        toast({
+          variant: "success",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: t("ProviderAgencies.form.toast.successCreate"),
+        })
+      } else {
+        const isWrongAddress = result.data["hydra:description"].includes("geoloc")
+        toast({
+          variant: "destructive",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: isWrongAddress
+            ? t("ProviderAgencies.form.toast.addressError")
+            : t("ProviderAgencies.form.toast.error"),
+        })
+      }
+
+      return result
+    },
+  })
 }
 
-export const updateAgencyById = async (agencyId: number, body: AgencyForm) => {
-  return api
-    .patch(`agencies/${agencyId}`, body, {
-      headers: {
-        "Content-Type": "application/merge-patch+json",
-      },
-    })
-    .catch((err) => err.response)
+export const useUpdateAgency = (agencyId?: number) => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (body: AgencyFormSchema) => {
+      const result = await api.patch(`agencies/${agencyId}`, body, {
+        headers: {
+          "Content-Type": "application/merge-patch+json",
+        },
+      })
+
+      if (result.status === 200) {
+        toast({
+          variant: "success",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: t("ProviderAgencies.form.toast.successUpdate"),
+        })
+      } else {
+        const isWrongAddress = result.data["hydra:description"].includes("geoloc")
+        toast({
+          variant: "destructive",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: isWrongAddress
+            ? t("ProviderAgencies.form.toast.addressError")
+            : t("ProviderAgencies.form.toast.error"),
+        })
+      }
+
+      return result
+    },
+  })
 }
 
-export const addNewAgency = async (companyId: number, body: AgencyForm) => {
-  body.company = `/api/companies/${companyId}`
+export const useDeleteAgencyById = () => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (agencyId: number) => {
+      const result = await api.delete(`agencies/${agencyId}`).catch((err) => err.response)
+      if (result.status === 204) {
+        toast({
+          variant: "success",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: t("ProviderAgencies.form.toast.successDelete"),
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: t("ProviderAgencies.form.toast.error"),
+        })
+      }
 
-  return api
-    .post(`agencies`, body, {
-      headers: {
-        "Content-Type": "application/ld+json",
-      },
-    })
-    .catch((err) => err.response)
+      return result
+    },
+  })
 }

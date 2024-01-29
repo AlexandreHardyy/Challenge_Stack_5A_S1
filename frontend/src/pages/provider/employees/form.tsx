@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useAuth } from "@/context/AuthContext"
 import { useFetchAgenciesByCompany } from "@/services"
 import { scheduleFormSchema, useAddSchedule } from "@/services/schedule.service"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -18,9 +19,9 @@ const HOURS = Array.from(Array(14)).map((_, index) => ({ value: String(8 + index
 export const FormSchedules = () => {
   const { t } = useTranslation()
   const { userId } = useParams()
-
+  const { user } = useAuth()
   const schedules = useAddSchedule()
-  const agencies = useFetchAgenciesByCompany(1)
+  const agencies = useFetchAgenciesByCompany(user?.company?.id)
   const onSubmit = async (values: z.infer<typeof scheduleFormSchema>) => {
     schedules.mutate(values)
   }

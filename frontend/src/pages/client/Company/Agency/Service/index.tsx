@@ -19,8 +19,6 @@ export default function ServiceClient() {
     return <h1>WTFFFFF</h1>
   }
 
-  console.log(requestSessions.data)
-
   const service = requestAgency.data?.services.find((service) => service.id === parseInt(serviceId!))
 
   return (
