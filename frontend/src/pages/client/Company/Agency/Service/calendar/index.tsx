@@ -154,8 +154,6 @@ export default function Calendar({
     selectedInstructorId ? parseInt(selectedInstructorId) : undefined
   )
 
-  console.log(schedules)
-
   function modifyWeekRange(type: "previous" | "next") {
     setWeekRange({
       beginningOfTheWeek:

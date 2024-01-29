@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
@@ -53,6 +54,13 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
                 description: 'Create a new agency for a company'
             )
         ),
+        new Delete(
+            openapi: new Operation(
+                tags: [ 'Agency' ],
+                summary: 'delete agency',
+                description: 'delete an agency'
+            )
+        )
     ]
 )]
 #[ApiResource(

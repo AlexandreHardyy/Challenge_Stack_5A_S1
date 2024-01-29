@@ -45,7 +45,6 @@ export default function UserForm({
   })
 
   const onSubmit = async (values: z.infer<typeof userFormSchema>) => {
-    console.log(values)
     const result = await (!user ? addNewUser(values) : updateUserById(user!.id, values))
     if (result.status === 201) {
       toast({

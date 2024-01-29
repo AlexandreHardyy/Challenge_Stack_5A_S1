@@ -30,6 +30,14 @@
       }
     }
   },
+  "global": {
+    "modalDelete": {
+      "title": "Confirmation la suppression",
+      "description": "Êtes-vous sur de vouloir supprimer",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
+    }
+  },
   "searchClient": {
     "form": {
       "categoryToggle": "Categorie",
@@ -212,6 +220,7 @@
         "title": "Agence",
         "successCreate": "agence créée avec succès",
         "successUpdate": "agence mis a jour avec succès",
+        "successDelete": "agence supprimé avec succès",
         "error": "une erreur a eu lieu lors de la mise a jour",
         "addressError": "Votre address n'a pas été trouvé"
       }

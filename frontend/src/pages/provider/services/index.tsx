@@ -8,6 +8,7 @@ import { PencilIcon, PlusCircleIcon } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { useFetchServicesByCompany } from "@/services/category.service"
 import { AddCategoryContainer, EditCategoryContainer, ServiceForm } from "./form"
+import { useAuth } from "@/context/AuthContext"
 
 const ModalFormService = ({
   service,
@@ -70,7 +71,8 @@ const ServiceContainer = ({ service, categoryId }: { service: Service; categoryI
 }
 
 const Services = () => {
-  const categories = useFetchServicesByCompany(1)
+  const { user } = useAuth()
+  const categories = useFetchServicesByCompany(user?.company?.id)
   const { t } = useTranslation()
 
   if (categories.isLoading) {

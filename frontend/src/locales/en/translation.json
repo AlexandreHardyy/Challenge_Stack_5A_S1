@@ -30,6 +30,14 @@
       }
     }
   },
+  "global": {
+    "deleteModal": {
+      "title": "Confirm suppression",
+      "description": "Are you sure you want to delete",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    }
+  },
   "searchClient": {
     "form": {
       "categoryToggle": "Category",
@@ -212,6 +220,7 @@
         "title": "Agency",
         "successCreate": "agency created successfully",
         "successUpdate": "agency updated successfully",
+        "successDelete": "agency delete successfully",
         "error": "an error occurred while updating",
         "addressError": "Your address was not found"
       }

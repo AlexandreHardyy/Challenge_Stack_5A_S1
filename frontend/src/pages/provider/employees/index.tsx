@@ -26,6 +26,7 @@ import { Spinner } from "@/components/loader/Spinner"
 import { useToast } from "@/components/ui/use-toast"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
+import { useAuth } from "@/context/AuthContext"
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -106,6 +107,7 @@ const EmployeeForm = ({
   const { toast } = useToast()
   const { agencies, employees } = useContext(EmployeeContext)
   const { t } = useTranslation()
+  const { user } = useAuth()
 
   const form = useForm<z.infer<typeof employeeFormSchema>>({
     resolver: zodResolver(employeeFormSchema),
@@ -116,9 +118,10 @@ const EmployeeForm = ({
       phoneNumber: employee?.phoneNumber ?? "",
     },
   })
-
   const onSubmit = async (values: z.infer<typeof employeeFormSchema>) => {
-    const result = await (!employee ? addNewEmployee(1, values) : updateEmployeeById(employee!.id, values))
+    const result = await (!employee
+      ? addNewEmployee(user?.company?.id, values)
+      : updateEmployeeById(employee!.id, values))
     if (result.status === 201) {
       toast({
         variant: "success",
@@ -280,8 +283,10 @@ const EmployeeContext = React.createContext<{
 }>({})
 
 const Employees = () => {
-  const employees = useFetchEmployeesByCompany(1)
-  const agencies = useFetchAgenciesByCompany(1)
+  const { user } = useAuth()
+
+  const employees = useFetchEmployeesByCompany(user?.company?.id)
+  const agencies = useFetchAgenciesByCompany(user?.company?.id)
 
   return (
     <EmployeeContext.Provider value={{ employees, agencies }}>

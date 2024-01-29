@@ -38,7 +38,7 @@ export function useFetchUserById(id: number) {
   )
 }
 
-export function useFetchEmployeesByCompany(companyId: number) {
+export function useFetchEmployeesByCompany(companyId?: number) {
   return useQuery<User[]>(
     ["getUsers"],
     async () => {
@@ -90,7 +90,7 @@ export const updateEmployeeById = async (agencyId: number, body: EmployeeForm) =
     .catch((err) => err.response)
 }
 
-export const addNewEmployee = async (companyId: number, body: EmployeeForm) => {
+export const addNewEmployee = async (companyId: number | undefined, body: EmployeeForm) => {
   body.company = `/api/companies/${companyId}`
   return api
     .post(`employees`, body, {
