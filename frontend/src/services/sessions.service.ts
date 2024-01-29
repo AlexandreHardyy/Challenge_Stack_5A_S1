@@ -84,3 +84,25 @@ export function useAddSession({ onSuccess, onError }: { onSuccess: () => void; o
 
   // return response.json()
 }
+
+export function useUpdateSessionStatus({ onSuccess, onError }: { onSuccess: () => void; onError: () => void }) {
+  return useMutation({
+    mutationFn: async (params: { id: number; status: string }) =>
+      await api
+        .patch<Session>(
+          `sessions/${params.id}`,
+          { status: params.status },
+          {
+            headers: {
+              "Content-Type": "application/merge-patch+json",
+            },
+          }
+        )
+        .catch((err) => {
+          throw new Error(err.response)
+        }),
+    onSuccess,
+    onError,
+    retry: false,
+  })
+}

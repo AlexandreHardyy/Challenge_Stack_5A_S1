@@ -1,6 +1,6 @@
 import { useState } from "react"
 import EmployeeCalendar from "./employee-calendar"
-import { SessionDetails } from "./session-details"
+import { SessionDetails } from "./session-details/session-details"
 import { Session } from "@/utils/types"
 
 function EmployeePlanning() {

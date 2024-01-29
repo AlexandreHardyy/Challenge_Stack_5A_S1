@@ -286,6 +286,7 @@
       }
     },
     "myPlanning": {
+      "workDay": "Jour de travail",
       "sessionDetails": {
         "date": "Date",
         "noSessionSelected": "Séléctionnez une session pour voir plus d'infos",
@@ -293,7 +294,14 @@
         "studentDetails": "Détails de l'élève",
         "firstname": "Prénom",
         "lastname": "Nom",
-        "mail": "Email"
+        "mail": "Email",
+        "modal": {
+          "confirmationText": "Êtes vous sûr de vouloir annulé cette session ?",
+          "toastSuccessTitle": "Cette session a été annulé !",
+          "toastSuccessDescription": "Votre session a été annullé. Vous allez recevoir un email de notification",
+          "toastErrorTitle": "Une erreur est survenue !",
+          "toastErrorDescription": "Une erreur est survenue durant l'annulation de cette session."
+        }
       }
     }
   },
