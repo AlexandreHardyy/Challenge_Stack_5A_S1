@@ -45,6 +45,10 @@ export const columns: ColumnDef<User>[] = [
     header: "Last Name",
   },
   {
+    accessorKey: "phoneNumber",
+    header: "Phone number",
+  },
+  {
     accessorKey: "agencies",
     cell: ({ row }) => {
       const agencies = row.getValue("agencies") as Agency[]
@@ -64,6 +68,7 @@ export const columns: ColumnDef<User>[] = [
               email: val("email"),
               firstname: val("firstname"),
               lastname: val("lastname"),
+              phoneNumber: val("phoneNumber"),
               agencies: val("agencies"),
             }}
           />
@@ -85,6 +90,9 @@ const employeeFormSchema = z.object({
   lastname: z.string().min(2, {
     message: "FirstName must be at least 2 characters.",
   }),
+  phoneNumber: z.string().min(10, {
+    message: "Wrong number.",
+  }),
   agencies: z.array(z.string()).optional(),
 })
 
@@ -92,7 +100,7 @@ const EmployeeForm = ({
   employee,
   isReadOnly,
 }: {
-  employee?: Pick<Employee, "id" | "email" | "firstname" | "lastname" | "agencies">
+  employee?: Pick<Employee, "id" | "email" | "firstname" | "lastname" | "phoneNumber" | "agencies">
   isReadOnly: boolean
 }) => {
   const { toast } = useToast()
@@ -105,6 +113,7 @@ const EmployeeForm = ({
       email: employee?.email ?? "",
       firstname: employee?.firstname ?? "",
       lastname: employee?.lastname ?? "",
+      phoneNumber: employee?.phoneNumber ?? "",
     },
   })
 
@@ -175,6 +184,19 @@ const EmployeeForm = ({
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="phoneNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone number</FormLabel>
+              <FormControl>
+                <Input placeholder="Phone Number" {...field} readOnly={isReadOnly} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         {employee && (
           <FormField
             control={form.control}
@@ -215,7 +237,7 @@ const ModalFormEmployee = ({
   employee,
   variant = "ghost",
 }: {
-  employee?: Pick<Employee, "id" | "email" | "firstname" | "lastname" | "agencies">
+  employee?: Pick<Employee, "id" | "email" | "firstname" | "lastname" | "phoneNumber" | "agencies">
   variant?: "ghost" | "outline"
 }) => {
   const [isReadOnly, setIsReadOnly] = useState(!!employee)

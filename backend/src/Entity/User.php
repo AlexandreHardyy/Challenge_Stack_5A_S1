@@ -187,6 +187,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['employee:read'])]
     private Collection $schedules;
 
+    #[ORM\Column(length: 30)]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read'])]
+    private ?string $phoneNumber = null;
+
     public function __construct()
     {
         $this->agencies = new ArrayCollection();
@@ -468,6 +472,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $schedule->setEmployee(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(string $phoneNumber): static
+    {
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
