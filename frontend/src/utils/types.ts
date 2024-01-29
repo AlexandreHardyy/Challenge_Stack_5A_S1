@@ -51,6 +51,7 @@ export interface User {
   firstname: string
   lastname: string
   email: string
+  phoneNumber: string
   roles: string[]
   isVerified: boolean
   createdAt: string

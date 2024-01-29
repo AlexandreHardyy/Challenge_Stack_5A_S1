@@ -24,7 +24,13 @@ const userFormSchema = z.object({
   updatedAt: z.string(),
 })
 
-export default function UserForm({ user, isReadOnly }: { user?: User; isReadOnly: boolean }) {
+export default function UserForm({
+  user,
+  isReadOnly,
+}: {
+  user?: Pick<User, "id" | "firstname" | "lastname" | "email" | "roles" | "isVerified" | "createdAt" | "updatedAt">
+  isReadOnly: boolean
+}) {
   const users = useFetchUsers()
   const form = useForm<z.infer<typeof userFormSchema>>({
     resolver: zodResolver(userFormSchema),

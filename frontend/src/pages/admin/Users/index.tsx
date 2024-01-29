@@ -47,6 +47,7 @@ function usersColumns(t: TFunction<"translation", undefined>): ColumnDef<User>[]
       header: t("admin.users.table.actions"),
       cell: ({ row: { getValue: val } }) => {
         return (
+          // Problem here
           <ModalUserForm
             user={{
               id: val("id"),

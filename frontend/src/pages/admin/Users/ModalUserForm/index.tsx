@@ -13,7 +13,13 @@ import { PencilIcon } from "lucide-react"
 import { t } from "i18next"
 import UserForm from "@/pages/admin/Users/ModalUserForm/user-form.tsx"
 
-export default function ModalUserForm({ user, variant = "ghost" }: { user?: User; variant?: "ghost" | "outline" }) {
+export default function ModalUserForm({
+  user,
+  variant = "ghost",
+}: {
+  user?: Pick<User, "id" | "firstname" | "lastname" | "email" | "roles" | "isVerified" | "createdAt" | "updatedAt">
+  variant?: "ghost" | "outline"
+}) {
   const [isReadOnly, setIsReadOnly] = useState(!!user)
   return (
     <Dialog onOpenChange={(open) => !open && setIsReadOnly(!!user)}>
