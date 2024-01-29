@@ -31,7 +31,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         ),
         new GetCollection(
-            normalizationContext:['groups' => ['agency-group-read']],
+            normalizationContext:['groups' => ['agency-group-read'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Returns agencies',

@@ -25,16 +25,34 @@ function SearchForm() {
   const { t } = useTranslation()
 
   const { filters, setFilters } = useSearchFiltersContext()
-  const [enabledInput, setEnabledInput] = useState<string[]>([])
+  const [enabledInputs, setEnabledInputs] = useState<string[]>([])
 
   const form = useForm<z.infer<typeof searchFormSchema>>({
     resolver: zodResolver(searchFormSchema),
   })
 
+  function onEnabledInputsChange(value: string[]) {
+    if (value.length <= enabledInputs.length) {
+      const newFilters = { ...filters }
+      if (!value.includes("category")) {
+        delete newFilters.category
+      }
+      if (!value.includes("location")) {
+        delete newFilters.address
+        delete newFilters.city
+        delete newFilters.zip
+      }
+
+      setFilters(newFilters)
+    }
+
+    setEnabledInputs(value)
+  }
+
   useEffect(() => {
     if (filters.category) {
-      if (!enabledInput.includes("category")) {
-        setEnabledInput([...enabledInput, "category"])
+      if (!enabledInputs.includes("category")) {
+        setEnabledInputs([...enabledInputs, "category"])
       }
       form.setValue("category", filters.category)
     }
@@ -43,7 +61,7 @@ function SearchForm() {
   return (
     <Card className="">
       <CardHeader>
-        <ToggleGroup value={enabledInput} onValueChange={setEnabledInput} variant="outline" type="multiple">
+        <ToggleGroup value={enabledInputs} onValueChange={onEnabledInputsChange} variant="outline" type="multiple">
           <ToggleGroupItem className="data-[state=on]:text-primary" value="category" aria-label="Toggle bold">
             {t("searchClient.form.categoryToggle")}
           </ToggleGroupItem>
@@ -69,7 +87,7 @@ function SearchForm() {
                 </FormItem>
               )}
             />
-            {enabledInput.includes("category") && (
+            {enabledInputs.includes("category") && (
               <FormField
                 control={form.control}
                 defaultValue=""
@@ -85,7 +103,7 @@ function SearchForm() {
                 )}
               />
             )}
-            {enabledInput.includes("location") && (
+            {enabledInputs.includes("location") && (
               <div className="flex gap-2">
                 <FormField
                   control={form.control}
