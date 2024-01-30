@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\Metadata\Link;
@@ -31,6 +32,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 tags: ['Category'],
                 summary: 'Update category',
                 description: 'Update a category'
+            )          
+        ),
+        new Delete(
+            openapi: new Operation(
+                tags: ['Category'],
+                summary: 'Delete category',
+                description: 'Delete a category'
             )
         )
     ]

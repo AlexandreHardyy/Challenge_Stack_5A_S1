@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
@@ -41,6 +42,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 description: 'Create a new service for a company'
             )
         ),
+        new Delete(
+            openapi: new Operation(
+                tags: ['Service'],
+                summary: 'delete service',
+                description: 'Delete a service'
+            )
+        )
     ]
 )]
 

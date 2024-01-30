@@ -6,9 +6,12 @@ import { Service } from "@/utils/types"
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { PencilIcon, PlusCircleIcon } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import { useFetchServicesByCompany } from "@/services/category.service"
+import { useDeleteCategoryById, useFetchServicesGroupByCategory } from "@/services/category.service"
 import { AddCategoryContainer, EditCategoryContainer, ServiceForm } from "./form"
 import { useAuth } from "@/context/AuthContext"
+import { DeleteModal } from "@/components/delete-modal"
+import { useQueryClient } from "@tanstack/react-query"
+import { useDeleteServiceById } from "@/services"
 
 const ModalFormService = ({
   service,
@@ -20,6 +23,8 @@ const ModalFormService = ({
   variant?: "ghost" | "outline"
 }) => {
   const { t } = useTranslation()
+  const deleteService = useDeleteServiceById()
+  const queryClient = useQueryClient()
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -36,8 +41,21 @@ const ModalFormService = ({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="pb-4">
-            {!service ? t("providerService.form.cta.newService") : t("providerService.form.cta.updateService")}
+          <DialogTitle className="pb-4 flex items-center gap-1">
+            {!service ? (
+              t("providerService.form.cta.newService")
+            ) : (
+              <>
+                {t("providerService.form.cta.updateService")}{" "}
+                <DeleteModal
+                  name={service.name}
+                  onDelete={async () => {
+                    await deleteService.mutateAsync(service.id)
+                    queryClient.invalidateQueries(["getCategories"])
+                  }}
+                />
+              </>
+            )}
           </DialogTitle>
           <DialogDescription>
             <ServiceForm service={service} categoryId={categoryId} />
@@ -72,8 +90,10 @@ const ServiceContainer = ({ service, categoryId }: { service: Service; categoryI
 
 const Services = () => {
   const { user } = useAuth()
-  const categories = useFetchServicesByCompany(user?.company?.id)
+  const queryClient = useQueryClient()
+  const categories = useFetchServicesGroupByCategory(user?.company?.id)
   const { t } = useTranslation()
+  const deleteCategory = useDeleteCategoryById()
 
   if (categories.isLoading) {
     return (
@@ -93,8 +113,16 @@ const Services = () => {
             return (
               <Card key={category.id}>
                 <CardHeader>
-                  <CardTitle className="flex gap-3 items-center">
+                  <CardTitle className="flex gap-3 items-center relative">
                     <EditCategoryContainer category={category} />
+                    <DeleteModal
+                      className="absolute right-0"
+                      name={category.name}
+                      onDelete={async () => {
+                        await deleteCategory.mutateAsync(category.id)
+                        queryClient.invalidateQueries(["getCategories"])
+                      }}
+                    />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
