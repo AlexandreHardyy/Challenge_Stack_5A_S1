@@ -3,7 +3,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Agency, Service } from "@/utils/types"
 import { useDeleteAgencyById, useFetchAgenciesByCompany } from "@/services/agency.service"
 import { useTranslation } from "react-i18next"
-import { useFetchServicesByCompany } from "@/services/category.service"
+import { useFetchServicesGroupByCategory } from "@/services/category.service"
 import ModalAgencyForm from "@/pages/provider/agencies/form"
 import React, { useMemo } from "react"
 import { DeleteModal } from "@/components/delete-modal"
@@ -80,7 +80,7 @@ const Agencies = () => {
   const { user } = useAuth()
 
   const agencies = useFetchAgenciesByCompany(user?.company?.id)
-  const services = useFetchServicesByCompany(user?.company?.id)
+  const services = useFetchServicesGroupByCategory(user?.company?.id)
   const { t } = useTranslation()
 
   const formattedServices = useMemo(() => {
