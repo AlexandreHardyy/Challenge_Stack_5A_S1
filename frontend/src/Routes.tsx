@@ -25,103 +25,112 @@ import Search from "./pages/client/Search"
 import Users from "@/pages/admin/Users"
 import Companies from "@/pages/admin/Companies"
 import Services from "@/pages/provider/services"
+import App from "@/App.tsx"
 
 const Routes = () => {
   const router = createBrowserRouter([
     {
-      element: <ClientLayout />,
+      element: <App />,
       children: [
         {
+          element: <ClientLayout />,
           path: "/",
-          element: <Landing />,
+          children: [
+            {
+              path: "",
+              element: <Landing />,
+            },
+            {
+              path: "login",
+              element: <Login />,
+            },
+            {
+              path: "register",
+              element: <Register />,
+            },
+            {
+              path: "register/welcome",
+              element: <RegisterSuccess />,
+            },
+            {
+              path: "user/profile",
+              element: <ProfileClient />,
+            },
+            {
+              path: "terms",
+              element: <Terms />,
+            },
+            {
+              path: "search",
+              element: <Search />,
+            },
+            {
+              path: "companies/:companyId",
+              element: <CompanyClient />,
+            },
+            {
+              path: "companies/:companyId/agencies/:agencyId",
+              element: <AgencyClient />,
+            },
+            {
+              path: "companies/:companyId/agencies/:agencyId/services/:serviceId",
+              element: <ServiceClient />,
+            },
+            {
+              path: "provider/new",
+              element: <NewProvider />,
+            },
+          ],
+          errorElement: <NotFound />,
         },
         {
-          path: "/login",
-          element: <Login />,
-        },
-        {
-          path: "/register",
-          element: <Register />,
-        },
-        {
-          path: "/register/welcome",
-          element: <RegisterSuccess />,
-        },
-        {
-          path: "/user/profile",
-          element: <ProfileClient />,
-        },
-        {
-          path: "/terms",
-          element: <Terms />,
-        },
-        {
-          path: "/search",
-          element: <Search />,
-        },
-        {
-          path: "/companies/:companyId",
-          element: <CompanyClient />,
-        },
-        {
-          path: "/companies/:companyId/agencies/:agencyId",
-          element: <AgencyClient />,
-        },
-        {
-          path: "/companies/:companyId/agencies/:agencyId/services/:serviceId",
-          element: <ServiceClient />,
-        },
-        {
-          path: "/provider/new",
-          element: <NewProvider />,
-        },
-      ],
-      errorElement: <NotFound />,
-    },
-    {
-      element: <ProviderLayout />,
-      children: [
-        {
+          element: <ProviderLayout />,
           path: "/provider",
-          element: <HomeProvider />,
+          children: [
+            {
+              path: "",
+              element: <HomeProvider />,
+            },
+            {
+              path: "employee",
+              element: <Employees />,
+            },
+            {
+              path: "employee/:userId",
+              element: <HandleEmployee />,
+            },
+            {
+              path: "agency",
+              element: <Agencies />,
+            },
+            {
+              path: "planning",
+              element: <EmployeePlanning />,
+            },
+            {
+              path: "service",
+              element: <Services />,
+            },
+          ],
+          errorElement: <NotFound />,
         },
         {
-          path: "/provider/employee",
-          element: <Employees />,
-        },
-        {
-          path: "/provider/employee/:userId",
-          element: <HandleEmployee />,
-        },
-        {
-          path: "/provider/agency",
-          element: <Agencies />,
-        },
-        {
-          path: "/provider/planning",
-          element: <EmployeePlanning />,
-        },
-        {
-          path: "/provider/service",
-          element: <Services />,
-        },
-      ],
-      errorElement: <NotFound />,
-    },
-    {
-      element: <AdminLayout />,
-      children: [
-        {
+          element: <AdminLayout />,
           path: "/admin",
-          element: <HomeAdmin />,
-        },
-        {
-          path: "/admin/companies",
-          element: <Companies />,
-        },
-        {
-          path: "/admin/users",
-          element: <Users />,
+          children: [
+            {
+              path: "",
+              element: <HomeAdmin />,
+            },
+            {
+              path: "companies",
+              element: <Companies />,
+            },
+            {
+              path: "users",
+              element: <Users />,
+            },
+          ],
         },
       ],
     },
