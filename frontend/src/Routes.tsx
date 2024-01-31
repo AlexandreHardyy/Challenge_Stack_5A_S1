@@ -26,6 +26,7 @@ import Users from "@/pages/admin/Users"
 import Companies from "@/pages/admin/Companies"
 import Services from "@/pages/provider/services"
 import App from "@/App.tsx"
+import ForgotPassword from "@/pages/auth/ForgotPassword.tsx"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -51,6 +52,10 @@ const Routes = () => {
             {
               path: "register/welcome",
               element: <RegisterSuccess />,
+            },
+            {
+              path: "/forgot-password",
+              element: <ForgotPassword />,
             },
             {
               path: "user/profile",
