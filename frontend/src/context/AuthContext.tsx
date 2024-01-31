@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import api from "@/utils/api.ts"
 import { getUserMe } from "@/services/user/user.service.ts"
 import { User } from "@/utils/types.ts"
-import { Spinner } from "@/components/loader/Spinner"
+import { Spinner } from "@/components/loader/Spinner.tsx"
 
 interface AuthContext {
   token: string | null

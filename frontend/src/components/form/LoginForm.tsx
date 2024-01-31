@@ -64,7 +64,7 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>{t("common.form.email")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="email" />
+                  <Input {...field} type="email" autoComplete="email" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -77,7 +77,7 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>{t("common.form.password")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <Input {...field} type="password" autoComplete="current-password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

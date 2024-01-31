@@ -17,6 +17,7 @@ const formSchema = z
     firstname: z.string().trim().min(2),
     lastname: z.string().trim().min(2),
     email: z.string().email(),
+    phoneNumber: z.string().regex(/^\+[1-9]\d{10,14}$/, "Must be a valid phone number with the format +33"),
     password: z
       .string()
       .min(8)
@@ -43,6 +44,7 @@ const RegisterForm = () => {
       firstname: "",
       lastname: "",
       email: "",
+      phoneNumber: "",
       password: "",
       passwordConfirmation: "",
       cgu: false,
@@ -50,7 +52,13 @@ const RegisterForm = () => {
   })
 
   const registerMutation = useMutation({
-    mutationFn: (user: { firstname: string; lastname: string; email: string; plainPassword: string }) => {
+    mutationFn: (user: {
+      firstname: string
+      lastname: string
+      email: string
+      phoneNumber: string
+      plainPassword: string
+    }) => {
       return register(user)
     },
   })
@@ -61,6 +69,7 @@ const RegisterForm = () => {
         firstname: values.firstname,
         lastname: values.lastname,
         email: values.email,
+        phoneNumber: values.phoneNumber,
         plainPassword: values.password,
       })
       navigate("/register/welcome")
@@ -87,7 +96,7 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>{t("common.form.firstName")}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} autoComplete="given-name" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -100,7 +109,7 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>{t("common.form.lastName")}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} autoComplete="family-name" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -113,7 +122,20 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>{t("common.form.email")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="email" />
+                  <Input {...field} type="email" autoComplete="email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("common.form.phoneNumber")}</FormLabel>
+                <FormControl>
+                  <Input {...field} type="text" autoComplete="tel" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -126,7 +148,7 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>{t("common.form.password")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <Input {...field} type="password" autoComplete="new-password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -139,7 +161,7 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>{t("common.form.confirmPassword")}</FormLabel>
                 <FormControl>
-                  <Input {...field} type="password" />
+                  <Input {...field} type="password" autoComplete="new-password" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
