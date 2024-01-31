@@ -62,7 +62,7 @@ export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldW
   return useQuery({
     queryKey: ["getAgencies"],
     queryFn: async (): Promise<Agency[]> => {
-      const response = await api.get(url)
+      const response = await api.get(url).catch((err) => err.response)
       if (response.status !== 200) {
         throw new Error("Something went wrong with the request (getAgencies)")
       }
@@ -112,11 +112,13 @@ export const useUpdateAgency = (agencyId?: number) => {
   const { t } = useTranslation()
   return useMutation({
     mutationFn: async (body: AgencyFormSchema) => {
-      const result = await api.patch(`agencies/${agencyId}`, body, {
-        headers: {
-          "Content-Type": "application/merge-patch+json",
-        },
-      })
+      const result = await api
+        .patch(`agencies/${agencyId}`, body, {
+          headers: {
+            "Content-Type": "application/merge-patch+json",
+          },
+        })
+        .catch((err) => err.response)
 
       if (result.status === 200) {
         toast({

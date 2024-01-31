@@ -21,15 +21,17 @@ export const useAddSchedule = () => {
   const { t } = useTranslation()
   return useMutation({
     mutationFn: async (params: z.infer<typeof scheduleFormSchema>) => {
-      const result = await api.post("schedules", {
-        ...params,
-        startHour: Number(params.startHour),
-        endHour: Number(params.endHour),
-        dateRange: {
-          from: format(params.dateRange.from, "yyyy-MM-dd"),
-          to: format(params.dateRange.to ?? params.dateRange.from, "yyyy-MM-dd"),
-        },
-      })
+      const result = await api
+        .post("schedules", {
+          ...params,
+          startHour: Number(params.startHour),
+          endHour: Number(params.endHour),
+          dateRange: {
+            from: format(params.dateRange.from, "yyyy-MM-dd"),
+            to: format(params.dateRange.to ?? params.dateRange.from, "yyyy-MM-dd"),
+          },
+        })
+        .catch((err) => err.response)
 
       if (result.status === 201) {
         toast({

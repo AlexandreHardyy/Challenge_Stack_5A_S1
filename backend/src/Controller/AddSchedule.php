@@ -32,7 +32,7 @@ class AddSchedule extends AbstractController
             throw new BadRequestHttpException('Body is not set or is empty', null, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        if (empty($body['startHour']) || empty($body['endHour']) || empty($body['dateRange'])) {
+        if (empty($body['startHour']) || empty($body['endHour']) || empty($body['dateRange']) || empty($body['employeeId']) || empty($body['agencyId'])) {
             throw new BadRequestHttpException('Invalid body parameters', null, JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -46,6 +46,9 @@ class AddSchedule extends AbstractController
         $interval = $from->diff($to);
 
         try {
+            $employee = $this->entityManager->find(User::class, $body['employeeId']);
+            $agency = $this->entityManager->find(Agency::class, $body['agencyId']);
+
             for($i = 0; $i <= $interval->days; $i++) {
                 $this->entityManager->getRepository(Schedule::class)->deleteByDate($from->format('c'), $body['employeeId'], $body['agencyId']);
 
@@ -53,8 +56,8 @@ class AddSchedule extends AbstractController
                 $schedule->setStartHour($body['startHour']);
                 $schedule->setEndHour($body['endHour']);
                 $schedule->setDate($from);
-                $schedule->setEmployee($this->entityManager->find(User::class, $body['employeeId']));
-                $schedule->setAgency($this->entityManager->find(Agency::class, $body['agencyId']));
+                $schedule->setEmployee($employee);
+                $schedule->setAgency($agency);
     
                 $this->entityManager->persist($schedule);
                 $this->entityManager->flush();

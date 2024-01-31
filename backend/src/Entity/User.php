@@ -53,18 +53,20 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     uriTemplate: '/employees',
     operations: [
         new Post(
+            security: "is_granted('USER_CREATE', object)",
             denormalizationContext: [ 'groups' => [ 'create-employee' ] ],
             openapi: new Operation(
-                tags: [ 'Company', 'User' ],
+                tags: [ 'User' ],
                 summary: 'create a new employee',
                 description: 'Create a new user for a company'
             )
         ),
         new Patch(
+            security: "is_granted('USER_EDIT', object)",
             uriTemplate: '/employees/{id}',
             denormalizationContext: [ 'groups' => [ 'create-employee', 'update-employee' ] ],
             openapi: new Operation(
-                tags: [ 'Company', 'User' ],
+                tags: [ 'User' ],
                 summary: 'update a employee',
                 description: 'Update a user for a company'
             )

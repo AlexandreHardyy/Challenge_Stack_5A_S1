@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
+            security: "is_granted('CATEGORY_CREATE', object)",
             denormalizationContext: ['groups' => 'create-category'],
             openapi: new Operation(
                 tags: ['Category'],
@@ -27,6 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             )
         ),
         new Patch(
+            security: "is_granted('CATEGORY_EDIT', object)",
             denormalizationContext: ['groups' => 'update-category'],
             openapi: new Operation(
                 tags: ['Category'],
@@ -35,6 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             )          
         ),
         new Delete(
+            security: "is_granted('CATEGORY_EDIT', object)",
             openapi: new Operation(
                 tags: ['Category'],
                 summary: 'Delete category',
@@ -45,6 +48,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[ApiResource(
     uriTemplate: '/companies/{id}/categories',
+    security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
             normalizationContext:['groups' => ['categories-group-read']],
