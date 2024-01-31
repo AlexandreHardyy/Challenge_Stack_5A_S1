@@ -243,12 +243,14 @@
         "title": "Categorie",
         "successCreate": "categorie créée avec succès",
         "successUpdate": "categorie modifiée avec succès",
+        "successDelete": "categorie supprimer avec succès",
         "error": "une erreur a eu lieu"
       },
       "toastService": {
         "title": "Service",
         "successCreate": "service créé avec succès",
         "successUpdate": "service modifié avec succès",
+        "successDelete": "service supprimé avec succès",
         "error": "une erreur a eu lieu"
       }
     }

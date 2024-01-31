@@ -17,15 +17,15 @@ type SelectProps = {
 export const SelectMultiple = ({ options, defaultData = [], placeholder, onChange, disabled = false }: SelectProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<SelectData[]>(defaultData)
+  const [selectedOptions, setSelectedOptions] = useState<SelectData[]>(defaultData)
   const [inputValue, setInputValue] = useState("")
 
   useEffect(() => {
-    onChange(selected.map((data) => data.value))
-  }, [selected])
+    onChange(selectedOptions.map((data) => data.value))
+  }, [selectedOptions])
 
   const handleUnselect = useCallback((currentData: SelectData) => {
-    setSelected((prev) => prev.filter((s) => s.value !== currentData.value))
+    setSelectedOptions((prev) => prev.filter((s) => s.value !== currentData.value))
   }, [])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -33,7 +33,7 @@ export const SelectMultiple = ({ options, defaultData = [], placeholder, onChang
     if (input) {
       if (e.key === "Delete" || e.key === "Backspace") {
         if (input.value === "") {
-          setSelected((prev) => {
+          setSelectedOptions((prev) => {
             const newSelected = [...prev]
             newSelected.pop()
             return newSelected
@@ -47,13 +47,15 @@ export const SelectMultiple = ({ options, defaultData = [], placeholder, onChang
     }
   }, [])
 
-  const selectables = options.filter((option) => !selected.includes(option))
+  const selectables = options.filter((option) => {
+    return !selectedOptions.some((selectedOption) => selectedOption.value === option.value)
+  })
 
   return (
     <Command onKeyDown={handleKeyDown} className="overflow-visible bg-transparent">
       <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <div className="flex gap-1 flex-wrap">
-          {selected.map((option) => {
+          {selectedOptions.map((option) => {
             return (
               <Badge key={option.value} variant="secondary">
                 {option.label}
@@ -102,7 +104,7 @@ export const SelectMultiple = ({ options, defaultData = [], placeholder, onChang
                     }}
                     onSelect={() => {
                       setInputValue("")
-                      setSelected((prev) => [...prev, option])
+                      setSelectedOptions((prev) => [...prev, option])
                     }}
                     className={"cursor-pointer"}
                   >

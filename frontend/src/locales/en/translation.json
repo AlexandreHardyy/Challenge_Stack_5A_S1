@@ -243,12 +243,14 @@
         "title": "Category",
         "successCreate": "category created successfully",
         "successUpdate": "category updated successfully",
+        "successDelete": "category deleted successfully",
         "error": "an error occurred"
       },
       "toastService": {
         "title": "Service",
         "successCreate": "service created successfully",
         "successUpdate": "service updated successfully",
+        "successDelete": "service deleted successfully",
         "error": "an error occurred"
       }
     }

@@ -12,19 +12,21 @@ import {
 import { ReactNode } from "react"
 import { Trash2Icon } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { cn } from "@/lib/utils"
 
 type Props = {
   onDelete: () => void
   trigger?: ReactNode
   name: string
+  className?: string
 }
 
-export const DeleteModal = ({ onDelete, trigger, name }: Props) => {
+export const DeleteModal = ({ onDelete, trigger, name, className }: Props) => {
   const { t } = useTranslation()
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"ghost"} className="px-2">
+        <Button variant={"ghost"} className={cn("px-2", className)}>
           {trigger ? trigger : <Trash2Icon />}
         </Button>
       </DialogTrigger>

@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { Category } from "@/utils/types"
 import { CategoryFormSchema } from "@/zod-schemas/category"
 
-export function useFetchServicesByCompany(companyId?: number) {
+export function useFetchServicesGroupByCategory(companyId?: number) {
   return useQuery<Category[]>(["getCategories"], async () => {
     const response = await api.get(`companies/${companyId}/categories`)
     if (response.status !== 200) {
@@ -62,6 +62,31 @@ export const useUpdateCategory = (categoryId: number) => {
           variant: "success",
           title: t("providerService.form.toastCategory.title"),
           description: t("providerService.form.toastCategory.successUpdate"),
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("providerService.form.toastCategory.title"),
+          description: t("providerService.form.toastCategory.error"),
+        })
+      }
+
+      return result
+    },
+  })
+}
+
+export const useDeleteCategoryById = () => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (categoryId: number) => {
+      const result = await api.delete(`categories/${categoryId}`).catch((err) => err.response)
+      if (result.status === 204) {
+        toast({
+          variant: "success",
+          title: t("providerService.form.toastCategory.title"),
+          description: t("providerService.form.toastCategory.successDelete"),
         })
       } else {
         toast({

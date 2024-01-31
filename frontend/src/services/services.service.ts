@@ -1,4 +1,4 @@
-import { toast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import api from "@/utils/api"
 import { Service } from "@/utils/types"
 import { serviceFormSchema } from "@/zod-schemas/service"
@@ -27,6 +27,7 @@ export function useFetchService(serviceId?: string) {
 
 export function useCreateService() {
   const { t } = useTranslation()
+  const { toast } = useToast()
   return useMutation({
     mutationFn: async (params: z.infer<typeof serviceFormSchema>) => {
       const result = await api.post("services", {
@@ -56,6 +57,7 @@ export function useCreateService() {
 
 export function useUpdateService(serviceId: number | undefined) {
   const { t } = useTranslation()
+  const { toast } = useToast()
   return useMutation({
     mutationFn: async (service: z.infer<typeof serviceFormSchema>) => {
       const result = await api.patch(
@@ -77,6 +79,31 @@ export function useUpdateService(serviceId: number | undefined) {
           variant: "success",
           title: t("providerService.form.toastService.title"),
           description: t("providerService.form.toastService.successUpdate"),
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("providerService.form.toastService.title"),
+          description: t("providerService.form.toastService.error"),
+        })
+      }
+
+      return result
+    },
+  })
+}
+
+export const useDeleteServiceById = () => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (categoryId: number) => {
+      const result = await api.delete(`services/${categoryId}`).catch((err) => err.response)
+      if (result.status === 204) {
+        toast({
+          variant: "success",
+          title: t("providerService.form.toastService.title"),
+          description: t("providerService.form.toastService.successDelete"),
         })
       } else {
         toast({
