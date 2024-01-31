@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
+            security: "is_granted('ROLE_PROVIDER')",
             name: 'schedules', 
             uriTemplate: '/schedules', 
             controller: AddSchedule::class,

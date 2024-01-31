@@ -22,6 +22,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: AgencyRepository::class)]
 #[ApiResource(
+    security: "is_granted('ROLE_USER')",
     operations: [
         new Get(
             normalizationContext:['groups' => ['agency-group-read']],
@@ -40,6 +41,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         ),
         new Patch(
+            security: "is_granted('AGENCY_EDIT', object)",
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Update agency by Id',
@@ -47,6 +49,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         ),
         new Post(
+            security: "is_granted('AGENCY_CREATE', object)",
             denormalizationContext: ['groups' => 'create-agency'],
             openapi: new Operation(
                 tags: [ 'Agency' ],
@@ -55,6 +58,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         ),
         new Delete(
+            security: "is_granted('AGENCY_EDIT', object)",
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'delete agency',
@@ -65,6 +69,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 )]
 #[ApiResource(
     uriTemplate: '/companies/{id}/agencies',
+    security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
             normalizationContext:['groups' => ['agency-group-read'], 'enable_max_depth' => true],
@@ -77,17 +82,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     ],
     uriVariables: [
         'id' => new Link(toProperty: 'company', fromClass: Company::class)
-    ]
-)]
-#[ApiResource(
-    normalizationContext:['groups' => ['agency-group-read']],
-    uriTemplate: '/companies/{companyId}/agencies/{agencyId}',
-    operations: [
-        // new Patch()
-    ],
-    uriVariables: [
-        'companyId' => new Link(toProperty: 'company', fromClass: Company::class),
-        'agencyId' => new Link(fromClass: Agency::class)
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'services.category.name' => 'partial', 'address' => 'partial', 'city' => 'partial', 'zip' => 'partial',])]

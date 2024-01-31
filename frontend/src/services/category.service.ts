@@ -51,11 +51,13 @@ export const useUpdateCategory = (categoryId: number) => {
   const { t } = useTranslation()
   return useMutation({
     mutationFn: async (body: CategoryFormSchema) => {
-      const result = await api.patch(`categories/${categoryId}`, body, {
-        headers: {
-          "Content-Type": "application/merge-patch+json",
-        },
-      })
+      const result = await api
+        .patch(`categories/${categoryId}`, body, {
+          headers: {
+            "Content-Type": "application/merge-patch+json",
+          },
+        })
+        .catch((err) => err.response)
 
       if (result.status === 200) {
         toast({

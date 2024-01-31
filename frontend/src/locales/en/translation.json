@@ -236,8 +236,8 @@
       "cta": {
         "newService": "Add new service",
         "updateService": "Update service",
-        "newCategory": "Add new category",
-        "updateCategory": "Update category"
+        "newCategory": "Add",
+        "updateCategory": "Update"
       },
       "toastCategory": {
         "title": "Category",

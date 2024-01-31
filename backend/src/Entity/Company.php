@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,13 +21,49 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
-    normalizationContext:['groups' => ['company-group-read'], 'enable_max_depth' => true,],
+    normalizationContext: ['groups' => ['company-group-read'], 'enable_max_depth' => true],
     operations: [
-        new GetCollection(),
-        new Get(),
-        new Post(),
-        new Delete(),
-        new Patch()
+        new GetCollection(
+            security: "is_granted('ROLE_USER')",
+            openapi: new Operation(
+                tags: ['Company'],
+                summary: 'Return companies',
+                description: 'Return all companies'
+            )
+        ),
+        new Get(
+            security: "is_granted('ROLE_USER')",
+            openapi: new Operation(
+                tags: ['Company'],
+                summary: 'Return one company',
+                description: 'Return one company by Id'
+            )
+        ),
+        new Post(
+            openapi: new Operation(
+                tags: ['Company'],
+                summary: 'Create company',
+                description: 'Create a new company'
+            )
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN')",
+            openapi: new Operation(
+                tags: ['Company'],
+                summary: 'Delete company',
+                description: 'Delete a company by id'
+            )
+        ),
+        new Patch(
+            security: "is_granted('ROLE_ADMIN')",
+            denormalizationContext: ['groups' => ['update-company']],
+            
+            openapi: new Operation(
+                tags: ['Company'],
+                summary: 'Update company',
+                description: 'Update a company by id'
+            )
+        )
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['socialReason' => 'partial', 'categories.name' => 'partial'])]
@@ -39,27 +76,27 @@ class Company
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read'])]
+    #[Groups(['company-group-read', 'update-company'])]
     private ?string $socialReason = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read'])]
+    #[Groups(['company-group-read', 'update-company'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['company-group-read'])]
+    #[Groups(['company-group-read', 'update-company'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['company-group-read'])]
+    #[Groups(['company-group-read', 'update-company'])]
     private ?string $siren = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['company-group-read'])]
+    #[Groups(['company-group-read', 'update-company'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['company-group-read'])]
+    #[Groups(['company-group-read', 'update-company'])]
     private ?bool $isVerified = false;
 
     #[ORM\Column]

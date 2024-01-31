@@ -8,7 +8,7 @@ import { CategoryFormSchema, categoryFormSchema } from "@/zod-schemas/category"
 import { ServiceFormSchema, serviceFormSchema } from "@/zod-schemas/service"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQueryClient } from "@tanstack/react-query"
-import { PencilIcon } from "lucide-react"
+import { Loader2, PencilIcon } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -16,9 +16,11 @@ import { useTranslation } from "react-i18next"
 export const FormCategory = ({
   category,
   onSubmit,
+  isSubmitting = false,
 }: {
   category?: Category
   onSubmit: (params: CategoryFormSchema) => void
+  isSubmitting?: boolean
 }) => {
   const { t } = useTranslation()
   const form = useForm<CategoryFormSchema>({
@@ -50,6 +52,7 @@ export const FormCategory = ({
         />
 
         <Button type="submit" className="px-6">
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {!category ? t("providerService.form.cta.newCategory") : t("providerService.form.cta.updateCategory")}
         </Button>
       </form>
@@ -66,6 +69,7 @@ export const EditCategoryContainer = ({ category }: { category: Category }) => {
     return (
       <FormCategory
         category={category}
+        isSubmitting={updateCategory.isLoading}
         onSubmit={async (values) => {
           const result = await updateCategory.mutateAsync(values)
 
@@ -94,6 +98,7 @@ export const AddCategoryContainer = () => {
 
   return (
     <FormCategory
+      isSubmitting={addCategory.isLoading}
       onSubmit={async (values) => {
         const result = await addCategory.mutateAsync(values)
 

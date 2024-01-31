@@ -30,11 +30,13 @@ export function useCreateService() {
   const { toast } = useToast()
   return useMutation({
     mutationFn: async (params: z.infer<typeof serviceFormSchema>) => {
-      const result = await api.post("services", {
-        ...params,
-        duration: Number(params.duration),
-        price: Number(params.price),
-      })
+      const result = await api
+        .post("services", {
+          ...params,
+          duration: Number(params.duration),
+          price: Number(params.price),
+        })
+        .catch((err) => err.response)
 
       if (result.status === 201) {
         toast({
@@ -60,19 +62,21 @@ export function useUpdateService(serviceId: number | undefined) {
   const { toast } = useToast()
   return useMutation({
     mutationFn: async (service: z.infer<typeof serviceFormSchema>) => {
-      const result = await api.patch(
-        `services/${serviceId}`,
-        {
-          ...service,
-          duration: Number(service.duration),
-          price: Number(service.price),
-        },
-        {
-          headers: {
-            "Content-Type": "application/merge-patch+json",
+      const result = await api
+        .patch(
+          `services/${serviceId}`,
+          {
+            ...service,
+            duration: Number(service.duration),
+            price: Number(service.price),
           },
-        }
-      )
+          {
+            headers: {
+              "Content-Type": "application/merge-patch+json",
+            },
+          }
+        )
+        .catch((err) => err.response)
 
       if (result.status === 200) {
         toast({
