@@ -39,8 +39,6 @@ final class SessionMailSubscriber implements EventSubscriberInterface
             return;
         }
 
-        var_dump($session->getInstructor()->getEmail());
-
         $sendSmtpEmail = new SendSmtpEmail();
         $sendSmtpEmail['sender'] = array('email'=>$_ENV["BREVO_SENDER_EMAIL"], 'name'=>'RoadWise');
         $sendSmtpEmail['to'] = array(array('email'=> $session->getInstructor()->getEmail(), 'name'=> $session->getInstructor()->getFirstname() . ' ' . $session->getInstructor()->getLastname()));
