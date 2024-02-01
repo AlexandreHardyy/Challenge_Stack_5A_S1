@@ -6,18 +6,15 @@ use App\Entity\Company;
 use App\Entity\User;
 use Error;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class CompanyVoter extends Voter
 {
     public const EDIT = 'COMPANY_EDIT';
-
-    private $security = null;
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
-    }
+    public function __construct(private Security $security, private RequestStack $requestStack)
+    {}
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -35,9 +32,9 @@ class CompanyVoter extends Voter
             if ($this->security->isGranted('ROLE_ADMIN')) {
                 return true;
             }
-            if (($this->security->isGranted('ROLE_PROVIDER') && $company->getId() === $user->getCompany()->getId())
-            ) {
-                return true;
+            if (($this->security->isGranted('ROLE_PROVIDER') && $company->getId() === $user->getCompany()->getId())) {
+                $bodyRequest = json_decode($this->requestStack->getCurrentRequest()->getContent());
+                return !isset($bodyRequest->isVerified);
             }
         }
 

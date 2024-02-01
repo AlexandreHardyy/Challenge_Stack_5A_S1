@@ -16,6 +16,7 @@
     "sideHeader": {
       "menu": {
         "dashboard": "Tableau de bord",
+        "myCompany": "Mon entreprise",
         "employees": "Mes employés",
         "agencies": "Mes agences",
         "planning": "Mon planning",

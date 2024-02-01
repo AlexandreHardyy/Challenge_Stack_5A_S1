@@ -1,5 +1,5 @@
 import { User } from "@/utils/types.ts"
-import { addNewUser, updateUserById, useFetchUsers } from "@/services"
+import { addNewUser, updateUserById, useFetchUsers } from "@/services/user/user.service"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"

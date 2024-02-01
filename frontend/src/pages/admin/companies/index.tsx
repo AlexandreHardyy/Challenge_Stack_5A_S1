@@ -1,12 +1,59 @@
 import { DataTable } from "@/components/Table"
 import { ColumnDef } from "@tanstack/react-table"
-import { useFetchCompanies } from "@/services"
+import { useFetchCompanies } from "@/services/company.service"
 import { Company } from "@/utils/types.ts"
 import { formatDate } from "@/utils/helpers.ts"
 import { Spinner } from "@/components/loader/Spinner.tsx"
-import { TFunction } from "i18next"
+import { TFunction, t } from "i18next"
 import { useTranslation } from "react-i18next"
-import ModalCompanyForm from "@/pages/admin/Companies/ModalCompanyForm"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { PencilIcon } from "lucide-react"
+import { useState } from "react"
+import { CompanyForm } from "@/components/form/company-form"
+
+const ModalCompanyForm = ({ company, variant = "ghost" }: { company?: Company; variant?: "ghost" | "outline" }) => {
+  const [isReadOnly, setIsReadOnly] = useState(!!company)
+  return (
+    <Dialog onOpenChange={(open) => !open && setIsReadOnly(!!company)}>
+      <DialogTrigger asChild>
+        <Button variant={variant} className="px-2">
+          {!company ? t("admin.companies.cta.new") : <PencilIcon />}
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="pb-4">
+            {!company ? (
+              t("admin.companies.cta.new")
+            ) : (
+              <>
+                <div className="flex items-center">
+                  <h2>{t("admin.companies.table.company")}</h2>
+                  {isReadOnly && (
+                    <Button variant={"ghost"} onClick={() => setIsReadOnly(!isReadOnly)}>
+                      <PencilIcon />
+                    </Button>
+                  )}{" "}
+                </div>
+              </>
+            )}
+          </DialogTitle>
+          <DialogDescription>
+            <CompanyForm company={company} isReadOnly={isReadOnly} isAdmin={true} />
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  )
+}
 
 function companiesColumns(t: TFunction<"translation", undefined>): ColumnDef<Company>[] {
   return [
@@ -75,7 +122,7 @@ const Companies = () => {
   const { t } = useTranslation()
   const companiesRequest = useFetchCompanies()
 
-  if (companiesRequest.status === "error") {
+  if (companiesRequest.isError) {
     return <div>{t("common.form.fetchingError")}</div>
   }
 

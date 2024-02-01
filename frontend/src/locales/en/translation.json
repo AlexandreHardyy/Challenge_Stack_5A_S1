@@ -16,6 +16,7 @@
     "sideHeader": {
       "menu": {
         "dashboard": "Dashboard",
+        "myCompany": "My Company",
         "employees": "My employees",
         "agencies": "My agencies",
         "planning": "My planning",

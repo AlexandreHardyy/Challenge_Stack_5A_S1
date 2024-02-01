@@ -5,10 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Overview, YourServices } from "@/components/dashboard-provider"
 import { useTranslation } from "react-i18next"
 import { Company, Agency } from "@/utils/types.ts"
-import { useFetchCompany, useFetchAgenciesByCompany } from "@/services"
+import { useFetchCompany } from "@/services/company.service"
 import { useState } from "react"
 import { Loader } from "@/components/ui/loader.tsx"
 import { useAuth } from "@/context/AuthContext.tsx"
+import { useFetchAgenciesByCompany } from "@/services/agency.service"
 
 const HomeProvider = () => {
   const { t } = useTranslation()

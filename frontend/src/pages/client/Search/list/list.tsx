@@ -1,9 +1,10 @@
-import { useFetchAgencies, useFetchCompanies } from "@/services"
+import { useFetchAgencies } from "@/services/agency.service"
 import CompanyCard from "./company-card"
 import AgencyCard from "./agency-card"
 import { Agency, Company } from "@/utils/types"
 import { useSearchFiltersContext } from "../search-filters-context"
 import { useTranslation } from "react-i18next"
+import { useFetchCompanies } from "@/services/company.service"
 
 function buildCards(companiesData?: Company[], agenciesData?: Agency[]) {
   const cards = []

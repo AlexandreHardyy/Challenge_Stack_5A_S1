@@ -1,6 +1,6 @@
 import { DataTable } from "@/components/Table"
 import { ColumnDef } from "@tanstack/react-table"
-import { useFetchUsers } from "@/services"
+import { useFetchUsers } from "@/services/user/user.service"
 import { User } from "@/utils/types.ts"
 import { formatDate } from "@/utils/helpers.ts"
 import { Spinner } from "@/components/loader/Spinner.tsx"

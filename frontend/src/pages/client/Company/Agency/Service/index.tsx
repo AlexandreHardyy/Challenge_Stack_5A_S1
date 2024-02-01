@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { computeServiceDuration } from "@/utils/helpers"
 import Calendar from "./calendar"
-import { useFetchAgencyById } from "@/services"
+import { useFetchAgencyById } from "@/services/agency.service"
 import { InstructorSelect } from "./instructor-select"
 import { useState } from "react"
 import { useFetchSessionsByAgencyService } from "@/services/sessions.service"

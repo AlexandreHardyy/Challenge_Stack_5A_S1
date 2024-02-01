@@ -4,6 +4,7 @@ import { ModeToggle } from "@/components/Mode-toggle.tsx"
 import { useTranslation } from "react-i18next"
 import {
   BoxIcon,
+  Building2Icon,
   CalendarDaysIcon,
   HomeIcon,
   LayoutDashboardIcon,
@@ -22,6 +23,14 @@ const SideHeader = () => {
       content: (
         <>
           <LayoutDashboardIcon /> {t("header.sideHeader.menu.dashboard")}
+        </>
+      ),
+    },
+    {
+      href: "/provider/company",
+      content: (
+        <>
+          <Building2Icon /> {t("header.sideHeader.menu.myCompany")}
         </>
       ),
     },

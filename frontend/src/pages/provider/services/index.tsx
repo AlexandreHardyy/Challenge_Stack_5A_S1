@@ -11,7 +11,7 @@ import { AddCategoryContainer, EditCategoryContainer, ServiceForm } from "./form
 import { useAuth } from "@/context/AuthContext"
 import { DeleteModal } from "@/components/delete-modal"
 import { useQueryClient } from "@tanstack/react-query"
-import { useDeleteServiceById } from "@/services"
+import { useDeleteServiceById } from "@/services/services.service"
 
 const ModalFormService = ({
   service,
