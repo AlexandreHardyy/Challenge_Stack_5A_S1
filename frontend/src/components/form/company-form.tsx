@@ -1,38 +1,27 @@
-import * as z from "zod"
 import { t } from "i18next"
 import { Company } from "@/utils/types.ts"
-import { addNewCompany, updateCompanyById, useFetchCompanies } from "@/services"
+import { useAddCompany, useUpdateCompany } from "@/services/company.service"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "@/components/ui/use-toast.ts"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form.tsx"
 import { Input } from "@/components/ui/input.tsx"
 import { Checkbox } from "@/components/ui/checkbox.tsx"
 import { Button } from "@/components/ui/button.tsx"
+import { CompanyFormSchema, companyFormSchema } from "@/zod-schemas/company"
+import { useQueryClient } from "@tanstack/react-query"
 
-const companyFormSchema = z.object({
-  socialReason: z.string().min(2, {
-    message: t("admin.companies.table.errors.socialReason"),
-  }),
-  email: z.string().email(),
-  phoneNumber: z.string().regex(/^(\+33|0)[1-9]([-. ]?\d{2}){4}$/, {
-    message: t("admin.companies.table.errors.phoneNumber"),
-  }),
-  description: z.string().min(2, {
-    message: t("admin.companies.table.errors.description"),
-  }),
-  siren: z.string().regex(/^\d{9}$/, {
-    message: t("admin.companies.table.errors.sirenNumberRegExp"),
-  }),
-  agencies: z.array(z.string()).optional(),
-  isVerified: z.boolean(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-})
+type CompanyFormProps = {
+  company?: Company
+  isReadOnly?: boolean
+  isAdmin?: boolean
+}
 
-export default function CompanyForm({ company, isReadOnly }: { company?: Company; isReadOnly: boolean }) {
-  const companies = useFetchCompanies()
-  const form = useForm<z.infer<typeof companyFormSchema>>({
+export const CompanyForm = ({ company, isReadOnly = false, isAdmin = false }: CompanyFormProps) => {
+  const queryClient = useQueryClient()
+  const addCompany = useAddCompany()
+  const updateCompany = useUpdateCompany(company!.id)
+
+  const form = useForm<CompanyFormSchema>({
     resolver: zodResolver(companyFormSchema),
     defaultValues: {
       socialReason: company?.socialReason ?? "",
@@ -46,28 +35,11 @@ export default function CompanyForm({ company, isReadOnly }: { company?: Company
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof companyFormSchema>) => {
-    const result = await (!company ? addNewCompany(values) : updateCompanyById(company!.id, values))
-    if (result.status === 201) {
-      toast({
-        variant: "success",
-        title: t("admin.companies.toast.success.title"),
-        description: t("admin.companies.toast.success.create"),
-      })
-      companies?.refetch()
-    } else if (result.status === 200) {
-      toast({
-        variant: "success",
-        title: t("admin.companies.toast.update.title"),
-        description: t("admin.companies.toast.update.update"),
-      })
-      companies?.refetch()
-    } else {
-      toast({
-        variant: "destructive",
-        title: t("admin.companies.toast.error.title"),
-        description: t("admin.companies.toast.error.error"),
-      })
+  const onSubmit = async (values: CompanyFormSchema) => {
+    const body = isAdmin ? values : { ...values, isVerified: undefined }
+    const result = await (!company ? addCompany.mutateAsync(values) : updateCompany.mutateAsync(body))
+    if (result.status === 201 || result.status === 200) {
+      queryClient.invalidateQueries(["getCompanies"])
     }
   }
 
@@ -146,7 +118,7 @@ export default function CompanyForm({ company, isReadOnly }: { company?: Company
             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
               <FormLabel>{t("admin.companies.table.isVerifiedLabel")}</FormLabel>
               <FormControl>
-                <Checkbox checked={field.value} onCheckedChange={field.onChange} readOnly={isReadOnly} />
+                <Checkbox checked={field.value} onCheckedChange={field.onChange} readOnly={isReadOnly || !isAdmin} />
               </FormControl>
               <FormMessage />
             </FormItem>

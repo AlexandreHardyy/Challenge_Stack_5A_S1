@@ -1,8 +1,10 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { Company } from "@/utils/types.ts"
 import api from "@/utils/api.ts"
-import { toast } from "@/components/ui/use-toast.ts"
+import { toast, useToast } from "@/components/ui/use-toast.ts"
 import { t } from "i18next"
+import { useTranslation } from "react-i18next"
+import { CompanyFormSchema } from "@/zod-schemas/company"
 
 export function useFetchCompany(companyId?: number) {
   const fetchCompanyUrl = `${import.meta.env.VITE_API_URL}companies/${companyId}`
@@ -38,8 +40,8 @@ export function useFetchCompanies(
 
   //TODO: add pagination
   if (isQueryParamsDefined) {
-    const formatedQueryParams = Object.entries(queryParams)
-      .filter(([_key, value]) => value !== undefined)
+    const formatedQueryParams = Object.values(queryParams)
+      .filter(([, value]) => value !== undefined)
       .map(([key, value]) => {
         return `${key}=${value}`
       })
@@ -49,16 +51,15 @@ export function useFetchCompanies(
   }
 
   return useQuery({
-    queryKey: ["companies", url],
-    queryFn: async ({ queryKey }): Promise<Company[]> => {
-      const [_key, url] = queryKey
+    queryKey: ["getCompanies"],
+    queryFn: async (): Promise<Company[]> => {
       const response = await api.get(url)
       if (response.status !== 200) {
         throw new Error("Something went wrong with the request (getCompanies)")
       }
+      console.log(url, response.data)
       return response.data["hydra:member"]
     },
-    retry: false,
     enabled: shouldWaitQueryParams ? isQueryParamsDefined : undefined,
   })
 
@@ -78,32 +79,65 @@ export function useFetchCompanies(
   // )
 }
 
-type companyForm = {
-  socialReason: string
-  description: string
-  email: string
-  phoneNumber: string
-  siren: string
-  createdAt?: string
-  updatedAt?: string
+export const useAddCompany = () => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (body: CompanyFormSchema) => {
+      const result = await api
+        .post(`companies`, body, {
+          headers: {
+            "Content-Type": "application/ld+json",
+          },
+        })
+        .catch((err) => err.response)
+      if (result.status === 201) {
+        toast({
+          variant: "success",
+          title: t("admin.companies.toast.success.title"),
+          description: t("admin.companies.toast.success.create"),
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("admin.companies.toast.error.title"),
+          description: t("admin.companies.toast.error.error"),
+        })
+      }
+
+      return result
+    },
+  })
 }
 
-export const addNewCompany = async (body: companyForm) => {
-  return api
-    .post(`companies`, body, {
-      headers: {
-        "Content-Type": "application/ld+json",
-      },
-    })
-    .catch((error) => error.response)
-}
+export const useUpdateCompany = (companyId?: number) => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (body: CompanyFormSchema) => {
+      const result = await api
+        .patch(`companies/${companyId}`, body, {
+          headers: {
+            "Content-Type": "application/merge-patch+json",
+          },
+        })
+        .catch((err) => err.response)
 
-export const updateCompanyById = async (companyId: number, body: companyForm) => {
-  return api
-    .patch(`companies/${companyId}`, body, {
-      headers: {
-        "Content-Type": "application/merge-patch+json",
-      },
-    })
-    .catch((error) => error.response)
+      if (result.status === 200) {
+        toast({
+          variant: "success",
+          title: t("admin.companies.toast.update.title"),
+          description: t("admin.companies.toast.update.update"),
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("admin.companies.toast.error.title"),
+          description: t("admin.companies.toast.error.error"),
+        })
+      }
+
+      return result
+    },
+  })
 }

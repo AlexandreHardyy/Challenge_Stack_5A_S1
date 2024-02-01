@@ -55,7 +55,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         ),
         new Patch(
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('COMPANY_EDIT', object)",
             denormalizationContext: ['groups' => ['update-company']],
             
             openapi: new Operation(

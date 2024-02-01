@@ -20,13 +20,14 @@ import Agencies from "@/pages/provider/agencies"
 import RegisterSuccess from "@/pages/auth/RegisterSuccess.tsx"
 import NewProvider from "@/pages/provider/NewProvider.tsx"
 import ProfileClient from "@/pages/client/User/ProfileClient.tsx"
-import EmployeePlanning from "./pages/provider/employee-planning"
-import Search from "./pages/client/Search"
+import EmployeePlanning from "@/pages/provider/employee-planning"
+import Search from "@/pages/client/Search"
 import Users from "@/pages/admin/Users"
-import Companies from "@/pages/admin/Companies"
+import Companies from "@/pages/admin/companies"
 import Services from "@/pages/provider/services"
 import App from "@/App.tsx"
 import ForgotPassword from "@/pages/auth/ForgotPassword.tsx"
+import MyCompany from "@/pages/provider/my-company"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -95,6 +96,10 @@ const Routes = () => {
             {
               path: "",
               element: <HomeProvider />,
+            },
+            {
+              path: "company",
+              element: <MyCompany />,
             },
             {
               path: "employee",

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useContext, useState } from "react"
-import { useAddAgency, useUpdateAgency } from "@/services"
+import { useAddAgency, useUpdateAgency } from "@/services/agency.service"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form.tsx"
 import { Input } from "@/components/ui/input.tsx"
 import { SelectMultiple } from "@/components/select-multiple.tsx"
@@ -22,7 +22,7 @@ import {
 import { PencilIcon } from "lucide-react"
 import { useAuth } from "@/context/AuthContext"
 
-function AgencyForm({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boolean }) {
+const AgencyForm = ({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boolean }) => {
   const { t } = useTranslation()
   const { services } = useContext(AgencyContext)
   const queryClient = useQueryClient()
@@ -134,13 +134,7 @@ function AgencyForm({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boole
   )
 }
 
-export default function ModalFormAgency({
-  agency,
-  variant = "ghost",
-}: {
-  agency?: Agency
-  variant?: "ghost" | "outline"
-}) {
+const ModalFormAgency = ({ agency, variant = "ghost" }: { agency?: Agency; variant?: "ghost" | "outline" }) => {
   const [isReadOnly, setIsReadOnly] = useState(!!agency)
   const { t } = useTranslation()
   return (
@@ -174,3 +168,5 @@ export default function ModalFormAgency({
     </Dialog>
   )
 }
+
+export default ModalFormAgency

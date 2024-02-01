@@ -8,7 +8,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { addNewCompany, addNewProvider } from "@/services"
+import { useAddCompany } from "@/services/company.service"
+import { addNewProvider } from "@/services/user/auth.service"
 
 /**
  * Verify if the siren is valid
@@ -42,6 +43,7 @@ const verifySiren = async (siren: string) => {
 const NewProvider = () => {
   const { toast } = useToast()
   const { t } = useTranslation()
+  const addCompany = useAddCompany()
 
   const newProviderFormSchema = z.object({
     firstname: z.string().min(2, {
@@ -94,7 +96,7 @@ const NewProvider = () => {
 
   const onSubmit = async (values: z.infer<typeof newProviderFormSchema>) => {
     //regarder dans son powerpoint, le denormalizerContext slide 52 pour rendre unique le nom de la société et ne pas ajouter si jamais
-    const createCompanyRequest = await addNewCompany(values)
+    const createCompanyRequest = await addCompany.mutateAsync(values)
 
     if (createCompanyRequest.status === 201) {
       const lastInsertCompanyId: number = createCompanyRequest.data.id

@@ -1,6 +1,6 @@
 import { Spinner } from "@/components/loader/Spinner"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { useFetchUserById } from "@/services"
+import { useFetchUserById } from "@/services/user/user.service"
 
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
