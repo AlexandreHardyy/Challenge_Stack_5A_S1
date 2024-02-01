@@ -2,7 +2,7 @@
 namespace App\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
-use App\Entity\User;
+use App\Entity\Session;
 use Brevo\Client\Api\TransactionalEmailsApi;
 use Brevo\Client\Configuration;
 use Brevo\Client\Model\SendSmtpEmail;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-final class UserMailSubscriber implements EventSubscriberInterface
+final class SessionMailSubscriber implements EventSubscriberInterface
 {
     private $brevo;
 
@@ -32,19 +32,25 @@ final class UserMailSubscriber implements EventSubscriberInterface
 
     public function sendMail(ViewEvent $event): void
     {
-        $user = $event->getControllerResult();
+        $session = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$user instanceof User || Request::METHOD_POST !== $method) {
+        if (!$session instanceof Session || Request::METHOD_POST !== $method) {
             return;
         }
 
+        var_dump($session->getInstructor()->getEmail());
+
         $sendSmtpEmail = new SendSmtpEmail();
         $sendSmtpEmail['sender'] = array('email'=>$_ENV["BREVO_SENDER_EMAIL"], 'name'=>'RoadWise');
-        $sendSmtpEmail['to'] = array(array('email'=> $user->getEmail(), 'name'=> $user->getFirstname() . ' ' . $user->getLastname()));
-        $sendSmtpEmail['subject'] = "Bienvenue sur RoadWise !";
-        $sendSmtpEmail['templateId'] = 4;
-        $sendSmtpEmail['params'] = array('name'=> $user->getFirstname());
+        $sendSmtpEmail['to'] = array(array('email'=> $session->getInstructor()->getEmail(), 'name'=> $session->getInstructor()->getFirstname() . ' ' . $session->getInstructor()->getLastname()));
+        $sendSmtpEmail['subject'] = "Vous avez une nouvelle session de prévu !";
+        $sendSmtpEmail['templateId'] = 5;
+        $sendSmtpEmail['params'] = array('name'=> $session->getInstructor()->getFirstname(),
+            'date'=> $session->getStartDate()->format('d/m/Y'),
+            'hour_start' => $session->getStartDate()->format('H:i'),
+            'hour_end' => $session->getEndDate()->format('H:i'),
+            'student' => $session->getStudent()->getFirstname() . ' ' . $session->getStudent()->getLastname());
 
         try {
             $this->brevo->sendTransacEmail($sendSmtpEmail);
