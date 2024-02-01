@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext.tsx"
 import { AlertCircle, Loader2 } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
 import { login } from "@/services/user/auth.service.ts"
 
@@ -83,10 +83,15 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-          <Button disabled={loginMutation.isLoading} type="submit">
-            {loginMutation.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {t("header.cta.signIn")}
-          </Button>
+          <div className="flex gap-2">
+            <Button disabled={loginMutation.isLoading} type="submit">
+              {loginMutation.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {t("header.cta.signIn")}
+            </Button>
+            <Button variant="link" className="text-secondary-foreground" asChild>
+              <Link to={"/forgot-password"}>{t("common.form.forgotPassword")} ?</Link>
+            </Button>
+          </div>
         </form>
       </Form>
     </>

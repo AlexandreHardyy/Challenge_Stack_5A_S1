@@ -102,6 +102,7 @@ class DataFixtures extends Fixture
         $user->setRoles(['ROLE_PROVIDER']);
         $hashedPassword = $this->hasher->hashPassword($user, 'Test1234');
         $user->setPassword($hashedPassword);
+        $user->setPhoneNumber("+33600000000");
         $user->setIsVerified(true);
         $user->setCompany($company1);
         $user->updatedTimestamps(new \DateTimeImmutable('now'));
@@ -115,6 +116,7 @@ class DataFixtures extends Fixture
         $user2->setRoles(['ROLE_PROVIDER']);
         $hashedPassword = $this->hasher->hashPassword($user2, 'Test1234!');
         $user2->setPassword($hashedPassword);
+        $user2->setPhoneNumber("+33600000000");
         $user2->setIsVerified(true);
         $user2->setCompany($company2);
         $user2->updatedTimestamps(new \DateTimeImmutable('now'));

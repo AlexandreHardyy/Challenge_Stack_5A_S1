@@ -131,13 +131,15 @@
       "error": "Error",
       "loginOrPassword": "Login or password is incorrect",
       "errorAccountCreation": "An error has occurred during account creation. Please try again later.",
+      "forgotPassword": "Forgot password",
       "fetchingError": "An error has occurred. Please try again later."
     },
     "cta": {
       "update": "Update",
       "submit": "Submit",
       "cancel": "Cancel",
-      "createMyAccount": "Create my account"
+      "createMyAccount": "Create my account",
+      "sendEmail": "Send email"
     },
     "validation": {
       "registerSuccess": "Your account has been created successfully.",
