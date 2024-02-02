@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => ['read-user'], 'enable_max_depth' => true]),
-        new Get(normalizationContext: ['groups' => ['read-user'], 'enable_max_depth' => true],
+        new Get(normalizationContext: ['groups' => ['read-user', 'employee:read'], 'enable_max_depth' => true],
                 security: "is_granted('USER_VIEW', object)"),
         new Post(denormalizationContext: ['groups' => ['create-user']]),
         new Patch(denormalizationContext: ['groups' => ['update-user']])

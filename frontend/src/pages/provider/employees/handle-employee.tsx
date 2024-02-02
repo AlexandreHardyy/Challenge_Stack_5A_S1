@@ -5,12 +5,18 @@ import { useFetchUserById } from "@/services"
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
 import { FormSchedules } from "@/pages/provider/employees/form"
+import { Employee, Session } from "@/utils/types"
+import { useState } from "react"
+import { SessionDetails } from "../../../components/employee/session-details"
+import EmployeeCalendar from "@/components/employee/employee-calendar"
 
 const HandleEmployee = () => {
   const { userId } = useParams()
   const { t } = useTranslation()
+  const [selectedSession, setSelectedSession] = useState<Session>()
 
-  const { data: employee, isLoading, isFetching, isError } = useFetchUserById(Number(userId))
+  const { data, isLoading, isFetching, isError } = useFetchUserById(Number(userId))
+  const employee = data as Employee
 
   if (isLoading || isFetching) {
     return (
@@ -25,29 +31,29 @@ const HandleEmployee = () => {
   }
 
   return (
-    <div>
-      <h1 className="text-4xl mb-8"> {t("employeePage.title")} </h1>
-
-      <Card>
+    <div className="flex flex-col gap-10">
+      <h1 className="text-4xl"> {t("employeePage.title")} </h1>
+      <Card className="">
         <CardHeader>
-          {" "}
           <div className="text-xl font-semibold">
             {employee.lastname} {employee.firstname}
-          </div>{" "}
+          </div>
         </CardHeader>
         <CardContent>
           <p> {employee?.email} </p>
           <p> {employee?.lastname} </p>
           <p> {employee?.firstname} </p>
-
           <div>
             <h1 className="text-xl font-semibold mt-6"> {t("employeePage.subTitle")} </h1>
-
             <p className="text-gray-400 mb-4">{t("employeePage.form.info")}</p>
             <FormSchedules />
           </div>
         </CardContent>
       </Card>
+      <div className="flex">
+        <EmployeeCalendar setSelectedSession={setSelectedSession} instructor={employee} />
+        <SessionDetails session={selectedSession} />
+      </div>
     </div>
   )
 }
