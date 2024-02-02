@@ -22,54 +22,36 @@ export const updateUser = async (
 }
 
 export function useFetchUserById(id: number) {
-  return useQuery<User>(
-    ["getUserById"],
-    async () => {
-      const response = await api.get(`users/${id}`)
-      if (response.status !== 200) {
-        throw new Error("Something went wrong with the request (getService)")
-      }
-
-      return response.data
-    },
-    {
-      retry: false,
+  return useQuery<User>(["getUserById"], async () => {
+    const response = await api.get(`users/${id}`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getUserById)")
     }
-  )
+
+    return response.data
+  })
 }
 
 export function useFetchEmployeesByCompany(companyId?: number) {
-  return useQuery<User[]>(
-    ["getUsers"],
-    async () => {
-      const response = await api.get(`companies/${companyId}/users`)
-      if (response.status !== 200) {
-        throw new Error("Something went wrong with the request (getUsers)")
-      }
-
-      return response.data["hydra:member"]
-    },
-    {
-      retry: false,
+  return useQuery<User[]>(["getUsers"], async () => {
+    const response = await api.get(`companies/${companyId}/users`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getUsers)")
     }
-  )
+
+    return response.data["hydra:member"]
+  })
 }
 
 export function useFetchUsers() {
-  return useQuery<User[]>(
-    ["getUsers"],
-    async () => {
-      const response = await api.get(`users`)
-      if (response.status !== 200) {
-        throw new Error("Something went wrong with the request (getUsers)")
-      }
-
-      return response.data["hydra:member"]
-    },
-    {
-      retry: false,
+  return useQuery<User[]>(["getUsers"], async () => {
+    const response = await api.get(`users`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getUsers)")
     }
-  )
+
+    return response.data["hydra:member"]
+  })
 }
 
 type EmployeeForm = {

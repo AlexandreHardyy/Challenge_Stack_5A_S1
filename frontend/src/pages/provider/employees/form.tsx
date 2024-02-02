@@ -6,13 +6,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/context/AuthContext"
 import { useFetchAgenciesByCompany } from "@/services"
-import { scheduleFormSchema, useAddSchedule } from "@/services/schedule.service"
+import { useAddSchedule } from "@/services/schedule.service"
+import { ScheduleFormSchema, scheduleFormSchema } from "@/zod-schemas/schedule"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useQueryClient } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
-import { z } from "zod"
 
 const HOURS = Array.from(Array(14)).map((_, index) => ({ value: String(8 + index), label: `${String(8 + index)}h` }))
 
@@ -20,13 +21,16 @@ export const FormSchedules = () => {
   const { t } = useTranslation()
   const { userId } = useParams()
   const { user } = useAuth()
+  const queryClient = useQueryClient()
   const schedules = useAddSchedule()
+
   const agencies = useFetchAgenciesByCompany(user?.company?.id)
-  const onSubmit = async (values: z.infer<typeof scheduleFormSchema>) => {
-    schedules.mutate(values)
+  const submit = async (values: ScheduleFormSchema) => {
+    await schedules.mutateAsync(values)
+    queryClient.invalidateQueries(["getUserById"])
   }
 
-  const form = useForm<z.infer<typeof scheduleFormSchema>>({
+  const form = useForm<ScheduleFormSchema>({
     resolver: zodResolver(scheduleFormSchema),
     defaultValues: {
       dateRange: { from: new Date(), to: new Date() },
@@ -38,7 +42,7 @@ export const FormSchedules = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-5 items-end">
+      <form onSubmit={form.handleSubmit(submit)} className="flex gap-5 items-end">
         <FormField
           control={form.control}
           name="startHour"

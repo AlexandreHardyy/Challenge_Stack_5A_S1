@@ -17,7 +17,7 @@ export function useFetchServicesGroupByCategory(companyId?: number) {
   })
 }
 
-export const useAddCategory = (companyId: number) => {
+export const useAddCategory = (companyId?: number) => {
   const { toast } = useToast()
   const { t } = useTranslation()
   return useMutation({

@@ -4,7 +4,6 @@ namespace App\Security\Voter;
 
 use App\Entity\Category;
 use App\Entity\User;
-use Error;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;

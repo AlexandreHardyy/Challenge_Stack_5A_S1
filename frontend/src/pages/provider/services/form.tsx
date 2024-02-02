@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useAuth } from "@/context/AuthContext"
 import { useCreateService, useUpdateService } from "@/services"
 import { useAddCategory, useUpdateCategory } from "@/services/category.service"
 import { Category, Service } from "@/utils/types"
@@ -93,7 +94,8 @@ export const EditCategoryContainer = ({ category }: { category: Category }) => {
 }
 
 export const AddCategoryContainer = () => {
-  const addCategory = useAddCategory(1)
+  const { user } = useAuth()
+  const addCategory = useAddCategory(user?.company?.id)
   const queryClient = useQueryClient()
 
   return (

@@ -4,7 +4,7 @@ import { Session } from "@/utils/types"
 import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import CancelSessionModal from "./cancel-session-modal"
+import CancelSessionModal from "@/components/employee/cancel-session-modal"
 
 export function SessionDetails({ session }: { session?: Session }) {
   const { t } = useTranslation()
