@@ -17,7 +17,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     labels:
-      - "traefik.http.routers.frontend.rule=Host(`frontend.localhost`)"
+      - "traefik.http.routers.frontend.rule=Host(`roadwise.duckdns.org`)"
 
   server:
     build:
@@ -29,7 +29,7 @@ services:
     links:
       - php
     labels:
-      - "traefik.http.routers.server.rule=Host(`server.localhost`)"
+      - "traefik.http.routers.server.rule=Host(`api.roadwise.duckdns.org`)"
 
   php:
     build:
@@ -38,5 +38,3 @@ services:
       target: php
     volumes:
       - ./backend:/srv/app
-    labels:
-      - "traefik.http.routers.backend.rule=Host(`backend.localhost`)"
