@@ -51,8 +51,8 @@ class Session
     #[ORM\ManyToOne(inversedBy: 'studentSessions')]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
-    // SECURIDAD
-    #[Groups(['session-group-read', 'employee:read'])]
+    // SECURITY
+    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection'])]
     private ?User $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'instructorSessions')]
@@ -71,13 +71,13 @@ class Session
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    // SECUTITY
+    // SECURITY
     #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['session-group-read', 'employee:read', 'student:read'])]
+    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection', 'student:read'])]
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]

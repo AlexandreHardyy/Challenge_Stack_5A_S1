@@ -90,7 +90,7 @@ class Agency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'session-group-read-collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -119,7 +119,7 @@ class Agency
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read', 'create-agency', 'read-user'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'create-agency', 'read-user', 'session-group-read-collection'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -145,6 +145,8 @@ class Agency
     private Collection $schedules;
     
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Session::class, orphanRemoval: true)]
+    #[MaxDepth(1)]
+    #[Groups(['session-group-read-collection', 'agency-group-read'])]
     private Collection $sessions;
 
     public function __construct()

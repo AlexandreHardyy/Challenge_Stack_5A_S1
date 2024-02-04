@@ -65,7 +65,7 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['agency-group-read', 'categories-group-read', 'read-user', 'create-service'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'read-user', 'create-service', 'session-group-read-collection'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -73,11 +73,11 @@ class Service
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'categories-group-read', 'create-service'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'create-service', 'session-group-read-collection'])]
     private ?float $duration = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'categories-group-read', 'create-service'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'create-service', 'session-group-read-collection'])]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]

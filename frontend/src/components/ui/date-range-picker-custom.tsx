@@ -71,7 +71,7 @@ export const DateRangePickerCustom: FC<DateRangePickerProps> & {
   initialCompareTo,
   onUpdate,
   align = "end",
-  locale = "en-US",
+  locale = "fr-FR",
   showCompare = true,
 }): JSX.Element => {
   const { t } = useTranslation()

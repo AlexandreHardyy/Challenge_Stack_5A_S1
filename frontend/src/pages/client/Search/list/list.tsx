@@ -51,7 +51,7 @@ function CompaniesAgenciesList() {
     true
   )
 
-  const isRequestNotSended =
+  const isRequestNotSent =
     companiesDataStatus === "loading" &&
     agenciesDataStatus === "loading" &&
     !isFetchingCompaniesData &&
@@ -75,7 +75,7 @@ function CompaniesAgenciesList() {
     )
   }
 
-  if (isRequestNotSended || (companiesData?.length === 0 && agenciesData?.length === 0)) {
+  if (isRequestNotSent || (companiesData?.length === 0 && agenciesData?.length === 0)) {
     return (
       <section className="flex flex-col gap-2">
         <p>{t("searchClient.list.noData")}</p>

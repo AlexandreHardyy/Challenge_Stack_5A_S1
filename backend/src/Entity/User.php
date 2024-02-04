@@ -157,12 +157,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read', 'session-group-read-collection'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read', 'session-group-read-collection'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 
