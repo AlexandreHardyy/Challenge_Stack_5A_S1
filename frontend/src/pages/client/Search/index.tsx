@@ -5,7 +5,7 @@ import { SearchFiltersProvider } from "./search-filters-context"
 function Search() {
   return (
     <SearchFiltersProvider>
-      <div className="flex">
+      <div className="flex mb-10">
         <section className="flex flex-col gap-4 grow px-6">
           <SearchForm />
           <CompaniesAgenciesList />

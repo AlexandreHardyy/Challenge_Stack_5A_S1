@@ -40,8 +40,8 @@ export function useFetchCompanies(
 
   //TODO: add pagination
   if (isQueryParamsDefined) {
-    const formatedQueryParams = Object.values(queryParams)
-      .filter(([, value]) => value !== undefined)
+    const formatedQueryParams = Object.entries(queryParams)
+      .filter(([, value]) => value !== undefined && value !== "")
       .map(([key, value]) => {
         return `${key}=${value}`
       })
@@ -51,13 +51,13 @@ export function useFetchCompanies(
   }
 
   return useQuery({
-    queryKey: ["getCompanies"],
-    queryFn: async (): Promise<Company[]> => {
+    queryKey: ["companies", url],
+    queryFn: async ({ queryKey }): Promise<Company[]> => {
+      const [_key, url] = queryKey
       const response = await api.get(url)
       if (response.status !== 200) {
         throw new Error("Something went wrong with the request (getCompanies)")
       }
-      console.log(url, response.data)
       return response.data["hydra:member"]
     },
     enabled: shouldWaitQueryParams ? isQueryParamsDefined : undefined,

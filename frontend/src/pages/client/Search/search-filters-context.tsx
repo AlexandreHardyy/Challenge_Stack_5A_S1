@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react"
 
-export type searchFilters = {
+export type SearchFilters = {
   name?: string
   category?: string
   address?: string
@@ -9,9 +9,9 @@ export type searchFilters = {
 }
 
 type Context = {
-  filters: searchFilters
+  filters: SearchFilters
 
-  setFilters: React.Dispatch<React.SetStateAction<searchFilters>>
+  setFilters: React.Dispatch<React.SetStateAction<SearchFilters>>
 }
 
 const SearchFiltersContext = createContext<Context | undefined>(undefined)
@@ -25,7 +25,7 @@ export function useSearchFiltersContext() {
 }
 
 export function SearchFiltersProvider(props: React.PropsWithChildren) {
-  const [filters, setFilters] = useState<searchFilters>({})
+  const [filters, setFilters] = useState<SearchFilters>({})
 
   return <SearchFiltersContext.Provider {...props} value={{ filters, setFilters }} />
 }

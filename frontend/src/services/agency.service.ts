@@ -50,7 +50,7 @@ export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldW
   //TODO: add pagination
   if (isQueryParamsDefined) {
     const formatedQueryParams = Object.entries(queryParams)
-      .filter(([, value]) => value !== undefined)
+      .filter(([, value]) => value !== undefined && value !== "")
       .map(([key, value]) => {
         return `${key}=${value}`
       })
@@ -60,8 +60,9 @@ export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldW
   }
 
   return useQuery({
-    queryKey: ["getAgencies"],
-    queryFn: async (): Promise<Agency[]> => {
+    queryKey: ["agencies", url],
+    queryFn: async ({ queryKey }): Promise<Agency[]> => {
+      const [_key, url] = queryKey
       const response = await api.get(url).catch((err) => err.response)
       if (response.status !== 200) {
         throw new Error("Something went wrong with the request (getAgencies)")

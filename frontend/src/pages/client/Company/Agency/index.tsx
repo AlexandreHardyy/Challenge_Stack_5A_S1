@@ -11,16 +11,16 @@ function AgencyClient() {
   const { agencyId } = useParams()
   const { t } = useTranslation()
 
-  const request = useFetchAgencyById(agencyId)
+  const agencyRequest = useFetchAgencyById(agencyId)
 
-  if (request.status === "error") {
+  if (agencyRequest.status === "error") {
     return <h1>WTFFFFF</h1>
   }
 
   return (
     <div className="flex flex-col gap-[50px] mt-[60px] mb-[83px]">
       <section className="w-[80%] mx-auto md:w-full md:mx-0">
-        <h1 className="text-[64px] font-bold ">{request.data?.name}</h1>
+        <h1 className="text-[64px] font-bold ">{agencyRequest.data?.name}</h1>
         <div className="flex items-center gap-1">
           <p>4,5</p>
           <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 17 15" fill="none">
@@ -55,10 +55,7 @@ function AgencyClient() {
           </svg>
           <p>205 {t("agencyClient.ratings")}</p>
         </div>
-        <p>
-          Nous sommes un réseau d&apos;auto-écoles et de centres de formation. Créé en 1983&lsquo; CER est un réseau de
-          plus de 550 enseignes sur toute la France.
-        </p>
+        <p>{agencyRequest.data?.description}</p>
       </section>
       <section id={styles.section2} className="pt-[40px] pb-[60px] bg-secondary">
         <div className="w-[80%] mx-auto md:w-full md:mx-0">
@@ -70,7 +67,7 @@ function AgencyClient() {
         </div>
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0">
-        <ServiceList services={request.data?.services ?? []} />
+        <ServiceList services={agencyRequest.data?.services ?? []} />
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0 flex flex-col gap-[17px]">
         <h2 className="text-[32px] font-bold">{t("agencyClient.location")}</h2>
@@ -83,16 +80,16 @@ function AgencyClient() {
             <circle cx="7.5" cy="7.5" r="3" stroke="#333333" />
           </svg>
           <p className="underline">
-            {request.data?.address}, {request.data?.zip} {request.data?.city}
+            {agencyRequest.data?.address}, {agencyRequest.data?.zip} {agencyRequest.data?.city}
           </p>
         </div>
         <div className="h-[530px] bg-secondary rounded-[8px]">
-          {request.data && <Map geoloc={request.data.geoloc} />}
+          {agencyRequest.data && <Map geoloc={agencyRequest.data.geoloc} />}
         </div>
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0 flex flex-col gap-[17px]">
         <h2 className="text-[32px] font-bold">{t("agencyClient.ourInstructors")}</h2>
-        {request.data?.users && <InstructorsList instructors={request.data.users} />}
+        {agencyRequest.data?.users && <InstructorsList instructors={agencyRequest.data.users} />}
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0">
         <Ratings />
