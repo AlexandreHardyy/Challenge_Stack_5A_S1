@@ -1,0 +1,42 @@
+version: '3.6'
+
+services:
+  reverse-proxy:
+    image: traefik:v2.10
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $PWD/traefik.toml:/etc/traefik/traefik.toml
+      - $PWD/acme.json:/acme.json
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.http.routers.frontend.rule=Host(`frontend.localhost`)"
+
+  server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: server
+    volumes:
+      - ./backend:/srv/app
+    links:
+      - php
+    labels:
+      - "traefik.http.routers.server.rule=Host(`server.localhost`)"
+
+  php:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: php
+    volumes:
+      - ./backend:/srv/app
+    labels:
+      - "traefik.http.routers.backend.rule=Host(`backend.localhost`)"
