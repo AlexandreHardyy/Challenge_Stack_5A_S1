@@ -1,32 +1,13 @@
-import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 import styles from "@/styles/CompanyClient.module.css"
 import { AgencyList } from "./driving-school-list"
-import { Agency, Company } from "@/utils/types"
+import { useFetchCompany } from "@/services/company.service"
+import { Agency } from "@/utils/types"
 import { Ratings } from "@/components/ratings"
 import { useTranslation } from "react-i18next"
 import { useState } from "react"
 import { Map } from "./map"
 import AgencySearchBar from "./agency-search-bar"
-
-function useFetchCompany(companyId?: string) {
-  const url = `${import.meta.env.VITE_API_URL}companies/${companyId}`
-
-  return useQuery<Company>(
-    ["getCompany", url],
-    async () => {
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw new Error("Something went wrong with the request (getCompany)")
-      }
-
-      return response.json()
-    },
-    {
-      retry: false,
-    }
-  )
-}
 
 function scrollToAgency(agencyId: number) {
   const agencyDiv = document.getElementById(`agency-${agencyId}`)
@@ -45,9 +26,9 @@ function CompanyClient() {
   const { t } = useTranslation()
   const [filteredAgencies, setFilteredAgencies] = useState<Agency[]>()
 
-  const request = useFetchCompany(companyId)
+  const companyRequest = useFetchCompany(parseInt(companyId ?? ""))
 
-  if (request.status === "error") {
+  if (companyRequest.status === "error") {
     return <h1>WTFFFFF</h1>
   }
 
@@ -56,7 +37,7 @@ function CompanyClient() {
       <section className="flex justify-between w-[80%] mx-auto gap-[226px] md:w-full md:mx-0">
         <div className="flex flex-col justify-between">
           <div>
-            <h1 className="text-[64px] font-bold ">{request.data?.socialReason}</h1>
+            <h1 className="text-[64px] font-bold ">{companyRequest.data?.socialReason}</h1>
             <p className="font-semibold ">{t("companyClient.section1.overallRating")}</p>
             <div className="flex items-center gap-1">
               <p>4,5</p>
@@ -92,7 +73,7 @@ function CompanyClient() {
               </svg>
               <p>205 {t("companyClient.section1.ratings")}</p>
             </div>
-            <p>{request.data?.description}</p>
+            <p>{companyRequest.data?.description}</p>
           </div>
         </div>
         <img
@@ -106,12 +87,12 @@ function CompanyClient() {
         <div className="w-[80%] flex flex-col mx-auto gap-[17px] md:w-full md:mx-0">
           <h2 className="text-[32px] font-bold">{t("companyClient.section2.ourDrivingSchools")}</h2>
           <div className="flex flex-col gap-[20px]">
-            <AgencySearchBar agencies={request.data?.agencies ?? []} setFilteredAgencies={setFilteredAgencies} />
+            <AgencySearchBar agencies={companyRequest.data?.agencies ?? []} setFilteredAgencies={setFilteredAgencies} />
             <div className="flex gap-[20px]">
-              <AgencyList agencies={filteredAgencies ?? request.data?.agencies} />
+              <AgencyList agencies={filteredAgencies ?? companyRequest.data?.agencies} />
               <div className="bg-background grow rounded-[8px]">
-                {request.data && (
-                  <Map agencies={filteredAgencies ?? request.data.agencies} onClickMarker={scrollToAgency} />
+                {companyRequest.data && (
+                  <Map agencies={filteredAgencies ?? companyRequest.data.agencies} onClickMarker={scrollToAgency} />
                 )}
               </div>
             </div>
