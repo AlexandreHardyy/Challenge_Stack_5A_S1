@@ -147,6 +147,8 @@ export default function Calendar({
   const [chosenInstructorIdForSession, setChosenInstructorIdForSession] = useState<number>()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const today = DateTime.now()
+
   const instructorIds = selectedInstructorId ? [parseInt(selectedInstructorId)] : agency.users!.map((user) => user.id)
   const schedules = retrieveSchedules(
     agency.schedules,
@@ -229,7 +231,7 @@ export default function Calendar({
 
                     return (
                       <Button
-                        disabled={isSessionNotAvailable}
+                        disabled={isSessionNotAvailable || hour < today}
                         key={hour.toMillis()}
                         size="sm"
                         onClick={() => onHourSelected(hour, availableInstructors)}

@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\SessionRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -173,6 +174,17 @@ class Session
     public function validate(ExecutionContextInterface $context, mixed $payload): void
     {
         $toCreate = $this;
+
+        // Check if the session is not in the past
+        $today = new DateTime();
+        
+        if ($this->getStartDate() < $today) {
+            $context->buildViolation('Your are not in back to the future')
+                ->atPath('session')
+                ->addViolation();
+        }
+
+        // Check if we have not a session at the same moment for the employee
         if ($this->getInstructor()->getInstructorSessions()->filter(function(Session $session) use($toCreate){
             if ($session->getEndDate() <= $toCreate->getStartDate()) return false;
             if ($session->getStartDate() >= $toCreate->getEndDate()) return false;
@@ -180,6 +192,25 @@ class Session
             return true;
         })->count()) {
             $context->buildViolation('Instructor is busy')
+                ->atPath('instructor')
+                ->addViolation();
+        }
+
+        // Check if the employee is working
+        $isSessionInSchedule = $this->getInstructor()->getSchedules()->filter(function(Schedule $schedule) use($toCreate){
+            $scheduleStart = clone $schedule->getDate();
+            $scheduleEnd = clone $schedule->getDate();
+            date_time_set($scheduleStart, $schedule->getStartHour(), 0);
+            date_time_set($scheduleEnd, $schedule->getEndHour(), 0);
+
+            if ($scheduleStart > $toCreate->getStartDate()) return false;
+            if ($scheduleEnd < $toCreate->getEndDate()) return false;
+
+            return true;
+        })->count();
+
+        if ($isSessionInSchedule === 0) {
+            $context->buildViolation('Session not in employee schedule')
                 ->atPath('instructor')
                 ->addViolation();
         }
