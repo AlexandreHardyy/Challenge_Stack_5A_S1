@@ -13,6 +13,8 @@ services:
       - frontend
       - server
       - php
+    networks:
+      - app-network
 
   frontend:
     build:
@@ -21,6 +23,8 @@ services:
     ports:
       - '3000:80'
     restart: always
+    networks:
+      - app-network
 
   server:
     build:
@@ -33,6 +37,8 @@ services:
       - ./backend:/srv/app
     links:
       - php
+    networks:
+      - app-network
 
   php:
     build:
@@ -41,3 +47,9 @@ services:
       target: php
     volumes:
       - ./backend:/srv/app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
