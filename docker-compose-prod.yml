@@ -1,35 +1,38 @@
 version: '3.6'
 
 services:
-  reverse-proxy:
-    image: traefik:v2.10
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - $PWD/traefik.toml:/etc/traefik/traefik.toml
-      - $PWD/acme.json:/acme.json
+      - '80:80'
+      - '443:443'
+    restart: always
+    depends_on:
+      - frontend
+      - server
+      - php
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    labels:
-      - "traefik.http.routers.frontend.rule=Host(`roadwise.duckdns.org`)"
+    ports:
+      - '8080:80'
+    restart: always
 
   server:
     build:
       context: ./backend
       dockerfile: Dockerfile
       target: server
+    ports:
+      - '8081:80'
     volumes:
       - ./backend:/srv/app
     links:
       - php
-    labels:
-      - "traefik.http.routers.server.rule=Host(`api.roadwise.duckdns.org`)"
 
   php:
     build:
