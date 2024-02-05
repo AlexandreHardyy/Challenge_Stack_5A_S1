@@ -38,12 +38,16 @@ class SendSmsCommand extends Command
             $tomorrowStart = new \DateTime('tomorrow');
             $tomorrowEnd = clone $tomorrowStart;
             $tomorrowEnd->modify('+1 day'); 
+
+            $cancelledStatus = "cancelled";
             
             $sessions = $this->entityManager->getRepository(Session::class)
                 ->createQueryBuilder('s')
                 ->where('s.startDate >= :tomorrowStart AND s.startDate < :tomorrowEnd')
+                ->andWhere('s.status != :cancelledStatus')
                 ->setParameter('tomorrowStart', $tomorrowStart)
                 ->setParameter('tomorrowEnd', $tomorrowEnd)
+                ->setParameter('cancelledStatus', $cancelledStatus)
                 ->setMaxResults(10)
                 ->getQuery()
                 ->getResult();

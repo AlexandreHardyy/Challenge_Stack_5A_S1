@@ -5,6 +5,7 @@ import { toast, useToast } from "@/components/ui/use-toast.ts"
 import { t } from "i18next"
 import { useTranslation } from "react-i18next"
 import { CompanyFormSchema } from "@/zod-schemas/company"
+import { formatQueryParams } from "@/utils/helpers"
 
 export function useFetchCompany(companyId?: number) {
   const fetchCompanyUrl = `${import.meta.env.VITE_API_URL}companies/${companyId}`
@@ -31,24 +32,8 @@ export function useFetchCompanies(
   queryParams?: { socialReason?: string; ["categories.name"]?: string },
   shouldWaitQueryParams = false
 ) {
-  let url = "companies"
-  const isQueryParamsDefined = !!(
-    queryParams &&
-    Object.keys(queryParams).length > 0 &&
-    Object.values(queryParams).find((value) => value !== undefined && value !== "")
-  )
-
-  //TODO: add pagination
-  if (isQueryParamsDefined) {
-    const formatedQueryParams = Object.entries(queryParams)
-      .filter(([, value]) => value !== undefined && value !== "")
-      .map(([key, value]) => {
-        return `${key}=${value}`
-      })
-      .join("&")
-
-    url += `?${formatedQueryParams}`
-  }
+  const formatedQueryParams = formatQueryParams(queryParams)
+  const url = formatedQueryParams ? `companies${formatedQueryParams}` : "companies"
 
   return useQuery({
     queryKey: ["companies", url],
@@ -60,7 +45,7 @@ export function useFetchCompanies(
       }
       return response.data["hydra:member"]
     },
-    enabled: shouldWaitQueryParams ? isQueryParamsDefined : undefined,
+    enabled: shouldWaitQueryParams ? !!formatedQueryParams : undefined,
   })
 
   // return useQuery<Company[]>(
