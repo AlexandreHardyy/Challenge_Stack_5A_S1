@@ -11,6 +11,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./acme.json:/acme.json
+    labels:
+      - "--providers.docker.exposedbydefault=false"
 
   frontend:
     build:
@@ -40,3 +42,5 @@ services:
       context: ./backend
       dockerfile: Dockerfile
       target: php
+    labels:
+      - "--providers.docker.exposedbydefault=false"
