@@ -26,4 +26,6 @@ certificatesResolvers:
     acme:
       email: "hardyalexandre2000@gmail.com"
       storage: "acme.json"
-      caServer: "https://acme-v01.api.letsencrypt.org/directory"
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      httpChallenge:
+        entryPoint: web

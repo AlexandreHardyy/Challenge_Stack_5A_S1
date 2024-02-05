@@ -17,7 +17,10 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`roadwise.duckdns.org`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=default"
 
   server:
     build:
@@ -27,7 +30,10 @@ services:
     links:
       - php
     labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.server.rule=Host(`api.roadwise.duckdns.org`)"
+      - "traefik.http.routers.server.entrypoints=websecure"
+      - "traefik.http.routers.server.tls.certresolver=default"
 
   php:
     build:
