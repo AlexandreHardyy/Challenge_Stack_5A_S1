@@ -13,3 +13,21 @@ export function computeServiceDuration(duration: number) {
 export function formatDate(date: string) {
   return new Date(date).toLocaleDateString("fr-FR")
 }
+
+export function formatQueryParams(queryParams?: Record<string, string>) {
+  const isQueryParamsDefined = !!(
+    queryParams && Object.values(queryParams).find((value) => value !== undefined && value !== "")
+  )
+
+  //TODO: add pagination
+  if (isQueryParamsDefined) {
+    const formatedQueryParams = Object.entries(queryParams)
+      .filter(([, value]) => value !== undefined && value !== "")
+      .map(([key, value]) => {
+        return `${key}=${value}`
+      })
+      .join("&")
+
+    return `?${formatedQueryParams}`
+  }
+}

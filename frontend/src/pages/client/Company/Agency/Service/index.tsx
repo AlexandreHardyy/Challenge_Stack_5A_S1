@@ -4,8 +4,9 @@ import Calendar from "./calendar"
 import { useFetchAgencyById } from "@/services/agency.service"
 import { InstructorSelect } from "./instructor-select"
 import { useState } from "react"
-import { useFetchSessionsByAgencyService } from "@/services/sessions.service"
+import { useFetchSessionsByAgency } from "@/services/sessions.service"
 import { useTranslation } from "react-i18next"
+import { DateTime } from "luxon"
 
 export default function ServiceClient() {
   const { agencyId, serviceId } = useParams()
@@ -13,7 +14,10 @@ export default function ServiceClient() {
   const [selectedInstructor, setSelectedInstructor] = useState<string>()
 
   const requestAgency = useFetchAgencyById(agencyId)
-  const requestSessions = useFetchSessionsByAgencyService(agencyId)
+  const requestSessions = useFetchSessionsByAgency(agencyId, {
+    status: "created",
+    "startDate[after]": DateTime.now().toISO({ includeOffset: false }) ?? "",
+  })
 
   if (requestAgency.status === "error" || requestSessions.status === "error") {
     return <h1>WTFFFFF</h1>

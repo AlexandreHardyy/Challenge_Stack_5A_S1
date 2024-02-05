@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
@@ -37,6 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['service' => 'exact', 'agency' => 'exact', 'status' => 'exact'])]
+#[ApiFilter(DateFilter::class, properties: ['startDate'])]
 class Session
 {
     #[ORM\Id]
@@ -186,6 +188,7 @@ class Session
 
         // Check if we have not a session at the same moment for the employee
         if ($this->getInstructor()->getInstructorSessions()->filter(function(Session $session) use($toCreate){
+            if ($session->getStatus() == "cancelled") return false;
             if ($session->getEndDate() <= $toCreate->getStartDate()) return false;
             if ($session->getStartDate() >= $toCreate->getEndDate()) return false;
 

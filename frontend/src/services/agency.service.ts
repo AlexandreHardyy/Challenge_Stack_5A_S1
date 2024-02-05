@@ -1,5 +1,6 @@
 import { useToast } from "@/components/ui/use-toast"
 import api from "@/utils/api"
+import { formatQueryParams } from "@/utils/helpers"
 import { Agency } from "@/utils/types"
 import { AgencyFormSchema } from "@/zod-schemas/agency"
 import { useMutation, useQuery } from "@tanstack/react-query"
@@ -42,22 +43,8 @@ type FetchAgenciesQueryParams = {
 }
 
 export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldWaitQueryParams = false) {
-  let url = "agencies"
-  const isQueryParamsDefined = !!(
-    queryParams && Object.values(queryParams).find((value) => value !== undefined && value !== "")
-  )
-
-  //TODO: add pagination
-  if (isQueryParamsDefined) {
-    const formatedQueryParams = Object.entries(queryParams)
-      .filter(([, value]) => value !== undefined && value !== "")
-      .map(([key, value]) => {
-        return `${key}=${value}`
-      })
-      .join("&")
-
-    url += `?${formatedQueryParams}`
-  }
+  const formatedQueryParams = formatQueryParams(queryParams)
+  const url = formatedQueryParams ? `agencies${formatedQueryParams}` : "agencies"
 
   return useQuery({
     queryKey: ["agencies", url],
@@ -70,7 +57,7 @@ export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldW
       return response.data["hydra:member"]
     },
     retry: false,
-    enabled: shouldWaitQueryParams ? isQueryParamsDefined : undefined,
+    enabled: shouldWaitQueryParams ? !!formatedQueryParams : undefined,
   })
 }
 
