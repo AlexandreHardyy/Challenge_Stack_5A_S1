@@ -21,7 +21,8 @@
         "employees": "My employees",
         "agencies": "My agencies",
         "planning": "My planning",
-        "services": "My services"
+        "services": "My services",
+        "scheduleExceptions": "Schedule exceptions asked"
       }
     },
     "sideAdminHeader": {
@@ -274,8 +275,9 @@
       }
     },
     "toast": {
-      "title": "Agence",
+      "title": "Schedule",
       "successUpdate": "Employee schedule has been updated successfully",
+      "successCreateException": "Breaktime request sent successfully",
       "error": "An error occurred while updating employee schedule"
     }
   },
@@ -328,7 +330,17 @@
           "toastErrorTitle": "An error occurred !",
           "toastErrorDescription": "An error occurred during your session cancellation."
         }
-      }
+      },
+      "form": {
+        "schedule": "Schedule",
+        "start": "start",
+        "end": "end",
+        "cta": {
+          "new": "Ask for break"
+        }
+      },
+      "titleBreak": "Request breaks",
+      "ask": "Request"
     }
   },
   "admin": {

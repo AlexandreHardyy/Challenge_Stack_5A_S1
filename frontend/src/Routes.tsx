@@ -30,6 +30,7 @@ import ForgotPassword from "@/pages/auth/ForgotPassword.tsx"
 import MyCompany from "@/pages/provider/my-company"
 import UserPlanning from "@/pages/client/User/UserPlanning"
 import CompanyDetails from "@/pages/admin/companies/CompanyDetails"
+import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -126,6 +127,10 @@ const Routes = () => {
             {
               path: "service",
               element: <Services />,
+            },
+            {
+              path: "schedule-exceptions",
+              element: <ScheduleExceptions />,
             },
           ],
           errorElement: <NotFound />,

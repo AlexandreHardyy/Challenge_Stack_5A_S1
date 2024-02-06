@@ -46,7 +46,7 @@ const HandleEmployee = () => {
           <div>
             <h1 className="text-xl font-semibold mt-6"> {t("employeePage.subTitle")} </h1>
             <p className="text-gray-400 mb-4">{t("employeePage.form.info")}</p>
-            <FormSchedules />
+            <FormSchedules agenciesAvalaibles={employee.agencies} />
           </div>
         </CardContent>
       </Card>
