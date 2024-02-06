@@ -32,6 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['session-group-read-collection']]
         ),
         new Patch(
+            validationContext: ['groups' => ['session-group-update']],
             denormalizationContext: ['groups' => ['session-group-update']],
             security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
         )
@@ -82,6 +83,10 @@ class Session
     #[ORM\Column(length: 30)]
     #[Groups(['session-group-read', 'session-group-update', 'employee:read'])]
     private ?string $status = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['session-group-update', 'employee:read'])]
+    private ?float $studentMark = null;
 
     public function getId(): ?int
     {
@@ -172,6 +177,18 @@ class Session
         return $this;
     }
 
+    public function getStudentMark(): ?float
+    {
+        return $this->studentMark;
+    }
+
+    public function setStudentMark(?float $studentMark): static
+    {
+        $this->studentMark = $studentMark;
+
+        return $this;
+    }
+
     #[Assert\Callback(groups: ['session-create'])]
     public function validate(ExecutionContextInterface $context, mixed $payload): void
     {
@@ -215,6 +232,30 @@ class Session
         if ($isSessionInSchedule === 0) {
             $context->buildViolation('Session not in employee schedule')
                 ->atPath('instructor')
+                ->addViolation();
+        }
+    }
+
+    #[Assert\Callback(groups: ['session-group-update'])]
+    public function validateStudentMark(ExecutionContextInterface $context, mixed $payload): void
+    {
+        $today = new DateTime();
+
+        if ($this->getStudentMark() < 0 || $this->getStudentMark() > 5) {
+            $context->buildViolation("You can't add a mark below 0 or above 5")
+                ->atPath('studentMark')
+                ->addViolation();
+        }
+
+        if ($this->getStudentMark() && $this->getStartDate() > $today) {
+            $context->buildViolation("You can't add a mark if the session is not finished")
+                ->atPath('studentMark')
+                ->addViolation();
+        }
+
+        if ($this->getStatus() == "cancelled" && null !== $this->getStudentMark()) {
+            $context->buildViolation("You can't add a mark if the session is cancelled")
+                ->atPath('studentMark')
                 ->addViolation();
         }
     }

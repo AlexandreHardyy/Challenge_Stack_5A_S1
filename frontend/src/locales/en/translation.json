@@ -309,6 +309,16 @@
         "firstname": "Firstname",
         "lastname": "Lastname",
         "mail": "Mail",
+        "studentMark": "Student mark",
+        "noInfo": "No info",
+        "rateInput": "Enter a mark for the student",
+        "evaluate": "Evaluate",
+        "studentMarkToast": {
+          "toastSuccessTitle": "Mark sended !",
+          "toastSuccessDescription": "Your notation has been sent",
+          "toastErrorTitle": "An error occurred !",
+          "toastErrorDescription": "An error occurred during the notation of your student."
+        },
         "modal": {
           "confirmationText": "Are you sure you want to cancel this session ?",
           "toastSuccessTitle": "This session has been cancelled !",

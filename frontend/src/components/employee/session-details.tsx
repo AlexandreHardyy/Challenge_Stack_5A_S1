@@ -3,15 +3,53 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Session } from "@/utils/types"
 import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { Rating } from "react-simple-star-rating"
 import CancelSessionModal from "@/components/employee/cancel-session-modal"
+import { useUpdateSession } from "@/services/sessions.service"
+import { toast } from "../ui/use-toast"
 
 export function SessionDetails({ session }: { session?: Session }) {
   const { t } = useTranslation()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [studentMark, setStudentMark] = useState<number>()
+  const [isLoading, setIsLoading] = useState(false)
 
   const today = DateTime.now()
+
+  const sessionUpdateMutation = useUpdateSession({
+    onSuccess: () => {
+      setIsLoading(false)
+      toast({
+        variant: "success",
+        title: `${t("provider.myPlanning.sessionDetails.studentMarkToast.toastSuccessTitle")}`,
+        description: `${t("provider.myPlanning.sessionDetails.studentMarkToast.toastSuccessDescription")}`,
+      })
+    },
+    onError: () => {
+      setIsLoading(false)
+      toast({
+        variant: "destructive",
+        title: `${t("provider.myPlanning.sessionDetails.studentMarkToast.toastErrorTitle")}`,
+        description: `${t("provider.myPlanning.sessionDetails.studentMarkToast.toastErrorDescription")}`,
+      })
+    },
+  })
+
+  useEffect(() => {
+    setStudentMark(session && session.studentMark ? session.studentMark : undefined)
+  }, [session])
+
+  function updateStudentMark(sessionId: number) {
+    if (studentMark) {
+      setIsLoading(true)
+      sessionUpdateMutation.mutate({
+        id: sessionId,
+        studentMark,
+      })
+    }
+  }
 
   if (!session) {
     return (
@@ -58,6 +96,29 @@ export function SessionDetails({ session }: { session?: Session }) {
             <p>
               {t("provider.myPlanning.sessionDetails.mail")}: {session.student.email}
             </p>
+            <p>
+              {t("provider.myPlanning.sessionDetails.studentMark")}:{" "}
+              {session.student.studentMarks
+                ? `${session.student.studentMarks.toFixed(2)}/5`
+                : t("provider.myPlanning.sessionDetails.noInfo")}
+            </p>
+            {today > sessionStartDate && session.status !== "cancelled" && (
+              <div className="mt-4">
+                <p className="font-bold">{t("provider.myPlanning.sessionDetails.rateInput")}:</p>
+                <div className="flex gap-5">
+                  <Rating
+                    iconsCount={5}
+                    size={25}
+                    SVGclassName="inline-block"
+                    onClick={(mark) => setStudentMark(mark)}
+                    initialValue={studentMark}
+                  />
+                  <Button disabled={isLoading} size="sm" onClick={() => updateStudentMark(session.id)}>
+                    {t("provider.myPlanning.sessionDetails.evaluate")}
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </CardContent>
         <CardFooter className="flex justify-center">

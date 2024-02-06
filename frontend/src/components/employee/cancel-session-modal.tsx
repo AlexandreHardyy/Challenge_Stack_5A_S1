@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { toast } from "@/components/ui/use-toast"
-import { useUpdateSessionStatus } from "@/services/sessions.service"
+import { useUpdateSession } from "@/services/sessions.service"
 import { Session } from "@/utils/types"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -17,7 +17,7 @@ function CancelSessionModal({ session, isModalOpen, onModalOpenChange }: CancelS
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const sessionUpdateMutation = useUpdateSessionStatus({
+  const sessionUpdateMutation = useUpdateSession({
     onSuccess: () => {
       setIsLoading(false)
       toast({

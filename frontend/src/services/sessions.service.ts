@@ -88,13 +88,16 @@ export function useAddSession({ onSuccess, onError }: { onSuccess: () => void; o
   // return response.json()
 }
 
-export function useUpdateSessionStatus({ onSuccess, onError }: { onSuccess: () => void; onError: () => void }) {
+export function useUpdateSession({ onSuccess, onError }: { onSuccess: () => void; onError: () => void }) {
   return useMutation({
-    mutationFn: async (params: { id: number; status: string }) =>
+    mutationFn: async (params: { id: number; status?: string; studentMark?: number }) =>
       await api
         .patch<Session>(
           `sessions/${params.id}`,
-          { status: params.status },
+          {
+            status: params.status,
+            studentMark: params.studentMark,
+          },
           {
             headers: {
               "Content-Type": "application/merge-patch+json",

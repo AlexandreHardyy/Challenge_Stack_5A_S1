@@ -61,6 +61,10 @@ export interface User {
   instructorSessions?: Session[]
 }
 
+export interface Student extends User {
+  studentMarks?: number
+}
+
 export interface Employee extends User {
   agencies?: Agency[]
   company?: Company
@@ -70,13 +74,14 @@ export interface Employee extends User {
 
 export interface Session {
   id: number
-  student: User
+  student: Student
   instructor: User
   startDate: string
   endDate: string
   service: Service
   agency: Agency
   status: string
+  studentMark?: number
 }
 
 export interface Schedule {
