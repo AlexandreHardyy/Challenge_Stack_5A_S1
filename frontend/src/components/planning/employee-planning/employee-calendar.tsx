@@ -3,6 +3,8 @@ import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import { Employee, Session } from "@/utils/types"
 import { useTranslation } from "react-i18next"
+import { EventInput } from "@fullcalendar/core/index.js"
+import { addHours } from "date-fns"
 
 type EmployeeCalendarProps = {
   setSelectedSession: (session: Session) => void
@@ -23,15 +25,29 @@ function EmployeeCalendar({ setSelectedSession, instructor }: EmployeeCalendarPr
       }
     }) ?? []
 
-  const scheduleEvents =
-    instructor.schedules?.map((schedule) => {
-      return {
-        title: `${t("provider.myPlanning.workDay")} ${schedule.startHour}H - ${schedule.endHour}H`,
-        start: schedule.date,
-        end: schedule.date,
-        allDay: true,
+  const scheduleEvents = instructor.schedules?.reduce((events: EventInput[], schedule) => {
+    events.push({
+      title: `${t("provider.myPlanning.workDay")}`,
+      start: addHours(new Date(schedule.date), schedule.startHour),
+      end: addHours(new Date(schedule.date), schedule.endHour),
+      display: "background",
+      backgroundColor: "#66a3ff",
+      className: "text-white",
+    })
+
+    schedule.scheduleExceptions?.forEach((scheduleException) => {
+      if (scheduleException.status === "VALIDATED") {
+        events.push({
+          title: "Break",
+          start: addHours(new Date(schedule.date), scheduleException.startHour),
+          end: addHours(new Date(schedule.date), scheduleException.endHour),
+          backgroundColor: "#9933ff",
+        })
       }
-    }) ?? []
+    })
+
+    return events
+  }, [])
 
   const events = [...sessionEvents, ...scheduleEvents]
 

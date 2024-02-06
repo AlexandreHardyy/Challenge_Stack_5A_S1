@@ -10,5 +10,12 @@ export const scheduleFormSchema = z.object({
   agencyId: z.number(),
   employeeId: z.number(),
 })
-
 export type ScheduleFormSchema = z.infer<typeof scheduleFormSchema>
+
+export const scheduleExceptionsFormSchema = z.object({
+  startHour: z.string(),
+  endHour: z.string(),
+  status: z.string(),
+  schedule: z.string(),
+})
+export type ScheduleExceptionsFormSchema = z.infer<typeof scheduleExceptionsFormSchema>

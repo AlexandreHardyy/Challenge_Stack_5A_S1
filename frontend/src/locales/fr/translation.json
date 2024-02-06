@@ -20,7 +20,8 @@
         "employees": "Mes employés",
         "agencies": "Mes agences",
         "planning": "Mon planning",
-        "services": "Mes services"
+        "services": "Mes services",
+        "scheduleExceptions": "Demande de repos"
       }
     },
     "sideAdminHeader": {
@@ -273,8 +274,9 @@
       }
     },
     "toast": {
-      "title": "Agence",
+      "title": "Emploi de temps",
       "successUpdate": "L'emploi de temps du salarié a été mis a jour avec succès",
+      "successCreateException": "Demande de repos envoyé",
       "error": "Une erreur a eu lieu lors de la mis a jour de l'emploi du temps"
     }
   },
@@ -327,7 +329,17 @@
           "toastErrorTitle": "Une erreur est survenue !",
           "toastErrorDescription": "Une erreur est survenue durant l'annulation de cette session."
         }
-      }
+      },
+      "form": {
+        "schedule": "Créneau",
+        "start": "début",
+        "end": "fin",
+        "cta": {
+          "new": "Demander repos"
+        }
+      },
+      "titleBreak": "Demande de repos",
+      "ask": "Demande"
     }
   },
   "admin": {
