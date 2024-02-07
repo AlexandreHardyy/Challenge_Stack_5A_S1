@@ -193,6 +193,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read'])]
     private ?string $phoneNumber = null;
 
+    #[Groups('employee:read')]
+    public function getStudentMarks(): float
+    {
+        $totalMark = 0;
+        $numberOfSessions = 0;
+
+        $studentSessions = $this->getStudentSessions();
+
+        foreach ($studentSessions as $session) {
+            if ($session->getStudentMark() !== null) {
+                $totalMark += $session->getStudentMark();
+                $numberOfSessions++;
+            }
+        }
+
+        if ($numberOfSessions === 0) {
+            return null;
+        }
+
+        return $totalMark / $numberOfSessions;
+    }
+
     public function __construct()
     {
         $this->agencies = new ArrayCollection();

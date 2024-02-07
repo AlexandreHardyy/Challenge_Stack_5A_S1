@@ -309,6 +309,16 @@
         "firstname": "Prénom",
         "lastname": "Nom",
         "mail": "Email",
+        "studentMark": "Note de l'élève",
+        "noInfo": "Pas d'info",
+        "rateInput": "Entrez une note pour l'élève",
+        "evaluate": "Évaluer",
+        "studentMarkToast": {
+          "toastSuccessTitle": "Note envoyée",
+          "toastSuccessDescription": "Votre notation a bien été prise en compte",
+          "toastErrorTitle": "Une erreur est survenue !",
+          "toastErrorDescription": "Une erreur est survenue durant l'envoie de la notation."
+        },
         "modal": {
           "confirmationText": "Êtes vous sûr de vouloir annulé cette session ?",
           "toastSuccessTitle": "Cette session a été annulé !",
