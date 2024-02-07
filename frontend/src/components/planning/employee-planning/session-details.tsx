@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { Rating } from "react-simple-star-rating"
-import CancelSessionModal from "@/components/employee/cancel-session-modal"
+import CancelSessionModal from "@/components/planning/cancel-session-modal"
 import { useUpdateSession } from "@/services/sessions.service"
-import { toast } from "../ui/use-toast"
+import { toast } from "@/components/ui/use-toast"
 
 export function SessionDetails({ session }: { session?: Session }) {
   const { t } = useTranslation()

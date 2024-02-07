@@ -168,14 +168,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['read-user', 'create-employee', 'create-provider', 'update-provider'])]
+    #[Groups(['employee:read', 'create-employee', 'create-provider', 'update-provider'])]
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]
-    #[Groups(['read-user', 'update-employee'])]
+    #[Groups(['employee:read', 'update-employee'])]
     private Collection $agencies;
 
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Session::class, orphanRemoval: true)]
+    #[MaxDepth(1)]
+    #[Groups(['student:read'])]
     private Collection $studentSessions;
 
     #[ORM\OneToMany(mappedBy: 'instructor', targetEntity: Session::class, orphanRemoval: true)]

@@ -33,8 +33,6 @@ function EmployeeCalendar({ setSelectedSession, instructor }: EmployeeCalendarPr
       }
     }) ?? []
 
-  console.log(scheduleEvents)
-
   const events = [...sessionEvents, ...scheduleEvents]
 
   return (
