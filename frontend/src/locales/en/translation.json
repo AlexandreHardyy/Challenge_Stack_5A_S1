@@ -387,6 +387,11 @@
         "createdAt": "Created at",
         "updatedAt": "Updated at",
         "actions": "Actions",
+        "companyDetails": {
+          "mainInformations": "Main informations",
+          "agenciesList": "Agencies List",
+          "employeesList": "Employees List"
+        },
         "errors": {
           "socialReason": "socialReason must be at least 2 characters.",
           "phoneNumber": "Phone number must be in a valid format (ex: +33 0 00 00 00 00 or 00 00 00 00 00).",
