@@ -19,6 +19,19 @@ const formSchema = z.object({
   lastname: z.string(),
 })
 
+const UserAvatar = ({ email, image }: { email: string; image: string | null }) => {
+  const placeholderImage = `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${email}`
+
+  const finalImage = image ? `${import.meta.env.VITE_API_URL_PUBLIC}${image}` : placeholderImage
+
+  return (
+    <Avatar className="flex-1 flex justify-center">
+      <AvatarImage src={finalImage} className="w-3/6 rounded object-cover" />
+      <AvatarFallback>{email[0].toUpperCase()}</AvatarFallback>
+    </Avatar>
+  )
+}
+
 const ProfileClient = () => {
   const { user } = useAuth()
   const { t } = useTranslation()
@@ -74,10 +87,12 @@ const ProfileClient = () => {
         )}
       </div>
       <section className="w-full flex gap-4">
-        <Avatar className="flex-1 flex justify-center">
-          <AvatarImage src="https://github.com/shadcn.png" className="w-3/6 rounded" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <div className={"flex-1 flex flex-col"}>
+          <UserAvatar email={user?.email ?? ""} image={user?.image?.contentUrl ?? null} />
+          <Button variant={"link"} className={"text-primary"}>
+            {t("common.form.uploadImage")}
+          </Button>
+        </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-4 px-6 pt-2">
             <FormField

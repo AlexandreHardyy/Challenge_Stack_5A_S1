@@ -23,13 +23,13 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => ['read-user'], 'enable_max_depth' => true]),
-        new Get(normalizationContext: ['groups' => ['read-user', 'employee:read'], 'enable_max_depth' => true],
+        new GetCollection(normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true]),
+        new Get(normalizationContext: ['groups' => ['read-user', 'employee:read', 'read-media_object'], 'enable_max_depth' => true],
                 security: "is_granted('USER_VIEW', object)"),
         new Post(denormalizationContext: ['groups' => ['create-user']]),
         new Patch(denormalizationContext: ['groups' => ['update-user']])
     ],
-    normalizationContext: ['groups' => ['read-user']],
+    normalizationContext: ['groups' => ['read-user', 'read-media_object']],
 )]
 
 #[ApiResource(
@@ -104,7 +104,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     operations: [
         new Get(
             normalizationContext: [
-                'groups' => ['read-user'],
+                'groups' => ['read-user', 'read-media_object'],
                 'enable_max_depth' => true,
             ],
             security: "is_granted('USER_VIEW', object)"
@@ -192,6 +192,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 30)]
     #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read'])]
     private ?string $phoneNumber = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Groups(['read-media_object'])]
+    private ?MediaObject $image = null;
 
     public function __construct()
     {
@@ -486,6 +490,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoneNumber(string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getImage(): ?MediaObject
+    {
+        return $this->image;
+    }
+
+    public function setImage(?MediaObject $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

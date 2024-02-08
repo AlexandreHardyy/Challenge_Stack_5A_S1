@@ -133,7 +133,8 @@
       "loginOrPassword": "Email ou mot de passe incorrect",
       "errorAccountCreation": "Une erreur est survenue lors de la création de votre compte. Veuillez réessayer plus tard.",
       "forgotPassword": "Mot de passe oublié",
-      "fetchingError": "Une erreur est survenue. Veuillez réessayer plus tard."
+      "fetchingError": "Une erreur est survenue. Veuillez réessayer plus tard.",
+      "uploadImage": "Télécharger une image"
     },
     "cta": {
       "update": "Update",

@@ -59,6 +59,7 @@ export interface User {
   agencies?: Agency[]
   company?: Company
   instructorSessions?: Session[]
+  image?: MediaObject
 }
 
 export interface Employee extends User {
@@ -85,4 +86,9 @@ export interface Schedule {
   startHour: number
   endHour: number
   employee: Pick<Employee, "id" | "firstname" | "lastname">
+}
+
+export interface MediaObject {
+  id: number
+  contentUrl: string
 }

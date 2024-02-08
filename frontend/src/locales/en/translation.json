@@ -133,7 +133,8 @@
       "loginOrPassword": "Login or password is incorrect",
       "errorAccountCreation": "An error has occurred during account creation. Please try again later.",
       "forgotPassword": "Forgot password",
-      "fetchingError": "An error has occurred. Please try again later."
+      "fetchingError": "An error has occurred. Please try again later.",
+      "uploadImage": "Upload new image"
     },
     "cta": {
       "update": "Update",
