@@ -19,6 +19,28 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    
+    App\Controller\AddSchedule:
+        autowire: true
+
+    App\EventSubscriber\UserRoleModifier:
+        arguments:
+            $requestStack: '@request_stack'
+        tags:
+            - { name: doctrine.event_subscriber }
+    
+    App\EventSubscriber\AgencyGeoLocModifier:
+        arguments:
+            $requestStack: '@request_stack'
+        tags:
+            - { name: doctrine.event_subscriber }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Command\SendSmsCommand:
+        arguments:
+            $twilioAccountSid: '%env(TWILIO_SID)%'
+            $twilioAuthToken: '%env(TWILIO_TOKEN)%'
+            $twilioPhoneNumber: '%env(TWILIO_PHONE_NUMBER)%'
+            $entityManager: '@doctrine.orm.entity_manager'

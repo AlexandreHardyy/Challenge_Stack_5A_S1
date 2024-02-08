@@ -1,0 +1,416 @@
+{
+  "header": {
+    "menu": {
+      "services": "Services",
+      "FAQ": "FAQ",
+      "about": "About us"
+    },
+    "cta": {
+      "signIn": "Sign in",
+      "signUp": "Sign up",
+      "logOut": "Log out",
+      "profile": "My profile",
+      "admin": "Admin",
+      "provider": "Provider"
+    },
+    "sideHeader": {
+      "menu": {
+        "dashboard": "Dashboard",
+        "myCompany": "My Company",
+        "employees": "My employees",
+        "agencies": "My agencies",
+        "planning": "My planning",
+        "services": "My services"
+      }
+    },
+    "sideAdminHeader": {
+      "menu": {
+        "dashboard": "Dashboard",
+        "companies": "Companies",
+        "users": "Users"
+      }
+    }
+  },
+  "global": {
+    "deleteModal": {
+      "title": "Confirm suppression",
+      "description": "Are you sure you want to delete",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    }
+  },
+  "searchClient": {
+    "form": {
+      "categoryToggle": "Category",
+      "locationToggle": "Location",
+      "nameInput": "Name",
+      "nameInputPlaceholder": "The Company or Agency name",
+      "categoryInput": "Category",
+      "categoryInputPlaceholder": "Category of service",
+      "addressInput": "Address",
+      "addressInputPlaceholder": "Enter a streat name",
+      "cityInput": "City",
+      "cityInputPlaceholder": "Enter a city name",
+      "zipInput": "Zip code",
+      "zipInputPlaceholder": "Enter a zip code",
+      "submitInput": "Submit"
+    },
+    "list": {
+      "loading": "Loading...",
+      "error": "An error occured",
+      "noData": "No data",
+      "companyCard": {
+        "email": "email",
+        "phoneNumber": "Phone number"
+      },
+      "agencyCard": {
+        "address": "Address",
+        "city": "City",
+        "zip": "Zip code"
+      }
+    }
+  },
+  "companyClient": {
+    "section1": {
+      "overallRating": "Overall rating",
+      "ratings": "ratings"
+    },
+    "section2": {
+      "ourDrivingSchools": "Our driving schools",
+      "searchBarPlaceholder": "City or zip code",
+      "researchCta": "Research"
+    }
+  },
+  "agencyClient": {
+    "ratings": "ratings",
+    "gallery": "Gallery",
+    "location": "Location",
+    "ourInstructors": "Our instructors"
+  },
+  "serviceClient": {
+    "details": "Details",
+    "title": "Title",
+    "duration": "Duration",
+    "price": "Price",
+    "description": "Description",
+    "instructorsSelector": {
+      "instructors": "Instructors",
+      "placeholder": "Select an instructor",
+      "noPreferences": "No preferences"
+    },
+    "calendarModal": {
+      "summary": "Summary",
+      "serviceName": "Service name",
+      "duration": "Duration",
+      "date": "date"
+    }
+  },
+  "ratingsComponent": {
+    "ratings": "Ratings",
+    "seeMore": "See more"
+  },
+  "footer": {
+    "menu": {
+      "knowUs": "Know us",
+      "credits": "©2023 RoadWise, Inc.",
+      "contact": "Contact us"
+    }
+  },
+  "common": {
+    "form": {
+      "register": "Register",
+      "login": "Login",
+      "firstName": "Firstname",
+      "lastName": "Lastname",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "phoneNumber": "Phone number",
+      "address": "Address",
+      "city": "City",
+      "postalCode": "Postal code",
+      "error": "Error",
+      "loginOrPassword": "Login or password is incorrect",
+      "errorAccountCreation": "An error has occurred during account creation. Please try again later.",
+      "forgotPassword": "Forgot password",
+      "fetchingError": "An error has occurred. Please try again later."
+    },
+    "cta": {
+      "update": "Update",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "createMyAccount": "Create my account",
+      "sendEmail": "Send email"
+    },
+    "validation": {
+      "registerSuccess": "Your account has been created successfully.",
+      "saveProfile": "Save profile",
+      "saveSuccess": "Your changes have been saved successfully.",
+      "checkEmail": "Please check your email to confirm your account."
+    },
+    "search": {
+      "search": "Search",
+      "searchPlaceholder": "Search",
+      "loading": "Loading..."
+    }
+  },
+  "landing": {
+    "title": "Book, Drive, Succeed. Your Future on the Fast Lane!",
+    "subtitle": "Our app simplifies the planning of driving lessons for multiple driving schools, optimizing the efficiency and satisfaction of instructors and students.",
+    "ctaDiscover": "Discover now",
+    "section1": {
+      "title": "Book, Drive, Succeed. Your Future on the Fast Lane!"
+    },
+    "newProvider": {
+      "title": "If you are a driving school, join us !",
+      "cta": "Become a provider"
+    }
+  },
+  "newProvider": {
+    "form": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phoneNumber": "Phone number",
+      "socialReason": "Social reason",
+      "description": "Description",
+      "sirenNumber": "N° SIREN",
+      "placeholders": {
+        "firstName": "Enter your first name",
+        "lastName": "Enter your last name",
+        "email": "Enter your email",
+        "phoneNumber": "+33 0 00 00 00 00",
+        "socialReason": "Enter your social reason",
+        "description": "Enter the description of your driving school company",
+        "sirenNumber": "Enter your SIREN number"
+      },
+      "cta": {
+        "submit": "Become a provider"
+      },
+      "errors": {
+        "firstName": "FirstName must be at least 2 characters.",
+        "lastName": "LastName must be at least 2 characters.",
+        "email": "Email is required",
+        "phoneNumber": "Phone number must be in a valid format (ex: +33 0 00 00 00 00 or 00 00 00 00 00).",
+        "socialReason": "Social reason must be at least 2 characters.",
+        "sirenNumberRegExp": "Siren number must be in a valid format (ex: 123456789).",
+        "sirenNumberNotValid": "Siren number is not valid."
+      },
+      "toast": {
+        "successTitle": "Request sent",
+        "errorTitle": "Error",
+        "success": "Your request has been sent to the admin, you will receive an email when your account is activated.",
+        "error": "An error has occurred. Please try again later."
+      }
+    }
+  },
+  "ProviderAgencies": {
+    "title": "My agencies",
+    "form": {
+      "name": "Name",
+      "address": "Address",
+      "city": "City",
+      "zip": "Zip Code",
+      "services": "Services",
+      "placeholders": {
+        "services": "Select services available at the agency"
+      },
+      "cta": {
+        "new": "Add new agency",
+        "update": "Update agency"
+      },
+      "toast": {
+        "title": "Agency",
+        "successCreate": "agency created successfully",
+        "successUpdate": "agency updated successfully",
+        "successDelete": "agency delete successfully",
+        "error": "an error occurred while updating",
+        "addressError": "Your address was not found"
+      }
+    }
+  },
+  "providerService": {
+    "title": "My services",
+    "form": {
+      "name": "Name",
+      "duration": "Duration",
+      "price": "Price",
+      "description": "Description",
+      "cta": {
+        "newService": "Add new service",
+        "updateService": "Update service",
+        "newCategory": "Add",
+        "updateCategory": "Update"
+      },
+      "toastCategory": {
+        "title": "Category",
+        "successCreate": "category created successfully",
+        "successUpdate": "category updated successfully",
+        "successDelete": "category deleted successfully",
+        "error": "an error occurred"
+      },
+      "toastService": {
+        "title": "Service",
+        "successCreate": "service created successfully",
+        "successUpdate": "service updated successfully",
+        "successDelete": "service deleted successfully",
+        "error": "an error occurred"
+      }
+    }
+  },
+  "employeePage": {
+    "title": "Manage your employee",
+    "subTitle": "Update his schedule",
+    "fetchError": "An error occurred while fetching employee",
+    "form": {
+      "info": "Select a start hour and an end hour where your employee works for a specific date range",
+      "start": "Start Hour",
+      "end": "End Hour",
+      "agency": "Agency",
+      "dateRange": "Date Range",
+      "cta": {
+        "add": "Update schedule"
+      }
+    },
+    "toast": {
+      "title": "Agence",
+      "successUpdate": "Employee schedule has been updated successfully",
+      "error": "An error occurred while updating employee schedule"
+    }
+  },
+  "provider": {
+    "homeProvider": {
+      "selectAgencyPlaceholder": "Select an agency",
+      "selectAgencyAll": "All agencies",
+      "dashboard": "Dashboard",
+      "cards": {
+        "totalRevenue": "Total revenue",
+        "subscriptions": "Subscriptions",
+        "sales": "Sales"
+      },
+      "yourServices": {
+        "title": "All Your services",
+        "subtitle_zero": "You don't have any service yet",
+        "subtitle_one": "You have 1 service",
+        "subtitle_other": "You have {{count}} services",
+        "noServices": "No services yet"
+      },
+      "toast": {
+        "error": "Something went wrong with the request (getCompany). Please try again later."
+      }
+    },
+    "myPlanning": {
+      "workDay": "Work day",
+      "sessionDetails": {
+        "date": "Date",
+        "noSessionSelected": "Select a session to see more infos",
+        "agency": "Agency",
+        "studentDetails": "Student details",
+        "firstname": "Firstname",
+        "lastname": "Lastname",
+        "mail": "Mail",
+        "studentMark": "Student mark",
+        "noInfo": "No info",
+        "rateInput": "Enter a mark for the student",
+        "evaluate": "Evaluate",
+        "studentMarkToast": {
+          "toastSuccessTitle": "Mark sended !",
+          "toastSuccessDescription": "Your notation has been sent",
+          "toastErrorTitle": "An error occurred !",
+          "toastErrorDescription": "An error occurred during the notation of your student."
+        },
+        "modal": {
+          "confirmationText": "Are you sure you want to cancel this session ?",
+          "toastSuccessTitle": "This session has been cancelled !",
+          "toastSuccessDescription": "Your session has been cancelled. You will receive soon a notification email",
+          "toastErrorTitle": "An error occurred !",
+          "toastErrorDescription": "An error occurred during your session cancellation."
+        }
+      }
+    }
+  },
+  "admin": {
+    "users": {
+      "title": "All users",
+      "table": {
+        "user": "The user",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "roles": "Roles",
+        "isVerified": "Is verified",
+        "isVerifiedLabel": "Verify this user",
+        "createdAt": "Created at",
+        "updatedAt": "Updated at",
+        "actions": "Actions",
+        "placeholders": {
+          "roles": "Select user roles"
+        },
+        "errors": {
+          "firstName": "FirstName must be at least 2 characters.",
+          "lastName": "LastName must be at least 2 characters."
+        }
+      },
+      "cta": {
+        "new": "Create a new user",
+        "add": "Add user",
+        "edit": "Edit user"
+      },
+      "toast": {
+        "success": {
+          "title": "User",
+          "create": "User created successfully"
+        },
+        "update": {
+          "title": "User",
+          "update": "User updated successfully"
+        },
+        "error": {
+          "title": "User",
+          "error": "Something went wrong with the request (getUsers). Please try again later."
+        }
+      }
+    },
+    "companies": {
+      "title": "All companies",
+      "table": {
+        "company": "The company",
+        "socialReason": "Social reason",
+        "email": "Email",
+        "phoneNumber": "Phone number",
+        "description": "Description",
+        "sirenNumber": "N° SIREN",
+        "isVerified": "Is verified",
+        "isVerifiedLabel": "Verify this company",
+        "createdAt": "Created at",
+        "updatedAt": "Updated at",
+        "actions": "Actions",
+        "errors": {
+          "socialReason": "socialReason must be at least 2 characters.",
+          "phoneNumber": "Phone number must be in a valid format (ex: +33 0 00 00 00 00 or 00 00 00 00 00).",
+          "description": "Description must be at least 2 characters.",
+          "sirenNumberRegExp": "Siren number must be in a valid format (ex: 123456789)."
+        }
+      },
+      "cta": {
+        "new": "Create a new company",
+        "add": "Add company",
+        "edit": "Edit company"
+      },
+      "toast": {
+        "success": {
+          "title": "Company",
+          "create": "Company successfully created"
+        },
+        "update": {
+          "title": "Company",
+          "update": "Company successfully updated"
+        },
+        "error": {
+          "title": "Company",
+          "error": "Something went wrong with the request (getCompany). Please try again later."
+        }
+      }
+    }
+  }
+}
