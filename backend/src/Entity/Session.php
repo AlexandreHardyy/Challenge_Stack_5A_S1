@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['session-group-read-collection']]
+            normalizationContext: ['groups' => ['session-group-read-collection'], 'enable_max_depth' => true]
         ),
         new Patch(
             validationContext: ['groups' => ['session-group-update']],
