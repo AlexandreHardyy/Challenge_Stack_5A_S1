@@ -9,6 +9,7 @@ export interface Company {
   isVerified: boolean
   createdAt: string
   updatedAt: string
+  users: Pick<Employee, "id" | "firstname" | "lastname" | "email">[]
 }
 
 export interface Agency {

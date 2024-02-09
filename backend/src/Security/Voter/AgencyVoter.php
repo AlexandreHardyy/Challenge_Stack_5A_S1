@@ -38,6 +38,9 @@ class AgencyVoter extends Voter
 
         switch ($attribute) {
             case self::EDIT:
+                if ($agency instanceof Agency && $this->security->isGranted('ROLE_ADMIN')) {
+                    return true;
+                }
                 if (
                     $agency instanceof Agency
                     && $this->security->isGranted('ROLE_PROVIDER') 

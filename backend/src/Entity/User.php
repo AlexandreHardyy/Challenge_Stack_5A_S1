@@ -121,11 +121,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read-user', 'agency-group-read', 'session-group-read', 'session-group-read-collection'])]
+    #[Groups(['read-user', 'agency-group-read', 'session-group-read', 'session-group-read-collection', 'company-group-read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'company-group-read'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     #[Assert\Email()]
     private ?string $email = null;
@@ -146,12 +146,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 

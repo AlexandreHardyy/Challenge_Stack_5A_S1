@@ -126,3 +126,28 @@ export const useUpdateCompany = (companyId?: number) => {
     },
   })
 }
+
+export const useDeleteCompanyById = () => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (companyId: number) => {
+      const result = await api.delete(`companies/${companyId}`).catch((err) => err.response)
+      if (result.status === 204) {
+        toast({
+          variant: "success",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: t("ProviderAgencies.form.toast.successDelete"),
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: t("ProviderAgencies.form.toast.error"),
+        })
+      }
+
+      return result
+    },
+  })
+}

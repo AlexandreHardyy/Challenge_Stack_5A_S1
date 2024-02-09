@@ -11,7 +11,7 @@ import { CompanyFormSchema, companyFormSchema } from "@/zod-schemas/company"
 import { useQueryClient } from "@tanstack/react-query"
 
 type CompanyFormProps = {
-  company?: Company
+  company?: Omit<Company, "users">
   isReadOnly?: boolean
   isAdmin?: boolean
 }

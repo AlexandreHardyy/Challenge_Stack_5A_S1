@@ -386,6 +386,11 @@
         "createdAt": "Créé le",
         "updatedAt": "Mis à jour le",
         "actions": "Actions",
+        "companyDetails": {
+          "mainInformations": "Informations principales",
+          "agenciesList": "List des agences",
+          "employeesList": "List des employés"
+        },
         "errors": {
           "socialReason": "Social reason must be at least 2 characters.",
           "phoneNumber": "Le numéro de téléphone doit être au format valide (ex: +33 0 00 00 00 00 or 00 00 00 00 00).",
