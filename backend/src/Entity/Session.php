@@ -45,7 +45,7 @@ class Session
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'studentSessions')]
@@ -58,30 +58,30 @@ class Session
     #[ORM\ManyToOne(inversedBy: 'instructorSessions')]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
-    #[Groups(['session-group-read', 'session-group-read-collection'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'student:read'])]
     private ?User $instructor = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
     // SECUTITY
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['session-group-read', 'employee:read'])]
+    #[Groups(['session-group-read', 'employee:read', 'student:read'])]
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session-group-read', 'session-group-update', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-update', 'employee:read', 'student:read'])]
     private ?string $status = null;
 
     #[ORM\Column(nullable: true)]

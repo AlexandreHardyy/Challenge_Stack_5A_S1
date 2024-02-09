@@ -28,6 +28,7 @@ import Services from "@/pages/provider/services"
 import App from "@/App.tsx"
 import ForgotPassword from "@/pages/auth/ForgotPassword.tsx"
 import MyCompany from "@/pages/provider/my-company"
+import UserPlanning from "./pages/client/User/UserPlanning"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -61,6 +62,10 @@ const Routes = () => {
             {
               path: "user/profile",
               element: <ProfileClient />,
+            },
+            {
+              path: "user/planning",
+              element: <UserPlanning />,
             },
             {
               path: "terms",

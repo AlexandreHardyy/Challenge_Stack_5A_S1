@@ -58,17 +58,17 @@ export interface User {
   updatedAt: string
   agencies?: Agency[]
   company?: Company
-  instructorSessions?: Session[]
 }
 
 export interface Student extends User {
   studentMarks?: number
+  studentSessions?: Session[]
 }
 
 export interface Employee extends User {
   agencies?: Agency[]
   company?: Company
-  instructorSessions: Session[]
+  instructorSessions?: Session[]
   schedules: Schedule[]
 }
 

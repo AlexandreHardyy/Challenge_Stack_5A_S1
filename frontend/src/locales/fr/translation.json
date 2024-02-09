@@ -306,6 +306,7 @@
         "noSessionSelected": "Séléctionnez une session pour voir plus d'infos",
         "agency": "Agence",
         "studentDetails": "Détails de l'élève",
+        "instructorDetails": "Détails du moniteur",
         "firstname": "Prénom",
         "lastname": "Nom",
         "mail": "Email",

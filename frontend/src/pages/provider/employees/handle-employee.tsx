@@ -7,8 +7,8 @@ import { useParams } from "react-router-dom"
 import { FormSchedules } from "@/pages/provider/employees/form"
 import { Employee, Session } from "@/utils/types"
 import { useState } from "react"
-import { SessionDetails } from "../../../components/employee/session-details"
-import EmployeeCalendar from "@/components/employee/employee-calendar"
+import { SessionDetails } from "../../../components/planning/employee-planning/session-details"
+import EmployeeCalendar from "@/components/planning/employee-planning/employee-calendar"
 
 const HandleEmployee = () => {
   const { userId } = useParams()

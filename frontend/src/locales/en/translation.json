@@ -9,6 +9,7 @@
       "signIn": "Sign in",
       "signUp": "Sign up",
       "logOut": "Log out",
+      "planning": "My planning",
       "profile": "My profile",
       "admin": "Admin",
       "provider": "Provider"
@@ -306,6 +307,7 @@
         "noSessionSelected": "Select a session to see more infos",
         "agency": "Agency",
         "studentDetails": "Student details",
+        "instructorDetails": "Instructor details",
         "firstname": "Firstname",
         "lastname": "Lastname",
         "mail": "Mail",
