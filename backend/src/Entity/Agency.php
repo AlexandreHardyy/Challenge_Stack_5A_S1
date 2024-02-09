@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     security: "is_granted('ROLE_USER')",
     operations: [
         new Get(
-            normalizationContext:['groups' => ['agency-group-read']],
+            normalizationContext:['groups' => ['agency-group-read'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Returns agency by Id',
