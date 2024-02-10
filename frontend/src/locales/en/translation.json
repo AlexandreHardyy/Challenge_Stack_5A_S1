@@ -134,7 +134,11 @@
       "loginOrPassword": "Login or password is incorrect",
       "errorAccountCreation": "An error has occurred during account creation. Please try again later.",
       "forgotPassword": "Forgot password",
-      "fetchingError": "An error has occurred. Please try again later."
+      "resetPassword": "Reset password",
+      "fetchingError": "An error has occurred. Please try again later.",
+      "sendMeEmail": "Send me an email",
+      "ResetMyPassword": "Reset my password",
+      "passwordResetSuccess": "Your password has been reset successfully."
     },
     "cta": {
       "update": "Update",

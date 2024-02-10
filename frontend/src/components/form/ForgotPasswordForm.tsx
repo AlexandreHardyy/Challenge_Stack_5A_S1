@@ -5,9 +5,15 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTranslation } from "react-i18next"
+import { useMutation } from "@tanstack/react-query"
+import { forgotPassword } from "@/services/user/auth.service.ts"
+import { useNavigate } from "react-router-dom"
+import { useToast } from "@/components/ui/use-toast.ts"
 
 const ForgotPasswordForm = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { toast } = useToast()
 
   const formSchema = z.object({
     email: z.string().email(),
@@ -20,8 +26,26 @@ const ForgotPasswordForm = () => {
     },
   })
 
+  const forgotPasswordMutation = useMutation({
+    mutationFn: ({ email }: { email: string }) => {
+      return forgotPassword(email)
+    },
+  })
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values)
+    try {
+      await forgotPasswordMutation.mutateAsync(values)
+      toast({
+        variant: "success",
+        title: t("Un email de réinitialisation de mot de passe a été envoyé."),
+      })
+      navigate("/login", { replace: true })
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: t("common.form.error"),
+      })
+    }
   }
 
   return (
@@ -41,7 +65,7 @@ const ForgotPasswordForm = () => {
           )}
         />
         <div className="flex gap-2">
-          <Button type="submit">{t("Envoyer un email")}</Button>
+          <Button type="submit">{t("common.form.sendMeEmail")}</Button>
         </div>
       </form>
     </Form>

@@ -5,6 +5,14 @@ export const login = async (user: { email: string; password: string }): Promise<
   return api.post("login", user)
 }
 
+export const forgotPassword = async (email: string): Promise<AxiosPromise<null>> => {
+  return api.post("forgot_password/", { email })
+}
+
+export const resetPassword = async (token: string, password: string): Promise<AxiosPromise<null>> => {
+  return api.post(`forgot_password/${token}`, { password })
+}
+
 export const register = async (user: {
   firstname: string
   lastname: string

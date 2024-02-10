@@ -1,9 +1,14 @@
 <?php
 namespace App\EventSubscriber;
 
+use Brevo\Client\Api\TransactionalEmailsApi;
+use Brevo\Client\Configuration;
+use Brevo\Client\Model\SendSmtpEmail;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Exception;
+use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -12,9 +17,12 @@ class UserRoleModifier implements EventSubscriber
 {
     public function __construct(        
         private UserPasswordHasherInterface $hasher,
-        private RequestStack $requestStack
+        private RequestStack $requestStack,
     )
-    {}
+    {
+        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', $_ENV["BREVO_API_KEY"]);
+        $this->brevo = new TransactionalEmailsApi(new Client(), $config);
+    }
 
     public function getSubscribedEvents(): array
     {
@@ -46,6 +54,19 @@ class UserRoleModifier implements EventSubscriber
             $roles[] = $request->getPathInfo() === '/api/employees' ? 'ROLE_EMPLOYEE' : 'ROLE_PROVIDER';
 
             $entity->setRoles(array_unique($roles));
+
+            $sendSmtpEmail = new SendSmtpEmail();
+            $sendSmtpEmail['sender'] = array('email'=>$_ENV["BREVO_SENDER_EMAIL"], 'name'=>'RoadWise');
+            $sendSmtpEmail['to'] = array(array('email'=> $entity->getEmail(), 'name'=> $entity->getFirstname() . ' ' . $entity->getLastname()));
+            $sendSmtpEmail['subject'] = "Bienvenue chez RoadWise !";
+            $sendSmtpEmail['templateId'] = 7;
+            $sendSmtpEmail['params'] = array('email'=> $entity->getEmail(), 'password'=> $this->generatePassword());
+
+            try {
+                $this->brevo->sendTransacEmail($sendSmtpEmail);
+            } catch (Exception $e) {
+                return;
+            }
         }
     }
 }
