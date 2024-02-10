@@ -28,6 +28,7 @@ export interface Agency {
   geoloc: [string, string]
   users?: Pick<Employee, "id" | "firstname" | "lastname">[]
   schedules: Schedule[]
+  sessions: Session[]
 }
 
 export interface Category {

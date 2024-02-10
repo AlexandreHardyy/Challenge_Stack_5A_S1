@@ -7,7 +7,7 @@ import AdminLayout from "@/layouts/admin"
 import Landing from "@/pages/Landing"
 import NotFound from "@/pages/NotFound"
 import HomeAdmin from "@/pages/admin/HomeAdmin"
-import HomeProvider from "@/pages/provider/HomeProvider"
+import DashboardProvider from "@/pages/provider/Dashboard"
 import Employees from "@/pages/provider/employees"
 import HandleEmployee from "@/pages/provider/employees/handle-employee"
 import Login from "@/pages/auth/Login.tsx"
@@ -102,7 +102,7 @@ const Routes = () => {
           children: [
             {
               path: "",
-              element: <HomeProvider />,
+              element: <DashboardProvider />,
             },
             {
               path: "company",
