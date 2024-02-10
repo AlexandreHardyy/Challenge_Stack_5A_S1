@@ -66,6 +66,9 @@ class MediaObject
     #[ORM\Column(nullable: true)]
     private ?string $filePath = null;
 
+    #[ORM\ManyToOne(inversedBy: 'image')]
+    private ?Agency $agency = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +106,18 @@ class MediaObject
     public function setFilePath(string $filePath): static
     {
         $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    public function getAgency(): ?Agency
+    {
+        return $this->agency;
+    }
+
+    public function setAgency(?Agency $agency): static
+    {
+        $this->agency = $agency;
 
         return $this;
     }

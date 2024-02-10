@@ -16,9 +16,14 @@ export const updateUser = async (
     firstname?: string
     lastname?: string
     email?: string
+    image?: string
   }
 ) => {
-  return api.patch(`users/${id}`, data)
+  return api.patch(`users/${id}`, data, {
+    headers: {
+      "Content-Type": "application/merge-patch+json",
+    },
+  })
 }
 
 export function useFetchUserById(id: number) {

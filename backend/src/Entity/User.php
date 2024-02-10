@@ -194,7 +194,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $phoneNumber = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[Groups(['read-media_object'])]
+    #[Groups(['update-user', 'read-media_object'])]
     private ?MediaObject $image = null;
 
     public function __construct()

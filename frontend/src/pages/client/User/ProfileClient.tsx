@@ -12,6 +12,9 @@ import { updateUser } from "@/services/user/user.service.ts"
 import { Alert, AlertTitle } from "@/components/ui/alert.tsx"
 import { AlertCircle, Loader2 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { useDropzone } from "react-dropzone"
+import { postMedia } from "@/services/media.service.ts"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -46,7 +49,7 @@ const ProfileClient = () => {
   })
 
   const updateProfile = useMutation({
-    mutationFn: (newUser: { email: string; firstname: string; lastname: string }) => {
+    mutationFn: (newUser: { email?: string; firstname?: string; lastname?: string; image?: string }) => {
       return updateUser(user?.id ?? 0, newUser)
     },
   })
@@ -65,6 +68,50 @@ const ProfileClient = () => {
     } catch (e) {
       form.setFocus("email")
     }
+  }
+
+  const Uploader = () => {
+    const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+      accept: {
+        "image/png": [".png"],
+        "image/jpeg": [".jpg"],
+        "image/gif": [".gif"],
+      },
+      maxFiles: 1,
+    })
+
+    const onUpload = async () => {
+      const formData = new FormData()
+      acceptedFiles.forEach((image) => {
+        formData.append("file", image)
+      })
+      try {
+        const response = await postMedia(formData)
+        await updateProfile.mutateAsync({ image: response.data["@id"] })
+      } catch (error) {
+        console.log("imageUpload" + error)
+      }
+    }
+
+    return (
+      <section className="flex flex-col gap-3">
+        <div {...getRootProps({ className: "p-2 border-2" })}>
+          <input {...getInputProps()} />
+          <p>Drag and drop some files here, or click to select files</p>
+        </div>
+        <aside>
+          <div>
+            {acceptedFiles.length > 0 &&
+              acceptedFiles.map((image, index) => <img src={`${URL.createObjectURL(image)}`} key={index} alt="" />)}
+          </div>
+          {acceptedFiles.length > 0 && (
+            <div className={"text-center mt-4"}>
+              <Button onClick={onUpload}>Upload</Button>
+            </div>
+          )}
+        </aside>
+      </section>
+    )
   }
 
   return (
@@ -89,9 +136,14 @@ const ProfileClient = () => {
       <section className="w-full flex gap-4">
         <div className={"flex-1 flex flex-col"}>
           <UserAvatar email={user?.email ?? ""} image={user?.image?.contentUrl ?? null} />
-          <Button variant={"link"} className={"text-primary"}>
-            {t("common.form.uploadImage")}
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant={"link"}>{t("common.form.uploadImage")}</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <Uploader />
+            </DialogContent>
+          </Dialog>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-4 px-6 pt-2">

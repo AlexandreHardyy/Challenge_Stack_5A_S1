@@ -109,6 +109,7 @@ Temporary Items
 # Assets and user uploads
 /web/bundles/
 /web/uploads/
+/public/media
 
 # PHPUnit
 /app/phpunit.xml

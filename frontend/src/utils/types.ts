@@ -9,6 +9,7 @@ export interface Company {
   isVerified: boolean
   createdAt: string
   updatedAt: string
+  image?: MediaObject
 }
 
 export interface Agency {
@@ -27,6 +28,7 @@ export interface Agency {
   geoloc: [string, string]
   users?: Pick<Employee, "id" | "firstname" | "lastname">[]
   schedules: Schedule[]
+  image?: MediaObject[]
 }
 
 export interface Category {

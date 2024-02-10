@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['company-group-read'], 'enable_max_depth' => true],
+    normalizationContext: ['groups' => ['company-group-read', 'read-media_object'], 'enable_max_depth' => true],
     operations: [
         new GetCollection(
             security: "is_granted('ROLE_USER')",
@@ -119,6 +119,10 @@ class Company
     #[MaxDepth(1)]
     #[Groups(['company-group-read'])]
     private Collection $users;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Groups(['read-media_object', 'update-company'])]
+    private ?MediaObject $image = null;
 
     public function __construct()
     {
@@ -314,6 +318,18 @@ class Company
                 $user->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?MediaObject
+    {
+        return $this->image;
+    }
+
+    public function setImage(?MediaObject $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
