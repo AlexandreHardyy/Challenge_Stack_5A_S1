@@ -140,7 +140,7 @@
       "sendMeEmail": "Send me an email",
       "ResetMyPassword": "Reset my password",
       "passwordResetSuccess": "Your password has been reset successfully.",
-      "uploadImage": "Upload new image",
+      "uploadImage": "Upload new image"
     },
     "cta": {
       "update": "Update",

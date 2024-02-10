@@ -139,7 +139,7 @@
       "sendMeEmail": "Envoyez-moi un email",
       "ResetMyPassword": "Réinitialiser mon mot de passe",
       "passwordResetSuccess": "Votre mot de passe a été réinitialisé avec succès.",
-      "uploadImage": "Télécharger une image",
+      "uploadImage": "Télécharger une image"
     },
     "cta": {
       "update": "Update",
