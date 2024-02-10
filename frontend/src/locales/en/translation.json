@@ -21,7 +21,8 @@
         "employees": "My employees",
         "agencies": "My agencies",
         "planning": "My planning",
-        "services": "My services"
+        "services": "My services",
+        "scheduleExceptions": "Schedule exceptions asked"
       }
     },
     "sideAdminHeader": {
@@ -278,10 +279,19 @@
       }
     },
     "toast": {
-      "title": "Agence",
+      "title": "Schedule",
       "successUpdate": "Employee schedule has been updated successfully",
+      "successCreateException": "Breaktime request sent successfully",
       "error": "An error occurred while updating employee schedule"
     }
+  },
+  "sessionTable" : {
+    "student": "Student",
+    "instructor": "Instructor",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "service": "Service",
+    "price": "Price"
   },
   "provider": {
     "homeProvider": {
@@ -289,16 +299,36 @@
       "selectAgencyAll": "All agencies",
       "dashboard": "Dashboard",
       "cards": {
-        "totalRevenue": "Total revenue",
-        "subscriptions": "Subscriptions",
-        "sales": "Sales"
+        "totalRevenue": {
+          "title": "Total Revenue",
+          "subtitle": "Global revenue"
+        },
+        "sessionsNumber": {
+          "title": "Session number",
+          "subtitle": "Total number of sessions"
+        },
+        "sessionsHours": {
+          "title": "Session hours",
+          "subtitle": "Total number of hours"
+        },
+        "sessionsStudents": {
+          "title": "Session students",
+          "subtitle": "Total number of students"
+        }
       },
+      "revenueOverview" : "Revenue Overview",
       "yourServices": {
         "title": "All Your services",
         "subtitle_zero": "You don't have any service yet",
         "subtitle_one": "You have 1 service",
         "subtitle_other": "You have {{count}} services",
-        "noServices": "No services yet"
+        "noServices": "No services yet",
+        "tooltip": "Most sold service",
+        "drawer": {
+          "title": "Future sessions",
+          "description": "Future sessions for : {{agencyName}}",
+          "noSessions": "No future sessions for this agency"
+        }
       },
       "toast": {
         "error": "Something went wrong with the request (getCompany). Please try again later."
@@ -332,7 +362,17 @@
           "toastErrorTitle": "An error occurred !",
           "toastErrorDescription": "An error occurred during your session cancellation."
         }
-      }
+      },
+      "form": {
+        "schedule": "Schedule",
+        "start": "start",
+        "end": "end",
+        "cta": {
+          "new": "Ask for break"
+        }
+      },
+      "titleBreak": "Request breaks",
+      "ask": "Request"
     }
   },
   "admin": {

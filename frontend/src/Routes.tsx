@@ -7,7 +7,7 @@ import AdminLayout from "@/layouts/admin"
 import Landing from "@/pages/Landing"
 import NotFound from "@/pages/NotFound"
 import HomeAdmin from "@/pages/admin/HomeAdmin"
-import HomeProvider from "@/pages/provider/HomeProvider"
+import DashboardProvider from "@/pages/provider/Dashboard"
 import Employees from "@/pages/provider/employees"
 import HandleEmployee from "@/pages/provider/employees/handle-employee"
 import Login from "@/pages/auth/Login.tsx"
@@ -31,6 +31,7 @@ import MyCompany from "@/pages/provider/my-company"
 import UserPlanning from "@/pages/client/User/UserPlanning"
 import CompanyDetails from "@/pages/admin/companies/CompanyDetails"
 import ResetPassword from "@/pages/auth/ResetPassword.tsx"
+import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -106,7 +107,7 @@ const Routes = () => {
           children: [
             {
               path: "",
-              element: <HomeProvider />,
+              element: <DashboardProvider />,
             },
             {
               path: "company",
@@ -131,6 +132,10 @@ const Routes = () => {
             {
               path: "service",
               element: <Services />,
+            },
+            {
+              path: "schedule-exceptions",
+              element: <ScheduleExceptions />,
             },
           ],
           errorElement: <NotFound />,

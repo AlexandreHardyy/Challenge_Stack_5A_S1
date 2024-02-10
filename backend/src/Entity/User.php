@@ -70,9 +70,21 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
                 summary: 'update a employee',
                 description: 'Update a user for a company'
             )
+        ),
+        new GetCollection(
+            uriTemplate: '/companies/{id}/employees/schedule_exceptions',
+            security: "is_granted('ROLE_PROVIDER')",
+            openapi: new Operation(
+                tags: [ 'Schedule' ],
+                summary: 'schedule exceptions',
+                description: 'get schedule exceptions from company'
+            ),
+            uriVariables: [
+                'id' => new Link(toProperty: 'company', fromClass: Company::class)
+            ],
+            normalizationContext: [ 'groups' => [ 'schedule_exceptions:read' ], 'enable_max_depth' => true ],
         )
     ],
-    normalizationContext: ['groups' => ['read-user']],
 )]
 
 #[ApiResource(
@@ -96,7 +108,6 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         )
     ],
-    normalizationContext: ['groups' => ['read-user']],
 )]
 
 #[ApiResource(
@@ -104,7 +115,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     operations: [
         new Get(
             normalizationContext: [
-                'groups' => ['read-user'],
+                'groups' => ['read-user', 'employee:read'],
                 'enable_max_depth' => true,
             ],
             security: "is_granted('USER_VIEW', object)"
@@ -146,12 +157,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read', 'session-group-read-collection'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read'])]
+    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read', 'session-group-read-collection'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 
@@ -188,7 +199,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Schedule::class, orphanRemoval: true)]
     #[MaxDepth(1)]
-    #[Groups(['employee:read'])]
+    #[Groups(['employee:read', 'schedule_exceptions:read'])]
     private Collection $schedules;
 
     #[ORM\Column(length: 30)]

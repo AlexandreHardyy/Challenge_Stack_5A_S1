@@ -28,6 +28,7 @@ export interface Agency {
   geoloc: [string, string]
   users?: Pick<Employee, "id" | "firstname" | "lastname">[]
   schedules: Schedule[]
+  sessions: Session[]
 }
 
 export interface Category {
@@ -91,4 +92,15 @@ export interface Schedule {
   startHour: number
   endHour: number
   employee: Pick<Employee, "id" | "firstname" | "lastname">
+  scheduleExceptions: ScheduleException[]
+}
+
+export interface ScheduleException {
+  firstname?: string
+  lastname?: string
+  date?: Date
+  id: number
+  startHour: number
+  endHour: number
+  status: string
 }
