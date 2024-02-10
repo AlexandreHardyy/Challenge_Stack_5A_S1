@@ -30,6 +30,7 @@ import ForgotPassword from "@/pages/auth/ForgotPassword.tsx"
 import MyCompany from "@/pages/provider/my-company"
 import UserPlanning from "@/pages/client/User/UserPlanning"
 import CompanyDetails from "@/pages/admin/companies/CompanyDetails"
+import ResetPassword from "@/pages/auth/ResetPassword.tsx"
 import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
 
 const Routes = () => {
@@ -60,6 +61,10 @@ const Routes = () => {
             {
               path: "/forgot-password",
               element: <ForgotPassword />,
+            },
+            {
+              path: "/reset-password/:token",
+              element: <ResetPassword />,
             },
             {
               path: "user/profile",
