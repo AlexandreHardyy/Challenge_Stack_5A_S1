@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import {
   BoxIcon,
   Building2Icon,
+  CalendarCheck2Icon,
   CalendarDaysIcon,
   HomeIcon,
   LayoutDashboardIcon,
@@ -55,6 +56,14 @@ const SideHeader = () => {
       content: (
         <>
           <CalendarDaysIcon /> {t("header.sideHeader.menu.planning")}
+        </>
+      ),
+    },
+    {
+      href: "/provider/schedule-exceptions",
+      content: (
+        <>
+          <CalendarCheck2Icon /> {t("header.sideHeader.menu.scheduleExceptions")}
         </>
       ),
     },

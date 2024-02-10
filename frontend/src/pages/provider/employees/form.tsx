@@ -1,13 +1,11 @@
-import { Spinner } from "@/components/loader/Spinner"
 import { SelectInput } from "@/components/select-input"
 import { Button } from "@/components/ui/button"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useAuth } from "@/context/AuthContext"
 import { useAddSchedule } from "@/services/schedule.service"
+import { Agency } from "@/utils/types"
 import { ScheduleFormSchema, scheduleFormSchema } from "@/zod-schemas/schedule"
-import { useFetchAgenciesByCompany } from "@/services/agency.service"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQueryClient } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
@@ -17,14 +15,12 @@ import { useParams } from "react-router-dom"
 
 const HOURS = Array.from(Array(14)).map((_, index) => ({ value: String(8 + index), label: `${String(8 + index)}h` }))
 
-export const FormSchedules = () => {
+export const FormSchedules = ({ agenciesAvalaibles }: { agenciesAvalaibles?: Agency[] }) => {
   const { t } = useTranslation()
   const { userId } = useParams()
-  const { user } = useAuth()
   const queryClient = useQueryClient()
   const schedules = useAddSchedule()
 
-  const agencies = useFetchAgenciesByCompany(user?.company?.id)
   const submit = async (values: ScheduleFormSchema) => {
     await schedules.mutateAsync(values)
     queryClient.invalidateQueries(["getUserById"])
@@ -78,18 +74,13 @@ export const FormSchedules = () => {
           name="agencyId"
           render={() => (
             <FormItem>
-              {agencies.isLoading && <Spinner />}
-              {!agencies.isLoading && (
-                <>
-                  <FormLabel>{t("employeePage.form.agency")}</FormLabel>
-                  <SelectInput
-                    options={agencies?.data?.map((agency) => ({ value: String(agency.id), label: agency.name })) ?? []}
-                    placeholder={t("employeePage.form.agency")}
-                    onSelect={(id) => form.setValue("agencyId", Number(id))}
-                  />
-                  <FormMessage />
-                </>
-              )}
+              <FormLabel>{t("employeePage.form.agency")}</FormLabel>
+              <SelectInput
+                options={agenciesAvalaibles?.map((agency) => ({ value: String(agency.id), label: agency.name })) ?? []}
+                placeholder={t("employeePage.form.agency")}
+                onSelect={(id) => form.setValue("agencyId", Number(id))}
+              />
+              <FormMessage />
             </FormItem>
           )}
         />

@@ -10,6 +10,7 @@ export interface Company {
   createdAt: string
   updatedAt: string
   image?: MediaObject
+  users: Pick<Employee, "id" | "firstname" | "lastname" | "email">[]
 }
 
 export interface Agency {
@@ -29,6 +30,7 @@ export interface Agency {
   users?: Pick<Employee, "id" | "firstname" | "lastname">[]
   schedules: Schedule[]
   image?: MediaObject[]
+  sessions: Session[]
 }
 
 export interface Category {
@@ -64,22 +66,28 @@ export interface User {
   image?: MediaObject
 }
 
+export interface Student extends User {
+  studentMarks?: number
+  studentSessions?: Session[]
+}
+
 export interface Employee extends User {
   agencies?: Agency[]
   company?: Company
-  instructorSessions: Session[]
+  instructorSessions?: Session[]
   schedules: Schedule[]
 }
 
 export interface Session {
   id: number
-  student: User
+  student: Student
   instructor: User
   startDate: string
   endDate: string
   service: Service
   agency: Agency
   status: string
+  studentMark?: number
 }
 
 export interface Schedule {
@@ -88,6 +96,17 @@ export interface Schedule {
   startHour: number
   endHour: number
   employee: Pick<Employee, "id" | "firstname" | "lastname">
+  scheduleExceptions: ScheduleException[]
+}
+
+export interface ScheduleException {
+  firstname?: string
+  lastname?: string
+  date?: Date
+  id: number
+  startHour: number
+  endHour: number
+  status: string
 }
 
 export interface MediaObject {

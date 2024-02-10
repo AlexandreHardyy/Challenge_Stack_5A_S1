@@ -26,7 +26,7 @@ export const updateUser = async (
   })
 }
 
-export function useFetchUserById(id: number) {
+export function useFetchUserById(id?: number) {
   return useQuery<User>(["getUserById"], async () => {
     const response = await api.get(`users/${id}`)
     if (response.status !== 200) {
@@ -38,10 +38,10 @@ export function useFetchUserById(id: number) {
 }
 
 export function useFetchEmployeesByCompany(companyId?: number) {
-  return useQuery<User[]>(["getUsers"], async () => {
+  return useQuery<User[]>(["getEmployees"], async () => {
     const response = await api.get(`companies/${companyId}/users`)
     if (response.status !== 200) {
-      throw new Error("Something went wrong with the request (getUsers)")
+      throw new Error("Something went wrong with the request (getEmployees)")
     }
 
     return response.data["hydra:member"]

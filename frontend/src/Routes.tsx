@@ -7,7 +7,7 @@ import AdminLayout from "@/layouts/admin"
 import Landing from "@/pages/Landing"
 import NotFound from "@/pages/NotFound"
 import HomeAdmin from "@/pages/admin/HomeAdmin"
-import HomeProvider from "@/pages/provider/HomeProvider"
+import DashboardProvider from "@/pages/provider/Dashboard"
 import Employees from "@/pages/provider/employees"
 import HandleEmployee from "@/pages/provider/employees/handle-employee"
 import Login from "@/pages/auth/Login.tsx"
@@ -28,6 +28,10 @@ import Services from "@/pages/provider/services"
 import App from "@/App.tsx"
 import ForgotPassword from "@/pages/auth/ForgotPassword.tsx"
 import MyCompany from "@/pages/provider/my-company"
+import UserPlanning from "@/pages/client/User/UserPlanning"
+import CompanyDetails from "@/pages/admin/companies/CompanyDetails"
+import ResetPassword from "@/pages/auth/ResetPassword.tsx"
+import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -59,8 +63,16 @@ const Routes = () => {
               element: <ForgotPassword />,
             },
             {
+              path: "/reset-password/:token",
+              element: <ResetPassword />,
+            },
+            {
               path: "user/profile",
               element: <ProfileClient />,
+            },
+            {
+              path: "user/planning",
+              element: <UserPlanning />,
             },
             {
               path: "terms",
@@ -95,7 +107,7 @@ const Routes = () => {
           children: [
             {
               path: "",
-              element: <HomeProvider />,
+              element: <DashboardProvider />,
             },
             {
               path: "company",
@@ -121,6 +133,10 @@ const Routes = () => {
               path: "service",
               element: <Services />,
             },
+            {
+              path: "schedule-exceptions",
+              element: <ScheduleExceptions />,
+            },
           ],
           errorElement: <NotFound />,
         },
@@ -135,6 +151,10 @@ const Routes = () => {
             {
               path: "companies",
               element: <Companies />,
+            },
+            {
+              path: "companies/:companyId",
+              element: <CompanyDetails />,
             },
             {
               path: "users",

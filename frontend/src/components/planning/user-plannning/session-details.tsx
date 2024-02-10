@@ -4,7 +4,7 @@ import { Session } from "@/utils/types"
 import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import CancelSessionModal from "@/components/employee/cancel-session-modal"
+import CancelSessionModal from "../cancel-session-modal"
 
 export function SessionDetails({ session }: { session?: Session }) {
   const { t } = useTranslation()
@@ -48,15 +48,15 @@ export function SessionDetails({ session }: { session?: Session }) {
             </p>
           </div>
           <div>
-            <p className="font-bold">{t("provider.myPlanning.sessionDetails.studentDetails")}:</p>
+            <p className="font-bold">{t("provider.myPlanning.sessionDetails.instructorDetails")}:</p>
             <p>
-              {t("provider.myPlanning.sessionDetails.firstname")}: {session.student.firstname}
+              {t("provider.myPlanning.sessionDetails.firstname")}: {session.instructor.firstname}
             </p>
             <p>
-              {t("provider.myPlanning.sessionDetails.lastname")}: {session.student.lastname}
+              {t("provider.myPlanning.sessionDetails.lastname")}: {session.instructor.lastname}
             </p>
             <p>
-              {t("provider.myPlanning.sessionDetails.mail")}: {session.student.email}
+              {t("provider.myPlanning.sessionDetails.mail")}: {session.instructor.email}
             </p>
           </div>
         </CardContent>

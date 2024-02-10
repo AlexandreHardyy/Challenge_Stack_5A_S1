@@ -4,14 +4,22 @@ import { Session } from "@/utils/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { DateTime } from "luxon"
 
-type useFetchSessionsByAgencyQueryParams = {
+type useFetchSessionsQueryParams = {
+  agency?: string | string[]
   status?: "created" | "cancelled"
   "startDate[after]"?: string
 }
 
-export function useFetchSessionsByAgency(agencyId?: string, queryParams?: useFetchSessionsByAgencyQueryParams) {
+export function useFetchSessions(queryParams?: useFetchSessionsQueryParams) {
   const formatedQueryParams = formatQueryParams(queryParams)
-  const url = formatedQueryParams ? `sessions${formatedQueryParams}&agency=${agencyId}` : `sessions?agency=${agencyId}`
+  const url = `sessions${formatedQueryParams}`
+
+  console.log("queryParams", queryParams)
+  ///////////
+
+  // if (!agencyId || !serviceId) {
+  //   throw new Error("agency and service must be specified")
+  // }
 
   return useQuery<Session[]>(
     ["getSessions"],
@@ -88,13 +96,16 @@ export function useAddSession({ onSuccess, onError }: { onSuccess: () => void; o
   // return response.json()
 }
 
-export function useUpdateSessionStatus({ onSuccess, onError }: { onSuccess: () => void; onError: () => void }) {
+export function useUpdateSession({ onSuccess, onError }: { onSuccess: () => void; onError: () => void }) {
   return useMutation({
-    mutationFn: async (params: { id: number; status: string }) =>
+    mutationFn: async (params: { id: number; status?: string; studentMark?: number }) =>
       await api
         .patch<Session>(
           `sessions/${params.id}`,
-          { status: params.status },
+          {
+            status: params.status,
+            studentMark: params.studentMark,
+          },
           {
             headers: {
               "Content-Type": "application/merge-patch+json",

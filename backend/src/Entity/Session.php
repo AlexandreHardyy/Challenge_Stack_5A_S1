@@ -29,9 +29,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['session-group-read-collection']]
+            normalizationContext: ['groups' => ['session-group-read-collection'], 'enable_max_depth' => true]
         ),
         new Patch(
+            validationContext: ['groups' => ['session-group-update']],
             denormalizationContext: ['groups' => ['session-group-update']],
             security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
         )
@@ -44,44 +45,48 @@ class Session
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'studentSessions')]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
-    // SECURIDAD
-    #[Groups(['session-group-read', 'employee:read'])]
+    // SECURITY
+    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection'])]
     private ?User $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'instructorSessions')]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
-    #[Groups(['session-group-read', 'session-group-read-collection'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'student:read'])]
     private ?User $instructor = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    // SECUTITY
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    // SECURITY
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['session-group-read', 'employee:read'])]
+    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection', 'student:read'])]
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session-group-read', 'session-group-update', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-update', 'employee:read', 'student:read'])]
     private ?string $status = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['session-group-update', 'employee:read'])]
+    private ?float $studentMark = null;
 
     public function getId(): ?int
     {
@@ -172,6 +177,18 @@ class Session
         return $this;
     }
 
+    public function getStudentMark(): ?float
+    {
+        return $this->studentMark;
+    }
+
+    public function setStudentMark(?float $studentMark): static
+    {
+        $this->studentMark = $studentMark;
+
+        return $this;
+    }
+
     #[Assert\Callback(groups: ['session-create'])]
     public function validate(ExecutionContextInterface $context, mixed $payload): void
     {
@@ -215,6 +232,30 @@ class Session
         if ($isSessionInSchedule === 0) {
             $context->buildViolation('Session not in employee schedule')
                 ->atPath('instructor')
+                ->addViolation();
+        }
+    }
+
+    #[Assert\Callback(groups: ['session-group-update'])]
+    public function validateStudentMark(ExecutionContextInterface $context, mixed $payload): void
+    {
+        $today = new DateTime();
+
+        if ($this->getStudentMark() < 0 || $this->getStudentMark() > 5) {
+            $context->buildViolation("You can't add a mark below 0 or above 5")
+                ->atPath('studentMark')
+                ->addViolation();
+        }
+
+        if ($this->getStudentMark() && $this->getStartDate() > $today) {
+            $context->buildViolation("You can't add a mark if the session is not finished")
+                ->atPath('studentMark')
+                ->addViolation();
+        }
+
+        if ($this->getStatus() == "cancelled" && null !== $this->getStudentMark()) {
+            $context->buildViolation("You can't add a mark if the session is cancelled")
+                ->atPath('studentMark')
                 ->addViolation();
         }
     }

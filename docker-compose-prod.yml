@@ -1,0 +1,36 @@
+version: '3.6'
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/cert:/etc/nginx/cert
+    restart: always
+    depends_on:
+      - frontend
+      - server
+      - php
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+  server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: server
+    links:
+      - php
+
+  php:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: php
