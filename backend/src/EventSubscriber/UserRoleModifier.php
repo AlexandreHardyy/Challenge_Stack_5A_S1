@@ -48,8 +48,9 @@ class UserRoleModifier implements EventSubscriber
         $request = $this->requestStack->getCurrentRequest();
 
         if ($entity instanceof User && $request && ($request->getPathInfo() === '/api/employees' || $request->getPathInfo() === '/api/providers')) {
+            $password = $this->generatePassword();
             $roles = $entity->getRoles();
-            $hashedPassword = $this->hasher->hashPassword($entity, $this->generatePassword());
+            $hashedPassword = $this->hasher->hashPassword($entity, $password);
             $entity->setPassword($hashedPassword);
             $roles[] = $request->getPathInfo() === '/api/employees' ? 'ROLE_EMPLOYEE' : 'ROLE_PROVIDER';
 
@@ -60,7 +61,7 @@ class UserRoleModifier implements EventSubscriber
             $sendSmtpEmail['to'] = array(array('email'=> $entity->getEmail(), 'name'=> $entity->getFirstname() . ' ' . $entity->getLastname()));
             $sendSmtpEmail['subject'] = "Bienvenue chez RoadWise !";
             $sendSmtpEmail['templateId'] = 7;
-            $sendSmtpEmail['params'] = array('email'=> $entity->getEmail(), 'password'=> $this->generatePassword());
+            $sendSmtpEmail['params'] = array('email'=> $entity->getEmail(), 'password'=> $password);
 
             try {
                 $this->brevo->sendTransacEmail($sendSmtpEmail);

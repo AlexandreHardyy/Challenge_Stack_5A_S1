@@ -65,7 +65,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
                 description: 'delete an agency'
             )
         )
-    ]
+    ],
+    normalizationContext: ['groups' => ['read-media_object']]
 )]
 #[ApiResource(
     uriTemplate: '/companies/{id}/agencies',
@@ -148,6 +149,10 @@ class Agency
     #[MaxDepth(1)]
     #[Groups(['session-group-read-collection', 'agency-group-read'])]
     private Collection $sessions;
+
+    #[ORM\OneToMany(mappedBy: 'agency', targetEntity: MediaObject::class)]
+    #[Groups(['read-media_object'])]
+    private Collection $image;
 
     public function __construct()
     {
@@ -390,6 +395,36 @@ class Agency
             // set the owning side to null (unless already changed)
             if ($session->getAgency() === $this) {
                 $session->setAgency(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MediaObject>
+     */
+    public function getImage(): Collection
+    {
+        return $this->image;
+    }
+
+    public function addImage(MediaObject $image): static
+    {
+        if (!$this->image->contains($image)) {
+            $this->image->add($image);
+            $image->setAgency($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(MediaObject $image): static
+    {
+        if ($this->image->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getAgency() === $this) {
+                $image->setAgency(null);
             }
         }
 
