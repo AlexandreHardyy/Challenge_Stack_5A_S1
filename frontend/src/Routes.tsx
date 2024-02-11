@@ -6,7 +6,7 @@ import AdminLayout from "@/layouts/admin"
 
 import Landing from "@/pages/Landing"
 import NotFound from "@/pages/NotFound"
-import HomeAdmin from "@/pages/admin/HomeAdmin"
+import DashboardAdmin from "@/pages/admin/Dashboard"
 import DashboardProvider from "@/pages/provider/Dashboard"
 import Employees from "@/pages/provider/employees"
 import HandleEmployee from "@/pages/provider/employees/handle-employee"
@@ -158,7 +158,7 @@ const Routes = () => {
           children: [
             {
               path: "",
-              element: <HomeAdmin />,
+              element: <DashboardAdmin />,
             },
             {
               path: "companies",

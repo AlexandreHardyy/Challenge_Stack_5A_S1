@@ -137,7 +137,7 @@ class Agency
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'agencies')]
     #[MaxDepth(1)]
-    #[Groups(['agency-group-read'])]
+    #[Groups(['agency-group-read', 'company-group-read'])]
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Schedule::class, orphanRemoval: true)]
@@ -147,7 +147,7 @@ class Agency
     
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Session::class, orphanRemoval: true)]
     #[MaxDepth(1)]
-    #[Groups(['session-group-read-collection'])]
+    #[Groups(['session-group-read-collection', 'employee:read', 'company-group-read'])]
     private Collection $sessions;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: MediaObject::class)]

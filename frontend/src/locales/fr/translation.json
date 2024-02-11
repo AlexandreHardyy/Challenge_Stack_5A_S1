@@ -333,7 +333,7 @@
     "price": "Prix"
   },
   "provider": {
-    "homeProvider": {
+    "dashboard": {
       "selectAgencyPlaceholder": "Sélectionner une agence",
       "selectAgencyAll": "Toutes les agences",
       "dashboard": "Tableau de bord",
@@ -417,6 +417,46 @@
     }
   },
   "admin": {
+    "dashboard": {
+      "selectCompanyPlaceholder": "Sélectionner une entreprise",
+      "selectCompanyAll": "Toutes les entreprises",
+      "dashboard": "Tableau de bord",
+      "cards": {
+        "totalEmployees": {
+          "title": "Nombre d'employés",
+          "subtitle": "Nombre total d'employés"
+        },
+        "sessionsNumber": {
+          "title": "Nombre de sessions",
+          "subtitle": "Total de sessions effectuées"
+        },
+        "sessionsHours": {
+          "title": "Heures de session",
+          "subtitle": "Total de temps de session"
+        },
+        "sessionsStudents": {
+          "title": "Nombre d'élèves",
+          "subtitle": "Nombre total d'élèves"
+        }
+      },
+      "revenueOverview" : "Vue d'ensemble des revenus",
+      "yourAgencies": {
+        "title": "Toutes vos agences",
+        "subtitle_zero": "Vous n'avez pas encore d'agences",
+        "subtitle_one": "Vous avez 1 agence",
+        "subtitle_other": "Vous avez {{count}} agences",
+        "noServices": "Vous n'avez pas encore d'agences",
+        "tooltip": "Agence avec le plus de sessions",
+        "drawer": {
+          "title": "Session à venir",
+          "description": "Les sessions à venir pour : {{companyName}}",
+          "noSessions": "Pas de sessions à venir"
+        }
+      },
+      "toast": {
+        "error": "Une erreur est survenue. Veuillez réessayer plus tard."
+      }
+    },
     "users": {
       "title": "Tous les utilisateurs",
       "table": {

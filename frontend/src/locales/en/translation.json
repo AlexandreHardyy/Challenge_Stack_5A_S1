@@ -51,7 +51,7 @@
       "categoryInput": "Category",
       "categoryInputPlaceholder": "Category of service",
       "addressInput": "Address",
-      "addressInputPlaceholder": "Enter a streat name",
+      "addressInputPlaceholder": "Enter a street name",
       "cityInput": "City",
       "cityInputPlaceholder": "Enter a city name",
       "zipInput": "Zip code",
@@ -60,7 +60,7 @@
     },
     "list": {
       "loading": "Loading...",
-      "error": "An error occured",
+      "error": "An error occurred",
       "noData": "No data",
       "companyCard": {
         "email": "email",
@@ -321,7 +321,7 @@
     "toast": {
       "title": "Schedule",
       "successUpdate": "Employee schedule has been updated successfully",
-      "successCreateException": "Breaktime request sent successfully",
+      "successCreateException": "Break-time request sent successfully",
       "error": "An error occurred while updating employee schedule"
     }
   },
@@ -334,7 +334,7 @@
     "price": "Price"
   },
   "provider": {
-    "homeProvider": {
+    "dashboard": {
       "selectAgencyPlaceholder": "Select an agency",
       "selectAgencyAll": "All agencies",
       "dashboard": "Dashboard",
@@ -392,7 +392,7 @@
         "alreadyRated": "You have already rated this session",
         "evaluate": "Evaluate",
         "studentMarkToast": {
-          "toastSuccessTitle": "Mark sended !",
+          "toastSuccessTitle": "Mark sent !",
           "toastSuccessDescription": "Your notation has been sent",
           "toastErrorTitle": "An error occurred !",
           "toastErrorDescription": "An error occurred during the notation of your student."
@@ -418,6 +418,46 @@
     }
   },
   "admin": {
+    "dashboard": {
+      "selectCompanyPlaceholder": "Select an company",
+      "selectCompanyAll": "All companies",
+      "dashboard": "Dashboard",
+      "cards": {
+        "totalEmployees": {
+          "title": "Total Employees",
+          "subtitle": "Global number of employees"
+        },
+        "sessionsNumber": {
+          "title": "Session number",
+          "subtitle": "Total number of sessions"
+        },
+        "sessionsHours": {
+          "title": "Session hours",
+          "subtitle": "Total number of hours"
+        },
+        "sessionsStudents": {
+          "title": "Session students",
+          "subtitle": "Total number of students"
+        }
+      },
+      "revenueOverview" : "Revenue Overview",
+      "yourAgencies": {
+        "title": "All Your agencies",
+        "subtitle_zero": "You don't have any agency yet",
+        "subtitle_one": "You have 1 agency",
+        "subtitle_other": "You have {{count}} agencies",
+        "noServices": "No agencies yet",
+        "tooltip": "Most sold agency",
+        "drawer": {
+          "title": "Future sessions",
+          "description": "Future sessions for : {{companyName}}",
+          "noSessions": "No future sessions for this company"
+        }
+      },
+      "toast": {
+        "error": "Something went wrong with the request (getCompany). Please try again later."
+      }
+    },
     "users": {
       "title": "All users",
       "table": {
