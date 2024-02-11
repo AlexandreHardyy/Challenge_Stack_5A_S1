@@ -33,6 +33,7 @@ import CompanyDetails from "@/pages/admin/companies/CompanyDetails"
 import ResetPassword from "@/pages/auth/ResetPassword.tsx"
 import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
 import ProtectedRoute from "@/components/security/ProtectedRoute.tsx"
+import FeedBackBuilders from "@/pages/provider/feedback-builders"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -143,6 +144,10 @@ const Routes = () => {
             {
               path: "schedule-exceptions",
               element: <ScheduleExceptions />,
+            },
+            {
+              path: "feedback-builders",
+              element: <FeedBackBuilders />,
             },
           ],
           errorElement: <NotFound />,

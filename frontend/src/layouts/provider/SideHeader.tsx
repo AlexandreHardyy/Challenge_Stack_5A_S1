@@ -7,6 +7,7 @@ import {
   Building2Icon,
   CalendarCheck2Icon,
   CalendarDaysIcon,
+  FactoryIcon,
   HomeIcon,
   LayoutDashboardIcon,
   LogOutIcon,
@@ -72,6 +73,14 @@ const SideHeader = () => {
       content: (
         <>
           <BoxIcon /> {t("header.sideHeader.menu.services")}
+        </>
+      ),
+    },
+    {
+      href: "/provider/feedback-builders",
+      content: (
+        <>
+          <FactoryIcon /> {t("header.sideHeader.menu.feedBackBuilders")}
         </>
       ),
     },

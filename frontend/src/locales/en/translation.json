@@ -22,7 +22,8 @@
         "agencies": "My agencies",
         "planning": "My planning",
         "services": "My services",
-        "scheduleExceptions": "Schedule exceptions asked"
+        "scheduleExceptions": "Schedule exceptions asked",
+        "feedBackBuilders": "Build Feedback form"
       }
     },
     "sideAdminHeader": {
@@ -233,6 +234,27 @@
         "successDelete": "agency delete successfully",
         "error": "an error occurred while updating",
         "addressError": "Your address was not found"
+      }
+    }
+  },
+  "ProviderFeedBackBuilders": {
+    "title": "Feedback Builders",
+    "form": {
+      "title": "Title",
+      "isSelected": "Selected",
+      "questions": "Questions",
+      "yourFeedbackBuilder": "Your feedback builder",
+      "cta": {
+        "addQuestion": "Add new question",
+        "new": "Add new feedback builder",
+        "update": "Update feedback builder"
+      },
+      "toast": {
+        "title": "Feedback Builder",
+        "successCreate": "feedback builder created successfully",
+        "successUpdate": "feedback builder updated successfully",
+        "successDelete": "feedback builder delete successfully",
+        "error": "an error occurred while updating"
       }
     }
   },

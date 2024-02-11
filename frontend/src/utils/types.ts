@@ -123,3 +123,9 @@ export interface MediaObject {
   id: number
   contentUrl: string
 }
+export interface FeedBackBuilder {
+  id: number
+  title: string
+  isSelected?: boolean
+  questions: string[]
+}
