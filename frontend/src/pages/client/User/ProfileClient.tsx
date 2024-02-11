@@ -21,6 +21,7 @@ const formSchema = z.object({
   email: z.string().email(),
   firstname: z.string(),
   lastname: z.string(),
+  phoneNumber: z.string().regex(/^\+[1-9]\d{10,14}$/, "Must be a valid phone number with the format +33"),
 })
 
 const UserAvatar = ({ email, image }: { email: string; image: string | null }) => {
@@ -48,6 +49,7 @@ const ProfileClient = () => {
       email: "",
       firstname: "",
       lastname: "",
+      phoneNumber: "",
     },
   })
 
@@ -62,6 +64,7 @@ const ProfileClient = () => {
       form.setValue("email", user.email)
       form.setValue("firstname", user.firstname)
       form.setValue("lastname", user.lastname)
+      form.setValue("phoneNumber", user.phoneNumber)
     }
   }, [user, form])
 
@@ -193,6 +196,19 @@ const ProfileClient = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("common.form.lastName")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("common.form.phoneNumber")}</FormLabel>
                   <FormControl>
                     <Input {...field} type="text" />
                   </FormControl>
