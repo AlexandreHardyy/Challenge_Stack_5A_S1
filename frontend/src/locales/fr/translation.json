@@ -138,7 +138,8 @@
       "fetchingError": "Une erreur est survenue. Veuillez réessayer plus tard.",
       "sendMeEmail": "Envoyez-moi un email",
       "ResetMyPassword": "Réinitialiser mon mot de passe",
-      "passwordResetSuccess": "Votre mot de passe a été réinitialisé avec succès."
+      "passwordResetSuccess": "Votre mot de passe a été réinitialisé avec succès.",
+      "uploadImage": "Télécharger une image"
     },
     "cta": {
       "update": "Update",
@@ -347,6 +348,8 @@
         "studentMark": "Note de l'élève",
         "noInfo": "Pas d'info",
         "rateInput": "Entrez une note pour l'élève",
+        "rateProvider": "Notez comment s'est passé votre session",
+        "alreadyRated": "Vous avez déjà noté cette session",
         "evaluate": "Évaluer",
         "studentMarkToast": {
           "toastSuccessTitle": "Note envoyée",
