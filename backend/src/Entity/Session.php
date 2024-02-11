@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     paginationEnabled: false,
     operations: [
-        new Post(validationContext: ['groups' => ['session-create']]),
+        new Post(validationContext: ['groups' => ['session-create']], security: "is_granted('ROLE_USER')"),
         new Get(
             normalizationContext: ['groups' => ['session-group-read']],
             security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
@@ -218,11 +218,27 @@ class Session
 
         // Check if the employee is working
         $isSessionInSchedule = $this->getInstructor()->getSchedules()->filter(function(Schedule $schedule) use($toCreate){
-            $scheduleStart = clone $schedule->getDate();
-            $scheduleEnd = clone $schedule->getDate();
+            $scheduleDate = $schedule->getDate();
+            $scheduleStart = clone $scheduleDate;
+            $scheduleEnd = clone $scheduleDate;
             date_time_set($scheduleStart, $schedule->getStartHour(), 0);
             date_time_set($scheduleEnd, $schedule->getEndHour(), 0);
 
+            $isSessionInScheduleException = $schedule->getScheduleExceptions()->filter(function(ScheduleException $scheduleException) use($toCreate, $scheduleDate){
+                if ($scheduleException->getStatus() != "VALIDATED") return false;
+
+                $scheduleExceptionStart = clone $scheduleDate;
+                $scheduleExceptionEnd = clone $scheduleDate;
+                date_time_set($scheduleExceptionStart, $scheduleException->getStartHour(), 0);
+                date_time_set($scheduleExceptionEnd, $scheduleException->getEndHour(), 0);
+
+                if ($scheduleExceptionEnd <= $toCreate->getStartDate()) return false;
+                if ($scheduleExceptionStart >= $toCreate->getEndDate()) return false;
+
+                return true;
+            })->count();
+
+            if ($isSessionInScheduleException != 0) return false;
             if ($scheduleStart > $toCreate->getStartDate()) return false;
             if ($scheduleEnd < $toCreate->getEndDate()) return false;
 

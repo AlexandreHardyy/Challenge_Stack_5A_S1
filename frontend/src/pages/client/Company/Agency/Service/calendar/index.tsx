@@ -3,12 +3,7 @@ import { DateTime } from "luxon"
 import { useEffect, useState } from "react"
 import ConfirmationModal from "./modal"
 import { Agency, Employee, Schedule, Service, Session } from "@/utils/types"
-
-// TODO: Remove after employees implementation (compute max beginning hour and max end hour)
-const BEGINNING_HOUR = 8
-const BEGINNING_MINUTE = 0
-const END_HOUR = 18
-const END_MINUTE = 0
+import { BEGINNING_HOUR, BEGINNING_MINUTE, END_HOUR, END_MINUTE } from "@/utils/helpers"
 
 interface CalendarProps {
   service: Service
@@ -28,6 +23,10 @@ interface ParsedSchedule {
   startHour: DateTime
   endHour: DateTime
   employee: Pick<Employee, "id" | "firstname" | "lastname">
+  scheduleExceptions: {
+    start: DateTime
+    end: DateTime
+  }[]
 }
 
 function computeCalendarHours(weekRange: WeekRange, granularity: number) {
@@ -56,22 +55,30 @@ function computeCalendarHours(weekRange: WeekRange, granularity: number) {
   return calendarValues
 }
 
-function checkIsSessionInSchedules(sessionStart: DateTime, sessionEnd: DateTime, schedules: ParsedSchedule[]) {
-  return schedules.some((schedule) => {
-    if (sessionStart >= schedule.startHour && sessionEnd <= schedule.endHour) return true
+function checkIsSessionNotAvailable(
+  sessionStart: DateTime,
+  sessionEnd: DateTime,
+  exeptions: {
+    start: DateTime
+    end: DateTime
+  }[]
+) {
+  return exeptions.some((exeption) => {
+    if (exeption.end <= sessionStart) return false
+    if (exeption.start >= sessionEnd) return false
 
-    return false
+    return true
   })
 }
 
-function checkIsSessionNotAvailable(sessionStart: DateTime, sessionEnd: DateTime, existingSessions: Session[]) {
-  return existingSessions.some((existingSession) => {
-    const existingSessionStart = DateTime.fromJSDate(new Date(existingSession.startDate))
-    const existingSessionEnd = DateTime.fromJSDate(new Date(existingSession.endDate))
-    if (existingSessionEnd <= sessionStart) return false
-    if (existingSessionStart >= sessionEnd) return false
+function checkIsSessionInSchedules(sessionStart: DateTime, sessionEnd: DateTime, schedules: ParsedSchedule[]) {
+  return schedules.some((schedule) => {
+    if (schedule.scheduleExceptions.length > 0) {
+      if (checkIsSessionNotAvailable(sessionStart, sessionEnd, schedule.scheduleExceptions)) return false
+    }
+    if (sessionStart >= schedule.startHour && sessionEnd <= schedule.endHour) return true
 
-    return true
+    return false
   })
 }
 
@@ -88,7 +95,14 @@ function checkNotAvailableSessionByInstructor(
       instructorNotAvailable: checkIsSessionNotAvailable(
         sessionStart,
         sessionEnd,
-        existingSessions.filter((existingSession) => existingSession.instructor.id === instructorId)
+        existingSessions
+          .filter((existingSession) => existingSession.instructor.id === instructorId)
+          .map((existingSession) => {
+            return {
+              start: DateTime.fromJSDate(new Date(existingSession.startDate)),
+              end: DateTime.fromJSDate(new Date(existingSession.endDate)),
+            }
+          })
       ),
       instructorIsWorking: checkIsSessionInSchedules(
         sessionStart,
@@ -120,11 +134,26 @@ function retrieveSchedules(
       return false
     })
     .map((schedule) => {
+      const scheduleDate = DateTime.fromISO(schedule.date)
       return {
         id: schedule.id,
-        startHour: DateTime.fromISO(schedule.date).set({ hour: schedule.startHour }),
-        endHour: DateTime.fromISO(schedule.date).set({ hour: schedule.endHour }),
+        startHour: scheduleDate.set({ hour: schedule.startHour }),
+        endHour: scheduleDate.set({ hour: schedule.endHour }),
         employee: schedule.employee,
+        scheduleExceptions: schedule.scheduleExceptions.reduce(
+          (acc: Array<{ start: DateTime; end: DateTime }>, scheduleException) => {
+            if (scheduleException.status !== "VALIDATED") {
+              return acc
+            }
+            acc.push({
+              start: scheduleDate.set({ hour: scheduleException.startHour }),
+              end: scheduleDate.set({ hour: scheduleException.endHour }),
+            })
+
+            return acc
+          },
+          []
+        ),
       }
     })
 }
