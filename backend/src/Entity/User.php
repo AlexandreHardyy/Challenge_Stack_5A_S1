@@ -209,6 +209,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[Groups(['update-user', 'read-media_object'])]
     private ?MediaObject $image = null;
+    
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: FeedBack::class)]
+    private Collection $feedBacks;
 
     #[Groups('employee:read')]
     public function getStudentMarks(): ?float
@@ -238,6 +241,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->studentSessions = new ArrayCollection();
         $this->instructorSessions = new ArrayCollection();
         $this->schedules = new ArrayCollection();
+        $this->feedBacks = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -537,6 +541,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImage(?MediaObject $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+    /**
+     * @return Collection<int, FeedBack>
+     */
+    public function getFeedBacks(): Collection
+    {
+        return $this->feedBacks;
+    }
+
+    public function addFeedBack(FeedBack $feedBack): static
+    {
+        if (!$this->feedBacks->contains($feedBack)) {
+            $this->feedBacks->add($feedBack);
+            $feedBack->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedBack(FeedBack $feedBack): static
+    {
+        if ($this->feedBacks->removeElement($feedBack)) {
+            // set the owning side to null (unless already changed)
+            if ($feedBack->getClient() === $this) {
+                $feedBack->setClient(null);
+            }
+        }
 
         return $this;
     }

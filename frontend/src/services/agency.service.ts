@@ -7,20 +7,14 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 
 export function useFetchAgenciesByCompany(companyId?: number) {
-  return useQuery<Agency[]>(
-    ["getAgencies"],
-    async () => {
-      const response = await api.get(`companies/${companyId}/agencies`)
-      if (response.status !== 200) {
-        throw new Error("Something went wrong with the request (getService)")
-      }
-
-      return response.data["hydra:member"]
-    },
-    {
-      retry: false,
+  return useQuery<Agency[]>(["getAgencies"], async () => {
+    const response = await api.get(`companies/${companyId}/agencies`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getService)")
     }
-  )
+
+    return response.data["hydra:member"]
+  })
 }
 
 export function useFetchAgencyById(agencyId?: string) {
@@ -49,14 +43,13 @@ export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldW
   return useQuery({
     queryKey: ["agencies", url],
     queryFn: async ({ queryKey }): Promise<Agency[]> => {
-      const [_key, url] = queryKey
+      const [, url] = queryKey
       const response = await api.get(url).catch((err) => err.response)
       if (response.status !== 200) {
         throw new Error("Something went wrong with the request (getAgencies)")
       }
       return response.data["hydra:member"]
     },
-    retry: false,
     enabled: shouldWaitQueryParams ? !!formatedQueryParams : undefined,
   })
 }

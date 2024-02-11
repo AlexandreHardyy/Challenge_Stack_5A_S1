@@ -21,7 +21,8 @@
         "agencies": "Mes agences",
         "planning": "Mon planning",
         "services": "Mes services",
-        "scheduleExceptions": "Demande de repos"
+        "scheduleExceptions": "Demande de repos",
+        "feedBackBuilders": "Construire form retour"
       }
     },
     "sideAdminHeader": {
@@ -232,6 +233,27 @@
         "successDelete": "agence supprimé avec succès",
         "error": "une erreur a eu lieu lors de la mise a jour",
         "addressError": "Votre address n'a pas été trouvé"
+      }
+    }
+  },
+  "ProviderFeedBackBuilders": {
+    "title": "Contructeur de formualireFeedback",
+    "form": {
+      "title": "Titre",
+      "isSelected": "Selectionné",
+      "questions": "Questions",
+      "yourFeedbackBuilder": "Votre formulaire de feedback",
+      "cta": {
+        "addQuestion": "Ajouter une question",
+        "new": "Ajouter formulaire de feedback",
+        "update": "Modifier formulaire de feedback"
+      },
+      "toast": {
+        "title": "Formulaire de feedback",
+        "successCreate": "Formulaire de feedback créée avec succès",
+        "successUpdate": "Formulaire de feedback modifié avec succès",
+        "successDelete": "Formulaire de feedback supprimé avec succès",
+        "error": "une erreur a un lieu"
       }
     }
   },
