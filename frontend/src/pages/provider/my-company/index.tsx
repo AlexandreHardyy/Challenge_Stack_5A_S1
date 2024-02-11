@@ -8,7 +8,6 @@ const MyCompany = () => {
   const { user } = useAuth()
   const { t } = useTranslation()
   const company = useFetchCompany(user?.company?.id)
-  console.log(company.data)
 
   if (company.isLoading) {
     return (

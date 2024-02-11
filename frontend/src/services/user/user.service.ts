@@ -6,8 +6,19 @@ export const getUser = async (id: number) => {
   return api.get(`users/${id}`)
 }
 
-export const getUserMe = async () => {
-  return api.get(`user/me`)
+export function useFetchUserMe() {
+  return useQuery<User>({
+    queryKey: ["userMe"],
+    queryFn: async () => {
+      const response = await api.get(`user/me`)
+      if (response.status !== 200) {
+        throw new Error("Something went wrong with the request (getUserById)")
+      }
+
+      return response.data
+    },
+    enabled: false,
+  })
 }
 
 export const updateUser = async (
@@ -16,9 +27,14 @@ export const updateUser = async (
     firstname?: string
     lastname?: string
     email?: string
+    image?: string
   }
 ) => {
-  return api.patch(`users/${id}`, data)
+  return api.patch(`users/${id}`, data, {
+    headers: {
+      "Content-Type": "application/merge-patch+json",
+    },
+  })
 }
 
 export function useFetchUserById(id?: number) {

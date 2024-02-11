@@ -12,6 +12,19 @@ const Header = () => {
   const auth = useAuth()
   const navigate = useNavigate()
 
+  const UserAvatar = ({ email, image }: { email: string; image: string | null }) => {
+    const placeholderImage = `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${email}`
+
+    const finalImage = image ? `${import.meta.env.VITE_API_URL_PUBLIC}${image}` : placeholderImage
+
+    return (
+      <Avatar>
+        <AvatarImage src={finalImage} className="w-10 rounded object-cover" />
+        <AvatarFallback>{email[0].toUpperCase()}</AvatarFallback>
+      </Avatar>
+    )
+  }
+
   return (
     <header className="flex px-8 py-4 items-center justify-between sticky top-0 bg-background drop-shadow-md z-50 h-18">
       <h1>
@@ -43,10 +56,7 @@ const Header = () => {
           <ModeToggle />
           <Popover>
             <PopoverTrigger>
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" className="w-10 rounded" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <UserAvatar email={auth.user?.email ?? ""} image={auth.user?.image?.contentUrl ?? null} />
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-3">
               <Button variant={"outline"} onClick={() => navigate("/user/profile")}>
@@ -55,12 +65,16 @@ const Header = () => {
               <Button variant={"outline"} onClick={() => navigate("/user/planning")}>
                 {t("header.cta.planning")}
               </Button>
-              <Button variant={"outline"} onClick={() => navigate("/admin")}>
-                {t("header.cta.admin")}
-              </Button>
-              <Button variant={"outline"} onClick={() => navigate("/provider")}>
-                {t("header.cta.provider")}
-              </Button>
+              {auth.user?.roles?.includes("ROLE_ADMIN") && (
+                <Button variant={"outline"} onClick={() => navigate("/admin")}>
+                  {t("header.cta.admin")}
+                </Button>
+              )}
+              {auth.user?.roles?.includes("ROLE_PROVIDER") && (
+                <Button variant={"outline"} onClick={() => navigate("/provider")}>
+                  {t("header.cta.provider")}
+                </Button>
+              )}
               <Button
                 variant={"destructive"}
                 onClick={() => {
