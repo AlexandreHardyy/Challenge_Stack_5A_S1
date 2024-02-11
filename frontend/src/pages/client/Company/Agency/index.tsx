@@ -3,9 +3,10 @@ import styles from "@/styles/CompanyClient.module.css"
 import { Ratings } from "@/components/ratings"
 import { useTranslation } from "react-i18next"
 import { ServiceList } from "./service-list"
-import { Map } from "./map"
 import { InstructorsList } from "./instructors-list"
 import { useFetchAgencyById } from "@/services/agency.service"
+import { MultipleAgenciesMap } from "@/components/maps/multiple-agencies-map"
+import { buildAgencyMarkers } from "@/components/maps/utils"
 
 function AgencyClient() {
   const { agencyId } = useParams()
@@ -84,7 +85,9 @@ function AgencyClient() {
           </p>
         </div>
         <div className="h-[530px] bg-secondary rounded-[8px]">
-          {agencyRequest.data && <Map geoloc={agencyRequest.data.geoloc} />}
+          {agencyRequest.data && (
+            <MultipleAgenciesMap markersWIthCoordinates={buildAgencyMarkers([agencyRequest.data])} />
+          )}
         </div>
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0 flex flex-col gap-[17px]">

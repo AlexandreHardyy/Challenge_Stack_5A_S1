@@ -1,25 +1,15 @@
 import { useParams } from "react-router-dom"
 import styles from "@/styles/CompanyClient.module.css"
-import { AgencyList } from "./driving-school-list"
+import { AgencyList } from "./agency-list"
 import { useFetchCompany } from "@/services/company.service"
 import { Agency } from "@/utils/types"
 import { Ratings } from "@/components/ratings"
 import { useTranslation } from "react-i18next"
 import { useState } from "react"
-import { Map } from "./map"
 import AgencySearchBar from "./agency-search-bar"
-
-function scrollToAgency(agencyId: number) {
-  const agencyDiv = document.getElementById(`agency-${agencyId}`)
-  const scrollDiv = document.getElementById("scroll-div")
-
-  if (agencyDiv && scrollDiv) {
-    scrollDiv.scrollTo({
-      top: agencyDiv.offsetTop - scrollDiv.offsetTop,
-      behavior: "smooth",
-    })
-  }
-}
+import { MultipleAgenciesMap } from "@/components/maps/multiple-agencies-map"
+import "./map.css"
+import { buildAgencyMarkers } from "@/components/maps/utils"
 
 function CompanyClient() {
   const { companyId } = useParams()
@@ -92,7 +82,19 @@ function CompanyClient() {
               <AgencyList agencies={filteredAgencies ?? companyRequest.data?.agencies} />
               <div className="bg-background grow rounded-[8px]">
                 {companyRequest.data && (
-                  <Map agencies={filteredAgencies ?? companyRequest.data.agencies} onClickMarker={scrollToAgency} />
+                  <MultipleAgenciesMap
+                    markersWIthCoordinates={buildAgencyMarkers(
+                      companyRequest.data.agencies.map((agency) => {
+                        return {
+                          ...agency,
+                          company: {
+                            ...agency.company,
+                            id: parseInt(companyId ?? ""),
+                          },
+                        }
+                      })
+                    )}
+                  />
                 )}
               </div>
             </div>
