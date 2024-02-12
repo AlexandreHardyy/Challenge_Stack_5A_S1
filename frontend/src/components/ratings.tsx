@@ -5,13 +5,13 @@ import { Rating } from "react-simple-star-rating"
 export function Ratings({ ratings }: { ratings: Agency }) {
   const { t } = useTranslation()
 
-  const sessionsWithRatings = ratings.sessions.filter((session) => session.ratingService)
+  const sessionsWithRatings = ratings.sessions?.filter((session) => session.ratingService)
 
   return (
     <div className="flex flex-col gap-[17px]">
       <h2 className="text-[32px] font-bold ">{t("ratingsComponent.ratings")}</h2>
       <div className="flex flex-col gap-[20px]">
-        {sessionsWithRatings.map((session) => {
+        {sessionsWithRatings?.map((session) => {
           return (
             <div key={session.id} className="flex flex-col gap-[10px] p-[20px] bg-secondary rounded-[8px]">
               <h3 className="text-[20px] font-bold ">Anonyme</h3>
