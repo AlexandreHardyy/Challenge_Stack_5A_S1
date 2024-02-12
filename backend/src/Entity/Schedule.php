@@ -61,7 +61,7 @@ class Schedule
     private ?User $employee = null;
 
     #[ORM\OneToMany(mappedBy: 'schedule', targetEntity: ScheduleException::class)]
-    #[Groups(['schedule_exceptions:read', 'employee:read'])]
+    #[Groups(['schedule_exceptions:read', 'employee:read', 'agency-group-read'])]
     private Collection $scheduleExceptions;
 
     public function __construct()

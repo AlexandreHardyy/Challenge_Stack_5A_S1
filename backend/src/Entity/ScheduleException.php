@@ -49,11 +49,11 @@ class ScheduleException
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['schedule_exceptions:read', 'employee:read'])]
+    #[Groups(['schedule_exceptions:read', 'employee:read', 'agency-group-read'])]
     private ?int $startHour = null;
 
     #[ORM\Column]
-    #[Groups(['schedule_exceptions:read', 'employee:read'])]
+    #[Groups(['schedule_exceptions:read', 'employee:read', 'agency-group-read'])]
     private ?int $endHour = null;
 
     #[ORM\ManyToOne(inversedBy: 'scheduleExceptions')]
@@ -61,7 +61,7 @@ class ScheduleException
     private ?Schedule $schedule = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['schedule-exception-validation', 'schedule_exceptions:read', 'employee:read'])]
+    #[Groups(['schedule-exception-validation', 'schedule_exceptions:read', 'employee:read', 'agency-group-read'])]
     private ?string $status = null;
 
     public function getId(): ?int

@@ -91,7 +91,7 @@ class Agency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company-group-read', 'agency-group-read', 'session-group-read-collection'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'session-group-read-collection', 'employee:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -147,7 +147,7 @@ class Agency
     
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Session::class, orphanRemoval: true)]
     #[MaxDepth(1)]
-    #[Groups(['session-group-read-collection', 'agency-group-read'])]
+    #[Groups(['session-group-read-collection'])]
     private Collection $sessions;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: MediaObject::class)]
