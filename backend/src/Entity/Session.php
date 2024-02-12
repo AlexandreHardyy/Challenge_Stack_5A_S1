@@ -92,6 +92,10 @@ class Session
     #[Groups(['session-group-read', 'employee:read', 'student:read'])]
     private ?RatingService $ratingService = null;
 
+    #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
+    #[Groups(['session-group-read', 'student:read'])]
+    private ?FeedBack $feedBack = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -293,6 +297,28 @@ class Session
         }
 
         $this->ratingService = $ratingService;
+
+        return $this;
+    }
+
+    public function getFeedBack(): ?FeedBack
+    {
+        return $this->feedBack;
+    }
+
+    public function setFeedBack(?FeedBack $feedBack): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($feedBack === null && $this->feedBack !== null) {
+            $this->feedBack->setSession(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($feedBack !== null && $feedBack->getSession() !== $this) {
+            $feedBack->setSession($this);
+        }
+
+        $this->feedBack = $feedBack;
 
         return $this;
     }

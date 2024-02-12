@@ -2,9 +2,10 @@ import FullCalendar from "@fullcalendar/react"
 import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import { Session, Student } from "@/utils/types"
+import { useEffect } from "react"
 
 type StudentCalendarProps = {
-  setSelectedSession: (session: Session) => void
+  setSelectedSession: (session?: Session) => void
   student: Student
 }
 
@@ -21,6 +22,10 @@ function StudentCalendar({ setSelectedSession, student }: StudentCalendarProps) 
     }) ?? []
 
   const events = [...sessionEvents]
+
+  useEffect(() => {
+    setSelectedSession(undefined)
+  }, [student])
 
   return (
     <div className="grow">

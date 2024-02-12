@@ -14,7 +14,6 @@ export function useFetchSessions(queryParams?: useFetchSessionsQueryParams) {
   const formatedQueryParams = formatQueryParams(queryParams)
   const url = `sessions${formatedQueryParams}`
 
-  console.log("queryParams", queryParams)
   ///////////
 
   // if (!agencyId || !serviceId) {

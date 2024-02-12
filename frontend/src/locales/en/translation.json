@@ -42,6 +42,18 @@
       "cancel": "Cancel"
     }
   },
+  "feedBackInfo": {
+    "cta": {
+      "addtionalFeedBack": "Send additionnal feedback",
+      "sendFeedBack": "Send feedback"
+    },
+    "toast": {
+      "title": "Feedback",
+      "success": "Feedback successfully sent",
+      "error": "An error has occurred. Please try again later."
+    },
+    "placeholderQuestion": "Answer question ..."
+  },
   "searchClient": {
     "form": {
       "categoryToggle": "Category",
