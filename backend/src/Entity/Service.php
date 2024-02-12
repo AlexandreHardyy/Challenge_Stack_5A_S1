@@ -20,38 +20,38 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get(
-            security: "is_granted('ROLE_USER')",
             openapi: new Operation(
                 tags: ['Service'],
                 summary: 'Returns a service of an agency',
                 description: 'Returns a single service of an agency by providing the agencyId and the serviceId'
-            )
+            ),
+            security: "is_granted('ROLE_USER')"
         ),
         new Post(
-            security: "is_granted('SERVICE_CREATE', object)",
-            denormalizationContext: ['groups' => 'create-service'],
             openapi: new Operation(
                 tags: ['Service'],
                 summary: 'new service',
                 description: 'Create a new service for a company'
-            )
+            ),
+            denormalizationContext: ['groups' => 'create-service'],
+            security: "is_granted('SERVICE_CREATE', object)"
         ),
         new Patch(
-            security: "is_granted('SERVICE_EDIT', object)",
-            denormalizationContext: ['groups' => 'create-service'],
             openapi: new Operation(
                 tags: ['Service'],
                 summary: 'new service',
                 description: 'Create a new service for a company'
-            )
+            ),
+            denormalizationContext: ['groups' => 'create-service'],
+            security: "is_granted('SERVICE_EDIT', object)"
         ),
         new Delete(
-            security: "is_granted('SERVICE_EDIT', object)",
             openapi: new Operation(
                 tags: ['Service'],
                 summary: 'delete service',
                 description: 'Delete a service'
-            )
+            ),
+            security: "is_granted('SERVICE_EDIT', object)"
         )
     ]
 )]

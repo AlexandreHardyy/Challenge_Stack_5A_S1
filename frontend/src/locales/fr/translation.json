@@ -22,7 +22,8 @@
         "planning": "Mon planning",
         "services": "Mes services",
         "scheduleExceptions": "Demande de repos",
-        "feedBackBuilders": "Construire form retour"
+        "feedBackBuilders": "Construire form retour",
+        "history": "Historique de reservation"
       }
     },
     "sideAdminHeader": {
@@ -43,12 +44,12 @@
   },
   "searchClient": {
     "form": {
-      "categoryToggle": "Categorie",
+      "categoryToggle": "Catégorie",
       "locationToggle": "Localisation",
       "nameInput": "Nom",
-      "nameInputPlaceholder": "Le nom de l'agence ou de la companie",
-      "categoryInput": "Categorie",
-      "categoryInputPlaceholder": "Categorie de service",
+      "nameInputPlaceholder": "Le nom de l'agence ou de la société",
+      "categoryInput": "Catégorie",
+      "categoryInputPlaceholder": "Catégorie de service",
       "addressInput": "Adresse",
       "addressInputPlaceholder": "Entrez une adresse",
       "cityInput": "Ville",
@@ -403,17 +404,7 @@
           "toastErrorTitle": "Une erreur est survenue !",
           "toastErrorDescription": "Une erreur est survenue durant l'annulation de cette session."
         }
-      },
-      "form": {
-        "schedule": "Créneau",
-        "start": "début",
-        "end": "fin",
-        "cta": {
-          "new": "Demander repos"
-        }
-      },
-      "titleBreak": "Demande de repos",
-      "ask": "Demande"
+      }
     }
   },
   "admin": {

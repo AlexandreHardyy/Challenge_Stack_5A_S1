@@ -13,6 +13,7 @@ import {
   LogOutIcon,
   UserCircle2Icon,
   Users2Icon,
+  History,
 } from "lucide-react"
 import { useAuth } from "@/context/AuthContext"
 
@@ -89,6 +90,14 @@ const SideHeader = () => {
       content: (
         <>
           <FactoryIcon /> {t("header.sideHeader.menu.feedBackBuilders")}
+        </>
+      ),
+    },
+    {
+      href: "/provider/history",
+      content: (
+        <>
+          <History /> {t("header.sideHeader.menu.history")}
         </>
       ),
     },

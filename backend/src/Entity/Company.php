@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\CompanyRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -21,23 +22,22 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['company-group-read', 'read-media_object'], 'enable_max_depth' => true],
     operations: [
         new GetCollection(
-            security: "is_granted('ROLE_USER')",
             openapi: new Operation(
                 tags: ['Company'],
                 summary: 'Return companies',
                 description: 'Return all companies'
-            )
+            ),
+            security: "is_granted('ROLE_USER')"
         ),
         new Get(
-            security: "is_granted('ROLE_USER')",
             openapi: new Operation(
                 tags: ['Company'],
                 summary: 'Return one company',
                 description: 'Return one company by Id'
-            )
+            ),
+            security: "is_granted('ROLE_USER')"
         ),
         new Post(
             openapi: new Operation(
@@ -47,24 +47,24 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         ),
         new Delete(
-            security: "is_granted('ROLE_ADMIN')",
             openapi: new Operation(
                 tags: ['Company'],
                 summary: 'Delete company',
                 description: 'Delete a company by id'
-            )
+            ),
+            security: "is_granted('ROLE_ADMIN')"
         ),
         new Patch(
-            security: "is_granted('COMPANY_EDIT', object)",
-            denormalizationContext: ['groups' => ['update-company']],
-            
             openapi: new Operation(
                 tags: ['Company'],
                 summary: 'Update company',
                 description: 'Update a company by id'
-            )
+            ),
+            denormalizationContext: ['groups' => ['update-company']],
+            security: "is_granted('COMPANY_EDIT', object)",
         )
-    ]
+    ],
+    normalizationContext: ['groups' => ['company-group-read', 'read-media_object'], 'enable_max_depth' => true],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['socialReason' => 'partial', 'categories.name' => 'partial'])]
 class Company
@@ -101,11 +101,11 @@ class Company
 
     #[ORM\Column]
     #[Groups(['company-group-read'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
     #[Groups(['company-group-read'])]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Agency::class, orphanRemoval: true)]
     #[Groups(['company-group-read'])]
@@ -204,24 +204,24 @@ class Company
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 

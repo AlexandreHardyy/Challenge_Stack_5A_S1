@@ -22,6 +22,7 @@ import NewProvider from "@/pages/provider/NewProvider.tsx"
 import ProfileClient from "@/pages/client/User/ProfileClient.tsx"
 import EmployeePlanning from "@/pages/provider/employee-planning"
 import Search from "@/pages/client/Search"
+import ProviderHistory from "@/pages/provider/History"
 import Users from "@/pages/admin/Users"
 import Companies from "@/pages/admin/companies"
 import Services from "@/pages/provider/services"
@@ -179,11 +180,36 @@ const Routes = () => {
               path: "feedback-builders",
               element: <FeedBackBuilders />,
             },
+            {
+              path: "history",
+              element: <ProviderHistory />,
+            },
           ],
           errorElement: <NotFound />,
         },
         {
-          element: <AdminLayout />,
+          path: "/provider/employee",
+          element: <Employees />,
+        },
+        {
+          path: "/provider/employee/:userId",
+          element: <HandleEmployee />,
+        },
+        {
+          path: "/provider/agency",
+          element: <Agencies />,
+        },
+        {
+          path: "/provider/planning",
+          element: <EmployeePlanning />,
+        },
+      ],
+      errorElement: <NotFound />,
+    },
+    {
+      element: <AdminLayout />,
+      children: [
+        {
           path: "/admin",
           children: [
             {

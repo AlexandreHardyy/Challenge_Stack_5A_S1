@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Controller\AddSchedule;
 use App\Repository\ScheduleRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -18,16 +19,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
-            security: "is_granted('ROLE_PROVIDER')",
-            name: 'schedules', 
-            uriTemplate: '/schedules', 
+            uriTemplate: '/schedules',
             controller: AddSchedule::class,
-            input: ScheduleInput::class,
             openapi: new Operation(
                 tags: [ 'Schedule' ],
                 summary: 'Add multiple schedules',
                 description: 'Add schedule for every day in a dateRange'
-            )
+            ),
+            security: "is_granted('ROLE_PROVIDER')",
+            input: ScheduleInput::class,
+            name: 'schedules'
         )
     ]
 )]
@@ -74,12 +75,12 @@ class Schedule
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(DateTimeInterface $date): static
     {
         $this->date = $date;
 

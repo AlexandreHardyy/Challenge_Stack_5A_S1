@@ -18,12 +18,18 @@ final class CurrentUserExtension implements QueryItemExtensionInterface
 
     public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, Operation $operation = null, array $context = []): void
     {
-        $this->addWhere($queryBuilder, $resourceClass, $context);
+        $this->addWhere($queryBuilder, $resourceClass, $context, $operation);
     }
 
-    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass, array $context): void
+    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass, array $context, Operation $operation): void
     {
-        if ($context["request_uri"] != "/api/user/me" || User::class !== $resourceClass ||  null === $user = $this->security->getUser()) {
+        $user = $this->security->getUser();
+
+        if (
+            $operation->getName() !== 'get_me'
+            || User::class !== $resourceClass
+            || !$user instanceof User
+        ) {
             return;
         }
 

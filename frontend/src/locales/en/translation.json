@@ -23,7 +23,8 @@
         "planning": "My planning",
         "services": "My services",
         "scheduleExceptions": "Schedule exceptions asked",
-        "feedBackBuilders": "Build Feedback form"
+        "feedBackBuilders": "Build Feedback form",
+        "history": "Reservation's history"
       }
     },
     "sideAdminHeader": {
@@ -404,17 +405,7 @@
           "toastErrorTitle": "An error occurred !",
           "toastErrorDescription": "An error occurred during your session cancellation."
         }
-      },
-      "form": {
-        "schedule": "Schedule",
-        "start": "start",
-        "end": "end",
-        "cta": {
-          "new": "Ask for break"
-        }
-      },
-      "titleBreak": "Request breaks",
-      "ask": "Request"
+      }
     }
   },
   "admin": {
