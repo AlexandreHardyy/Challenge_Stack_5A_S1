@@ -2,10 +2,6 @@ import api from "@/utils/api.ts"
 import { User } from "@/utils/types"
 import { useQuery } from "@tanstack/react-query"
 
-export const getUser = async (id: number) => {
-  return api.get(`users/${id}`)
-}
-
 export function useFetchUserMe() {
   return useQuery<User>({
     queryKey: ["userMe"],
@@ -18,22 +14,6 @@ export function useFetchUserMe() {
       return response.data
     },
     enabled: false,
-  })
-}
-
-export const updateUser = async (
-  id: number,
-  data: {
-    firstname?: string
-    lastname?: string
-    email?: string
-    image?: string
-  }
-) => {
-  return api.patch(`users/${id}`, data, {
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-    },
   })
 }
 
@@ -100,12 +80,13 @@ export const addNewEmployee = async (companyId: number | undefined, body: Employ
 }
 
 type UserForm = {
-  firstname: string
-  lastname: string
-  email: string
-  roles: string[]
-  isVerified: boolean
+  firstname?: string
+  lastname?: string
+  email?: string
+  roles?: string[]
+  isVerified?: boolean
   updatedAt?: string
+  image?: string
 }
 
 export const addNewUser = async (body: UserForm) => {

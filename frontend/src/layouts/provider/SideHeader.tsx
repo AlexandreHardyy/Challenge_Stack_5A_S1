@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button.tsx"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { ModeToggle } from "@/components/Mode-toggle.tsx"
 import { useTranslation } from "react-i18next"
 import {
@@ -14,10 +14,13 @@ import {
   UserCircle2Icon,
   Users2Icon,
 } from "lucide-react"
+import { useAuth } from "@/context/AuthContext.tsx"
 
 const SideHeader = () => {
   const { t } = useTranslation()
   const { pathname } = useLocation()
+  const auth = useAuth()
+  const navigate = useNavigate()
 
   const links = [
     {
@@ -108,7 +111,7 @@ const SideHeader = () => {
       <div className="flex flex-col gap-4">
         <div className="flex gap-2">
           <Button asChild variant="secondary" className="flex gap-2 px-4 flex-1">
-            <Link to="/profile">
+            <Link to="/user/profile">
               {" "}
               <UserCircle2Icon /> {t("header.cta.profile")}
             </Link>
@@ -116,11 +119,17 @@ const SideHeader = () => {
           <ModeToggle className="self-center" />
         </div>
 
-        <Button asChild variant="destructive" className="flex gap-2 px-4">
-          <Link to="/logout">
-            {" "}
+        <Button
+          onClick={() => {
+            auth.setToken(null)
+            navigate("/", { replace: true })
+          }}
+          variant="destructive"
+          className="flex gap-2 px-4"
+        >
+          <>
             <LogOutIcon /> {t("header.cta.logOut")}
-          </Link>
+          </>
         </Button>
       </div>
     </header>

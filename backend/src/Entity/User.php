@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         new Get(normalizationContext: ['groups' => ['read-user', 'employee:read', 'read-media_object'], 'enable_max_depth' => true],
                 security: "is_granted('USER_VIEW', object)"),
         new Post(denormalizationContext: ['groups' => ['create-user']]),
-        new Patch(denormalizationContext: ['groups' => ['update-user']])
+        new Patch(denormalizationContext: ['groups' => ['update-user']],  security: "is_granted('USER_EDIT', object)")
     ],
     normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true],
 )]

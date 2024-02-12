@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext.tsx"
 import { useTranslation } from "react-i18next"
 import { useEffect, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { updateUser } from "@/services/user/user.service.ts"
+import { updateUserById } from "@/services/user/user.service.ts"
 import { Alert, AlertTitle } from "@/components/ui/alert.tsx"
 import { AlertCircle, Loader2 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
@@ -55,7 +55,7 @@ const ProfileClient = () => {
 
   const updateProfile = useMutation({
     mutationFn: (newUser: { email?: string; firstname?: string; lastname?: string; image?: string }) => {
-      return updateUser(user?.id ?? 0, newUser)
+      return updateUserById(user?.id ?? 0, newUser)
     },
   })
 
