@@ -115,7 +115,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     operations: [
         new Get(
             normalizationContext: [
-                'groups' => ['read-user', 'employee:read', 'read-media_object'],
+                'groups' => ['read-user', 'read-media_object'],
                 'enable_max_depth' => true,
             ],
             security: "is_granted('USER_VIEW', object)"
@@ -183,6 +183,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]
+    #[MaxDepth(1)]
     #[Groups(['employee:read', 'update-employee'])]
     private Collection $agencies;
 
