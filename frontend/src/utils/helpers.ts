@@ -2,6 +2,11 @@ import { DateTime } from "luxon"
 
 const MINUTES_IN_ONE_HOUR = 60
 
+export const BEGINNING_HOUR = 8
+export const BEGINNING_MINUTE = 0
+export const END_HOUR = 21
+export const END_MINUTE = 0
+
 export function computeServiceDuration(duration: number) {
   if (duration < MINUTES_IN_ONE_HOUR) {
     return `${duration}min`
