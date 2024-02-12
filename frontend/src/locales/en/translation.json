@@ -9,6 +9,7 @@
       "signIn": "Sign in",
       "signUp": "Sign up",
       "logOut": "Log out",
+      "planning": "My planning",
       "profile": "My profile",
       "admin": "Admin",
       "provider": "Provider"
@@ -20,7 +21,9 @@
         "employees": "My employees",
         "agencies": "My agencies",
         "planning": "My planning",
-        "services": "My services"
+        "services": "My services",
+        "scheduleExceptions": "Schedule exceptions asked",
+        "feedBackBuilders": "Build Feedback form"
       }
     },
     "sideAdminHeader": {
@@ -48,7 +51,7 @@
       "categoryInput": "Category",
       "categoryInputPlaceholder": "Category of service",
       "addressInput": "Address",
-      "addressInputPlaceholder": "Enter a streat name",
+      "addressInputPlaceholder": "Enter a street name",
       "cityInput": "City",
       "cityInputPlaceholder": "Enter a city name",
       "zipInput": "Zip code",
@@ -57,7 +60,7 @@
     },
     "list": {
       "loading": "Loading...",
-      "error": "An error occured",
+      "error": "An error occurred",
       "noData": "No data",
       "companyCard": {
         "email": "email",
@@ -133,7 +136,12 @@
       "loginOrPassword": "Login or password is incorrect",
       "errorAccountCreation": "An error has occurred during account creation. Please try again later.",
       "forgotPassword": "Forgot password",
-      "fetchingError": "An error has occurred. Please try again later."
+      "resetPassword": "Reset password",
+      "fetchingError": "An error has occurred. Please try again later.",
+      "sendMeEmail": "Send me an email",
+      "ResetMyPassword": "Reset my password",
+      "passwordResetSuccess": "Your password has been reset successfully.",
+      "uploadImage": "Upload new image"
     },
     "cta": {
       "update": "Update",
@@ -229,6 +237,44 @@
       }
     }
   },
+  "ProviderFeedBackBuilders": {
+    "title": "Feedback Builders",
+    "form": {
+      "title": "Title",
+      "isSelected": "Selected",
+      "questions": "Questions",
+      "yourFeedbackBuilder": "Your feedback builder",
+      "cta": {
+        "addQuestion": "Add new question",
+        "new": "Add new feedback builder",
+        "update": "Update feedback builder"
+      },
+      "toast": {
+        "title": "Feedback Builder",
+        "successCreate": "feedback builder created successfully",
+        "successUpdate": "feedback builder updated successfully",
+        "successDelete": "feedback builder delete successfully",
+        "error": "an error occurred while updating"
+      }
+    }
+  },
+  "ProviderEmployee": {
+    "title": "Your Employees",
+    "form": {
+      "agencies": "Agencies",
+      "cta": {
+        "addEmployee": "Add new employee",
+        "updateEmployee": "Update employee"
+      },
+      "toast": {
+        "title": "Employee",
+        "successCreate": "Employee created successfully",
+        "successUpdate": "Employee updated successfully",
+        "successDelete": "Employee deleted successfully",
+        "error": "an error occurred while updating"
+      }
+    }
+  },
   "providerService": {
     "title": "My services",
     "form": {
@@ -273,27 +319,56 @@
       }
     },
     "toast": {
-      "title": "Agence",
+      "title": "Schedule",
       "successUpdate": "Employee schedule has been updated successfully",
+      "successCreateException": "Break-time request sent successfully",
       "error": "An error occurred while updating employee schedule"
     }
   },
+  "sessionTable" : {
+    "student": "Student",
+    "instructor": "Instructor",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "service": "Service",
+    "price": "Price"
+  },
   "provider": {
-    "homeProvider": {
+    "dashboard": {
       "selectAgencyPlaceholder": "Select an agency",
       "selectAgencyAll": "All agencies",
       "dashboard": "Dashboard",
       "cards": {
-        "totalRevenue": "Total revenue",
-        "subscriptions": "Subscriptions",
-        "sales": "Sales"
+        "totalRevenue": {
+          "title": "Total Revenue",
+          "subtitle": "Global revenue"
+        },
+        "sessionsNumber": {
+          "title": "Session number",
+          "subtitle": "Total number of sessions"
+        },
+        "sessionsHours": {
+          "title": "Session hours",
+          "subtitle": "Total number of hours"
+        },
+        "sessionsStudents": {
+          "title": "Session students",
+          "subtitle": "Total number of students"
+        }
       },
+      "revenueOverview" : "Revenue Overview",
       "yourServices": {
         "title": "All Your services",
         "subtitle_zero": "You don't have any service yet",
         "subtitle_one": "You have 1 service",
         "subtitle_other": "You have {{count}} services",
-        "noServices": "No services yet"
+        "noServices": "No services yet",
+        "tooltip": "Most sold service",
+        "drawer": {
+          "title": "Future sessions",
+          "description": "Future sessions for : {{agencyName}}",
+          "noSessions": "No future sessions for this agency"
+        }
       },
       "toast": {
         "error": "Something went wrong with the request (getCompany). Please try again later."
@@ -306,15 +381,18 @@
         "noSessionSelected": "Select a session to see more infos",
         "agency": "Agency",
         "studentDetails": "Student details",
+        "instructorDetails": "Instructor details",
         "firstname": "Firstname",
         "lastname": "Lastname",
         "mail": "Mail",
         "studentMark": "Student mark",
         "noInfo": "No info",
         "rateInput": "Enter a mark for the student",
+        "rateProvider": "Let a review for the provider",
+        "alreadyRated": "You have already rated this session",
         "evaluate": "Evaluate",
         "studentMarkToast": {
-          "toastSuccessTitle": "Mark sended !",
+          "toastSuccessTitle": "Mark sent !",
           "toastSuccessDescription": "Your notation has been sent",
           "toastErrorTitle": "An error occurred !",
           "toastErrorDescription": "An error occurred during the notation of your student."
@@ -326,10 +404,60 @@
           "toastErrorTitle": "An error occurred !",
           "toastErrorDescription": "An error occurred during your session cancellation."
         }
-      }
+      },
+      "form": {
+        "schedule": "Schedule",
+        "start": "start",
+        "end": "end",
+        "cta": {
+          "new": "Ask for break"
+        }
+      },
+      "titleBreak": "Request breaks",
+      "ask": "Request"
     }
   },
   "admin": {
+    "dashboard": {
+      "selectCompanyPlaceholder": "Select an company",
+      "selectCompanyAll": "All companies",
+      "dashboard": "Dashboard",
+      "cards": {
+        "totalEmployees": {
+          "title": "Total Employees",
+          "subtitle": "Global number of employees"
+        },
+        "sessionsNumber": {
+          "title": "Session number",
+          "subtitle": "Total number of sessions"
+        },
+        "sessionsHours": {
+          "title": "Session hours",
+          "subtitle": "Total number of hours"
+        },
+        "sessionsStudents": {
+          "title": "Session students",
+          "subtitle": "Total number of students"
+        }
+      },
+      "revenueOverview" : "Revenue Overview",
+      "yourAgencies": {
+        "title": "All Your agencies",
+        "subtitle_zero": "You don't have any agency yet",
+        "subtitle_one": "You have 1 agency",
+        "subtitle_other": "You have {{count}} agencies",
+        "noServices": "No agencies yet",
+        "tooltip": "Most sold agency",
+        "drawer": {
+          "title": "Future sessions",
+          "description": "Future sessions for : {{companyName}}",
+          "noSessions": "No future sessions for this company"
+        }
+      },
+      "toast": {
+        "error": "Something went wrong with the request (getCompany). Please try again later."
+      }
+    },
     "users": {
       "title": "All users",
       "table": {
@@ -385,6 +513,11 @@
         "createdAt": "Created at",
         "updatedAt": "Updated at",
         "actions": "Actions",
+        "companyDetails": {
+          "mainInformations": "Main informations",
+          "agenciesList": "Agencies List",
+          "employeesList": "Employees List"
+        },
         "errors": {
           "socialReason": "socialReason must be at least 2 characters.",
           "phoneNumber": "Phone number must be in a valid format (ex: +33 0 00 00 00 00 or 00 00 00 00 00).",

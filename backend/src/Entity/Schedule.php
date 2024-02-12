@@ -40,7 +40,7 @@ class Schedule
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['agency-group-read', 'employee:read'])]
+    #[Groups(['agency-group-read', 'employee:read', 'schedule_exceptions:read'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column]
@@ -61,6 +61,7 @@ class Schedule
     private ?User $employee = null;
 
     #[ORM\OneToMany(mappedBy: 'schedule', targetEntity: ScheduleException::class)]
+    #[Groups(['schedule_exceptions:read', 'employee:read', 'agency-group-read'])]
     private Collection $scheduleExceptions;
 
     public function __construct()

@@ -9,6 +9,8 @@ export interface Company {
   isVerified: boolean
   createdAt: string
   updatedAt: string
+  users: Pick<Employee, "id" | "firstname" | "lastname" | "email">[]
+  image?: MediaObject
 }
 
 export interface Agency {
@@ -27,6 +29,8 @@ export interface Agency {
   geoloc: [string, string]
   users?: Pick<Employee, "id" | "firstname" | "lastname">[]
   schedules: Schedule[]
+  sessions: Session[]
+  image?: MediaObject[]
 }
 
 export interface Category {
@@ -58,21 +62,23 @@ export interface User {
   updatedAt: string
   agencies?: Agency[]
   company?: Company
-  instructorSessions?: Session[]
+  image?: MediaObject
 }
 
 export interface Student extends User {
   studentMarks?: number
+  studentSessions?: Session[]
 }
 
 export interface Employee extends User {
   agencies?: Agency[]
   company?: Company
-  instructorSessions: Session[]
+  instructorSessions?: Session[]
   schedules: Schedule[]
 }
 
 export interface Session {
+  "@id": string
   id: number
   student: Student
   instructor: User
@@ -82,6 +88,7 @@ export interface Session {
   agency: Agency
   status: string
   studentMark?: number
+  ratingService?: RatingService
 }
 
 export interface Schedule {
@@ -90,4 +97,35 @@ export interface Schedule {
   startHour: number
   endHour: number
   employee: Pick<Employee, "id" | "firstname" | "lastname">
+  scheduleExceptions: ScheduleException[]
+}
+
+export interface ScheduleException {
+  firstname?: string
+  lastname?: string
+  date?: Date
+  id: number
+  startHour: number
+  endHour: number
+  status: string
+}
+
+export interface RatingService {
+  id: number
+  rating: number
+  comment: string
+  session: Session
+  user: User
+}
+
+export interface MediaObject {
+  "@id": string
+  id: number
+  contentUrl: string
+}
+export interface FeedBackBuilder {
+  id: number
+  title: string
+  isSelected?: boolean
+  questions: string[]
 }

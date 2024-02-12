@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     security: "is_granted('ROLE_USER')",
     operations: [
         new Get(
-            normalizationContext:['groups' => ['agency-group-read']],
+            normalizationContext:['groups' => ['agency-group-read'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Returns agency by Id',
@@ -65,7 +65,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
                 description: 'delete an agency'
             )
         )
-    ]
+    ],
+    normalizationContext: ['groups' => ['read-media_object']]
 )]
 #[ApiResource(
     uriTemplate: '/companies/{id}/agencies',
@@ -90,7 +91,7 @@ class Agency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company-group-read', 'agency-group-read'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'session-group-read-collection', 'employee:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -119,7 +120,7 @@ class Agency
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read', 'create-agency', 'read-user'])]
+    #[Groups(['company-group-read', 'agency-group-read', 'create-agency', 'read-user', 'session-group-read-collection'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -136,7 +137,7 @@ class Agency
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'agencies')]
     #[MaxDepth(1)]
-    #[Groups(['agency-group-read'])]
+    #[Groups(['agency-group-read', 'company-group-read'])]
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Schedule::class, orphanRemoval: true)]
@@ -145,7 +146,13 @@ class Agency
     private Collection $schedules;
     
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Session::class, orphanRemoval: true)]
+    #[MaxDepth(1)]
+    #[Groups(['session-group-read-collection', 'employee:read', 'company-group-read'])]
     private Collection $sessions;
+
+    #[ORM\OneToMany(mappedBy: 'agency', targetEntity: MediaObject::class)]
+    #[Groups(['read-media_object'])]
+    private Collection $image;
 
     public function __construct()
     {
@@ -388,6 +395,36 @@ class Agency
             // set the owning side to null (unless already changed)
             if ($session->getAgency() === $this) {
                 $session->setAgency(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MediaObject>
+     */
+    public function getImage(): Collection
+    {
+        return $this->image;
+    }
+
+    public function addImage(MediaObject $image): static
+    {
+        if (!$this->image->contains($image)) {
+            $this->image->add($image);
+            $image->setAgency($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(MediaObject $image): static
+    {
+        if ($this->image->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getAgency() === $this) {
+                $image->setAgency(null);
             }
         }
 

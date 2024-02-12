@@ -5,22 +5,27 @@ import { Agency, Company } from "@/utils/types"
 import { useSearchFiltersContext } from "../search-filters-context"
 import { useTranslation } from "react-i18next"
 import { useFetchCompanies } from "@/services/company.service"
+import { useEffect } from "react"
+
+type CompaniesAgenciesListProps = {
+  setAgenciesDataForMap: (agencies: Agency[]) => void
+}
 
 function buildCards(companiesData?: Company[], agenciesData?: Agency[]) {
   const cards = []
 
   if (companiesData) {
-    cards.push(...companiesData.map((company) => <CompanyCard company={company} key={company.id} />))
+    cards.push(...companiesData.map((company) => <CompanyCard company={company} key={`company-${company.id}`} />))
   }
 
   if (agenciesData) {
-    cards.push(...agenciesData.map((agency) => <AgencyCard agency={agency} key={agency.id} />))
+    cards.push(...agenciesData.map((agency) => <AgencyCard agency={agency} key={`agency-${agency.id}`} />))
   }
 
   return cards
 }
 
-function CompaniesAgenciesList() {
+function CompaniesAgenciesList({ setAgenciesDataForMap }: CompaniesAgenciesListProps) {
   const { t } = useTranslation()
 
   const { filters } = useSearchFiltersContext()
@@ -51,13 +56,17 @@ function CompaniesAgenciesList() {
     true
   )
 
-  const isRequestNotSended =
+  const isRequestNotSent =
     companiesDataStatus === "loading" &&
     agenciesDataStatus === "loading" &&
     !isFetchingCompaniesData &&
     !isFetchingAgenciesData
   const isLoading = isFetchingCompaniesData || isFetchingAgenciesData
   const isError = companiesDataStatus === "error" || agenciesDataStatus === "error"
+
+  useEffect(() => {
+    if (agenciesData && agenciesData.length > 0) setAgenciesDataForMap(agenciesData)
+  }, [agenciesData])
 
   if (isError) {
     return (
@@ -75,7 +84,7 @@ function CompaniesAgenciesList() {
     )
   }
 
-  if (isRequestNotSended || (companiesData?.length === 0 && agenciesData?.length === 0)) {
+  if (isRequestNotSent || (companiesData?.length === 0 && agenciesData?.length === 0)) {
     return (
       <section className="flex flex-col gap-2">
         <p>{t("searchClient.list.noData")}</p>
@@ -84,7 +93,7 @@ function CompaniesAgenciesList() {
   }
 
   return (
-    <section className="flex flex-col gap-2">
+    <section id="search-list" className="flex flex-col gap-2">
       {(companiesData || agenciesData) && buildCards(companiesData, agenciesData)}
     </section>
   )

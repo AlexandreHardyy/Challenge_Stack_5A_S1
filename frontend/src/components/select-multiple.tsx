@@ -40,7 +40,6 @@ export const SelectMultiple = ({ options, defaultData = [], placeholder, onChang
           })
         }
       }
-      // This is not a default behaviour of the <input /> field
       if (e.key === "Escape") {
         input.blur()
       }
@@ -77,7 +76,6 @@ export const SelectMultiple = ({ options, defaultData = [], placeholder, onChang
               </Badge>
             )
           })}
-          {/* Avoid having the "Search" Icon */}
           <CommandPrimitive.Input
             ref={inputRef}
             value={inputValue}

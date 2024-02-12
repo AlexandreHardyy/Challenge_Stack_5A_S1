@@ -23,13 +23,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     paginationEnabled: false,
     operations: [
-        new Post(validationContext: ['groups' => ['session-create']]),
+        new Post(validationContext: ['groups' => ['session-create']], security: "is_granted('ROLE_USER')"),
         new Get(
             normalizationContext: ['groups' => ['session-group-read']],
             security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['session-group-read-collection']]
+            normalizationContext: ['groups' => ['session-group-read-collection'], 'enable_max_depth' => true]
         ),
         new Patch(
             validationContext: ['groups' => ['session-group-update']],
@@ -45,48 +45,52 @@ class Session
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'studentSessions')]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
-    // SECURIDAD
-    #[Groups(['session-group-read', 'employee:read'])]
+    // SECURITY
+    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection'])]
     private ?User $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'instructorSessions')]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
-    #[Groups(['session-group-read', 'session-group-read-collection'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'student:read'])]
     private ?User $instructor = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    // SECUTITY
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read'])]
+    // SECURITY
+    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['session-group-read', 'employee:read'])]
+    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection', 'student:read'])]
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session-group-read', 'session-group-update', 'employee:read'])]
+    #[Groups(['session-group-read', 'session-group-update', 'employee:read', 'student:read'])]
     private ?string $status = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['session-group-update', 'employee:read'])]
     private ?float $studentMark = null;
+
+    #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
+    #[Groups(['session-group-read', 'employee:read', 'student:read'])]
+    private ?RatingService $ratingService = null;
 
     public function getId(): ?int
     {
@@ -218,11 +222,27 @@ class Session
 
         // Check if the employee is working
         $isSessionInSchedule = $this->getInstructor()->getSchedules()->filter(function(Schedule $schedule) use($toCreate){
-            $scheduleStart = clone $schedule->getDate();
-            $scheduleEnd = clone $schedule->getDate();
+            $scheduleDate = $schedule->getDate();
+            $scheduleStart = clone $scheduleDate;
+            $scheduleEnd = clone $scheduleDate;
             date_time_set($scheduleStart, $schedule->getStartHour(), 0);
             date_time_set($scheduleEnd, $schedule->getEndHour(), 0);
 
+            $isSessionInScheduleException = $schedule->getScheduleExceptions()->filter(function(ScheduleException $scheduleException) use($toCreate, $scheduleDate){
+                if ($scheduleException->getStatus() != "VALIDATED") return false;
+
+                $scheduleExceptionStart = clone $scheduleDate;
+                $scheduleExceptionEnd = clone $scheduleDate;
+                date_time_set($scheduleExceptionStart, $scheduleException->getStartHour(), 0);
+                date_time_set($scheduleExceptionEnd, $scheduleException->getEndHour(), 0);
+
+                if ($scheduleExceptionEnd <= $toCreate->getStartDate()) return false;
+                if ($scheduleExceptionStart >= $toCreate->getEndDate()) return false;
+
+                return true;
+            })->count();
+
+            if ($isSessionInScheduleException != 0) return false;
             if ($scheduleStart > $toCreate->getStartDate()) return false;
             if ($scheduleEnd < $toCreate->getEndDate()) return false;
 
@@ -258,5 +278,22 @@ class Session
                 ->atPath('studentMark')
                 ->addViolation();
         }
+    }
+
+    public function getRatingService(): ?RatingService
+    {
+        return $this->ratingService;
+    }
+
+    public function setRatingService(RatingService $ratingService): static
+    {
+        // set the owning side of the relation if necessary
+        if ($ratingService->getSession() !== $this) {
+            $ratingService->setSession($this);
+        }
+
+        $this->ratingService = $ratingService;
+
+        return $this;
     }
 }

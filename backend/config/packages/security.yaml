@@ -31,10 +31,15 @@ security:
 
     role_hierarchy:
         ROLE_ADMIN: [ ROLE_USER, ROLE_ALLOWED_TO_SWITCH ]
+        ROLE_PROVIDER: [ ROLE_USER ]
+        ROLE_EMPLOYEE: [ ROLE_USER ]
         ROLE_USER: [ ]
 
     access_control:
-        - { path: ^/$, roles: PUBLIC_ACCESS }
+        - { path: ^/forgot_password/, roles: ROLE_PUBLIC }
+        - { path: ^/api/login, roles: ROLE_PUBLIC }
+        - { path: ^/api/users/\d+, roles: ROLE_PUBLIC, methods: [POST] }
+        - { path: ^/$, roles: ROLE_USER }
 
 when@test:
     security:

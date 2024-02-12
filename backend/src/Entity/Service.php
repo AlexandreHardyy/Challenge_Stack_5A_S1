@@ -65,7 +65,7 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['agency-group-read', 'categories-group-read', 'read-user', 'create-service'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'read-user', 'create-service', 'session-group-read-collection'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -73,11 +73,11 @@ class Service
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'categories-group-read', 'create-service'])]
+    #[Groups(['agency-group-read', 'categories-group-read', 'create-service', 'session-group-read-collection'])]
     private ?float $duration = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'categories-group-read', 'create-service'])]
+    #[Groups(['agency-group-read', 'company-group-read', 'categories-group-read', 'create-service', 'session-group-read-collection'])]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
@@ -91,10 +91,14 @@ class Service
     #[ORM\OneToMany(mappedBy: 'service', targetEntity: Session::class, orphanRemoval: true)]
     private Collection $sessions;
 
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: RatingService::class)]
+    private Collection $ratingServices;
+
     public function __construct()
     {
         $this->agencies = new ArrayCollection();
         $this->sessions = new ArrayCollection();
+        $this->ratingServices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -210,6 +214,36 @@ class Service
             // set the owning side to null (unless already changed)
             if ($session->getService() === $this) {
                 $session->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RatingService>
+     */
+    public function getRatingServices(): Collection
+    {
+        return $this->ratingServices;
+    }
+
+    public function addRatingService(RatingService $ratingService): static
+    {
+        if (!$this->ratingServices->contains($ratingService)) {
+            $this->ratingServices->add($ratingService);
+            $ratingService->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRatingService(RatingService $ratingService): static
+    {
+        if ($this->ratingServices->removeElement($ratingService)) {
+            // set the owning side to null (unless already changed)
+            if ($ratingService->getService() === $this) {
+                $ratingService->setService(null);
             }
         }
 

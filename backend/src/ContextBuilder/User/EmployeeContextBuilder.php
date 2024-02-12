@@ -27,8 +27,13 @@ class EmployeeContextBuilder implements SerializerContextBuilderInterface
             return $context;
         }
 
+        //@TODO: NEED TO BE MODIFIED
         if ($this->security->isGranted('ROLE_EMPLOYEE') || $this->security->isGranted('ROLE_PROVIDER')) {
             $context['groups'][] = 'employee:read';
+        }
+
+        if ($this->security->isGranted('ROLE_USER')) {
+            $context['groups'][] = 'student:read';
         }
 
         return $context;

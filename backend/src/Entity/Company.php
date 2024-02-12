@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['company-group-read'], 'enable_max_depth' => true],
+    normalizationContext: ['groups' => ['company-group-read', 'read-media_object'], 'enable_max_depth' => true],
     operations: [
         new GetCollection(
             security: "is_granted('ROLE_USER')",
@@ -120,11 +120,23 @@ class Company
     #[Groups(['company-group-read'])]
     private Collection $users;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Groups(['read-media_object', 'update-company'])]
+    private ?MediaObject $image = null;
+
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: FeedBackBuilder::class)]
+    private Collection $feedBackBuilders;
+
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: FeedBack::class)]
+    private Collection $feedBacks;
+
     public function __construct()
     {
         $this->agencies = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->feedBackBuilders = new ArrayCollection();
+        $this->feedBacks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -312,6 +324,77 @@ class Company
             // set the owning side to null (unless already changed)
             if ($user->getCompany() === $this) {
                 $user->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getImage(): ?MediaObject
+    {
+        return $this->image;
+    }
+
+    public function setImage(?MediaObject $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+    /**
+     * @return Collection<int, FeedBackBuilder>
+     */
+    public function getFeedBackBuilders(): Collection
+    {
+        return $this->feedBackBuilders;
+    }
+
+    public function addFeedBackBuilder(FeedBackBuilder $feedBackBuilder): static
+    {
+        if (!$this->feedBackBuilders->contains($feedBackBuilder)) {
+            $this->feedBackBuilders->add($feedBackBuilder);
+            $feedBackBuilder->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedBackBuilder(FeedBackBuilder $feedBackBuilder): static
+    {
+        if ($this->feedBackBuilders->removeElement($feedBackBuilder)) {
+            // set the owning side to null (unless already changed)
+            if ($feedBackBuilder->getCompany() === $this) {
+                $feedBackBuilder->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FeedBack>
+     */
+    public function getFeedBacks(): Collection
+    {
+        return $this->feedBacks;
+    }
+
+    public function addFeedBack(FeedBack $feedBack): static
+    {
+        if (!$this->feedBacks->contains($feedBack)) {
+            $this->feedBacks->add($feedBack);
+            $feedBack->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedBack(FeedBack $feedBack): static
+    {
+        if ($this->feedBacks->removeElement($feedBack)) {
+            // set the owning side to null (unless already changed)
+            if ($feedBack->getCompany() === $this) {
+                $feedBack->setCompany(null);
             }
         }
 

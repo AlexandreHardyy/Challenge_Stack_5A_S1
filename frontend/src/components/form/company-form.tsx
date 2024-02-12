@@ -7,11 +7,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input.tsx"
 import { Checkbox } from "@/components/ui/checkbox.tsx"
 import { Button } from "@/components/ui/button.tsx"
-import { CompanyFormSchema, companyFormSchema } from "@/zod-schemas/company"
+import { AddCompanyFormSchema, addCompanyFormSchema } from "@/zod-schemas/company"
 import { useQueryClient } from "@tanstack/react-query"
 
 type CompanyFormProps = {
-  company?: Company
+  company?: Omit<Company, "users">
   isReadOnly?: boolean
   isAdmin?: boolean
 }
@@ -21,8 +21,8 @@ export const CompanyForm = ({ company, isReadOnly = false, isAdmin = false }: Co
   const addCompany = useAddCompany()
   const updateCompany = useUpdateCompany(company!.id)
 
-  const form = useForm<CompanyFormSchema>({
-    resolver: zodResolver(companyFormSchema),
+  const form = useForm<AddCompanyFormSchema>({
+    resolver: zodResolver(addCompanyFormSchema),
     defaultValues: {
       socialReason: company?.socialReason ?? "",
       email: company?.email ?? "",
@@ -35,7 +35,7 @@ export const CompanyForm = ({ company, isReadOnly = false, isAdmin = false }: Co
     },
   })
 
-  const onSubmit = async (values: CompanyFormSchema) => {
+  const onSubmit = async (values: AddCompanyFormSchema) => {
     const body = isAdmin ? values : { ...values, isVerified: undefined }
     const result = await (!company ? addCompany.mutateAsync(values) : updateCompany.mutateAsync(body))
     if (result.status === 201 || result.status === 200) {

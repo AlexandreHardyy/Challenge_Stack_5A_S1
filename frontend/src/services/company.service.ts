@@ -4,7 +4,7 @@ import api from "@/utils/api.ts"
 import { toast, useToast } from "@/components/ui/use-toast.ts"
 import { t } from "i18next"
 import { useTranslation } from "react-i18next"
-import { CompanyFormSchema } from "@/zod-schemas/company"
+import { AddCompanyFormSchema, UpdateCompanyFormSchema } from "@/zod-schemas/company"
 import { formatQueryParams } from "@/utils/helpers"
 
 export function useFetchCompany(companyId?: number) {
@@ -17,7 +17,7 @@ export function useFetchCompany(companyId?: number) {
       if (response.status !== 200) {
         toast({
           variant: "destructive",
-          title: t("provider.homeProvider.toast.error"),
+          title: t("provider.dashboard.toast.error"),
         })
       }
       return response.data
@@ -68,7 +68,7 @@ export const useAddCompany = () => {
   const { toast } = useToast()
   const { t } = useTranslation()
   return useMutation({
-    mutationFn: async (body: CompanyFormSchema) => {
+    mutationFn: async (body: AddCompanyFormSchema) => {
       const result = await api
         .post(`companies`, body, {
           headers: {
@@ -99,7 +99,7 @@ export const useUpdateCompany = (companyId?: number) => {
   const { toast } = useToast()
   const { t } = useTranslation()
   return useMutation({
-    mutationFn: async (body: CompanyFormSchema) => {
+    mutationFn: async (body: UpdateCompanyFormSchema) => {
       const result = await api
         .patch(`companies/${companyId}`, body, {
           headers: {
@@ -119,6 +119,31 @@ export const useUpdateCompany = (companyId?: number) => {
           variant: "destructive",
           title: t("admin.companies.toast.error.title"),
           description: t("admin.companies.toast.error.error"),
+        })
+      }
+
+      return result
+    },
+  })
+}
+
+export const useDeleteCompanyById = () => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (companyId: number) => {
+      const result = await api.delete(`companies/${companyId}`).catch((err) => err.response)
+      if (result.status === 204) {
+        toast({
+          variant: "success",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: t("ProviderAgencies.form.toast.successDelete"),
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("ProviderAgencies.form.toast.title"),
+          description: t("ProviderAgencies.form.toast.error"),
         })
       }
 

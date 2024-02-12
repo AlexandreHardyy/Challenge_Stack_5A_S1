@@ -2,26 +2,22 @@ import api from "@/utils/api.ts"
 import { User } from "@/utils/types"
 import { useQuery } from "@tanstack/react-query"
 
-export const getUser = async (id: number) => {
-  return api.get(`users/${id}`)
+export function useFetchUserMe() {
+  return useQuery<User>({
+    queryKey: ["userMe"],
+    queryFn: async () => {
+      const response = await api.get(`user/me`)
+      if (response.status !== 200) {
+        throw new Error("Something went wrong with the request (getUserById)")
+      }
+
+      return response.data
+    },
+    enabled: false,
+  })
 }
 
-export const getUserMe = async () => {
-  return api.get(`user/me`)
-}
-
-export const updateUser = async (
-  id: number,
-  data: {
-    firstname?: string
-    lastname?: string
-    email?: string
-  }
-) => {
-  return api.patch(`users/${id}`, data)
-}
-
-export function useFetchUserById(id: number) {
+export function useFetchUserById(id?: number) {
   return useQuery<User>(["getUserById"], async () => {
     const response = await api.get(`users/${id}`)
     if (response.status !== 200) {
@@ -33,10 +29,10 @@ export function useFetchUserById(id: number) {
 }
 
 export function useFetchEmployeesByCompany(companyId?: number) {
-  return useQuery<User[]>(["getUsers"], async () => {
+  return useQuery<User[]>(["getEmployees"], async () => {
     const response = await api.get(`companies/${companyId}/users`)
     if (response.status !== 200) {
-      throw new Error("Something went wrong with the request (getUsers)")
+      throw new Error("Something went wrong with the request (getEmployees)")
     }
 
     return response.data["hydra:member"]
@@ -84,12 +80,13 @@ export const addNewEmployee = async (companyId: number | undefined, body: Employ
 }
 
 type UserForm = {
-  firstname: string
-  lastname: string
-  email: string
-  roles: string[]
-  isVerified: boolean
+  firstname?: string
+  lastname?: string
+  email?: string
+  roles?: string[]
+  isVerified?: boolean
   updatedAt?: string
+  image?: string
 }
 
 export const addNewUser = async (body: UserForm) => {
