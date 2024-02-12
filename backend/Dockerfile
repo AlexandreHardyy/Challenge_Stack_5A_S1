@@ -7,7 +7,7 @@ RUN apk add curl
 # Installing and enabling required PHP extension
 
 # amqp
-RUN apk --no-cache add pcre-dev ${PHPIZE_DEPS} && \
+RUN apk --no-cache add pcre-dev acl ${PHPIZE_DEPS} && \
     apk add rabbitmq-c-dev \
     && pecl install amqp \
     && docker-php-ext-enable amqp
