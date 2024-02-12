@@ -11,7 +11,7 @@ function CompanyCard({ company }: CompanyCardProps) {
   const { t } = useTranslation()
 
   return (
-    <Card className="flex items-center">
+    <Card id={`company-${company.id}`} className="flex items-center">
       <div className="py-2 pl-2">
         <img
           alt="companylogo"

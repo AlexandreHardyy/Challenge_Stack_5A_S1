@@ -24,7 +24,7 @@ function AgencyCard({ agency }: AgencyCardProps) {
   }
 
   return (
-    <Card className="flex items-center">
+    <Card id={`agency-${agency.id}`} className="flex items-center">
       <Carousel className="w-[92px] h-full flex flex-col">
         <div className="flex grow items-center">
           <CarouselContent>
