@@ -32,6 +32,7 @@ import UserPlanning from "@/pages/client/User/UserPlanning"
 import CompanyDetails from "@/pages/admin/companies/CompanyDetails"
 import ResetPassword from "@/pages/auth/ResetPassword.tsx"
 import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
+import ProtectedRoute from "@/components/security/ProtectedRoute.tsx"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -68,7 +69,13 @@ const Routes = () => {
             },
             {
               path: "user/profile",
-              element: <ProfileClient />,
+              element: <ProtectedRoute />,
+              children: [
+                {
+                  path: "",
+                  element: <ProfileClient />,
+                },
+              ],
             },
             {
               path: "user/planning",

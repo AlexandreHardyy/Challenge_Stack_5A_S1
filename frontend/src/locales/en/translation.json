@@ -139,7 +139,8 @@
       "fetchingError": "An error has occurred. Please try again later.",
       "sendMeEmail": "Send me an email",
       "ResetMyPassword": "Reset my password",
-      "passwordResetSuccess": "Your password has been reset successfully."
+      "passwordResetSuccess": "Your password has been reset successfully.",
+      "uploadImage": "Upload new image"
     },
     "cta": {
       "update": "Update",
@@ -348,6 +349,8 @@
         "studentMark": "Student mark",
         "noInfo": "No info",
         "rateInput": "Enter a mark for the student",
+        "rateProvider": "Let a review for the provider",
+        "alreadyRated": "You have already rated this session",
         "evaluate": "Evaluate",
         "studentMarkToast": {
           "toastSuccessTitle": "Mark sended !",

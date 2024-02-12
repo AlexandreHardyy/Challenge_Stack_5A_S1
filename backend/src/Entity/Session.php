@@ -88,6 +88,10 @@ class Session
     #[Groups(['session-group-update', 'employee:read'])]
     private ?float $studentMark = null;
 
+    #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
+    #[Groups(['session-group-read', 'employee:read', 'student:read'])]
+    private ?RatingService $ratingService = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -258,5 +262,22 @@ class Session
                 ->atPath('studentMark')
                 ->addViolation();
         }
+    }
+
+    public function getRatingService(): ?RatingService
+    {
+        return $this->ratingService;
+    }
+
+    public function setRatingService(RatingService $ratingService): static
+    {
+        // set the owning side of the relation if necessary
+        if ($ratingService->getSession() !== $this) {
+            $ratingService->setSession($this);
+        }
+
+        $this->ratingService = $ratingService;
+
+        return $this;
     }
 }
