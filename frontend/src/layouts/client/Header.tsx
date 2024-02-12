@@ -70,7 +70,7 @@ const Header = () => {
                   {t("header.cta.admin")}
                 </Button>
               )}
-              {auth.user?.roles?.includes("ROLE_PROVIDER") && (
+              {(auth.user?.roles?.includes("ROLE_PROVIDER") || auth.user?.roles?.includes("ROLE_EMPLOYEE")) && (
                 <Button variant={"outline"} onClick={() => navigate("/provider")}>
                   {t("header.cta.provider")}
                 </Button>

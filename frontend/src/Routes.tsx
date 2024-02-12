@@ -119,19 +119,37 @@ const Routes = () => {
             },
             {
               path: "company",
-              element: <MyCompany />,
+              element: <ProtectedRoute roles={["ROLE_PROVIDER", "ROLE_ADMIN"]} />,
+              children: [
+                {
+                  path: "",
+                  element: <MyCompany />,
+                },
+              ],
             },
             {
               path: "employee",
-              element: <Employees />,
-            },
-            {
-              path: "employee/:userId",
-              element: <HandleEmployee />,
+              element: <ProtectedRoute roles={["ROLE_PROVIDER", "ROLE_ADMIN"]} />,
+              children: [
+                {
+                  path: "",
+                  element: <Employees />,
+                },
+                {
+                  path: ":userId",
+                  element: <HandleEmployee />,
+                },
+              ],
             },
             {
               path: "agency",
-              element: <Agencies />,
+              element: <ProtectedRoute roles={["ROLE_PROVIDER", "ROLE_ADMIN"]} />,
+              children: [
+                {
+                  path: "",
+                  element: <Agencies />,
+                },
+              ],
             },
             {
               path: "planning",
@@ -139,11 +157,23 @@ const Routes = () => {
             },
             {
               path: "service",
-              element: <Services />,
+              element: <ProtectedRoute roles={["ROLE_PROVIDER", "ROLE_ADMIN"]} />,
+              children: [
+                {
+                  path: "",
+                  element: <Services />,
+                },
+              ],
             },
             {
               path: "schedule-exceptions",
-              element: <ScheduleExceptions />,
+              element: <ProtectedRoute roles={["ROLE_PROVIDER", "ROLE_ADMIN"]} />,
+              children: [
+                {
+                  path: "",
+                  element: <ScheduleExceptions />,
+                },
+              ],
             },
             {
               path: "feedback-builders",

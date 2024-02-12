@@ -14,7 +14,7 @@ import {
   UserCircle2Icon,
   Users2Icon,
 } from "lucide-react"
-import { useAuth } from "@/context/AuthContext.tsx"
+import { useAuth } from "@/context/AuthContext"
 
 const SideHeader = () => {
   const { t } = useTranslation()
@@ -33,6 +33,7 @@ const SideHeader = () => {
     },
     {
       href: "/provider/company",
+      role: "ROLE_PROVIDER",
       content: (
         <>
           <Building2Icon /> {t("header.sideHeader.menu.myCompany")}
@@ -41,6 +42,7 @@ const SideHeader = () => {
     },
     {
       href: "/provider/employee",
+      role: "ROLE_PROVIDER",
       content: (
         <>
           <Users2Icon /> {t("header.sideHeader.menu.employees")}
@@ -49,6 +51,7 @@ const SideHeader = () => {
     },
     {
       href: "/provider/agency",
+      role: "ROLE_PROVIDER",
       content: (
         <>
           <HomeIcon /> {t("header.sideHeader.menu.agencies")}
@@ -65,6 +68,7 @@ const SideHeader = () => {
     },
     {
       href: "/provider/schedule-exceptions",
+      role: "ROLE_PROVIDER",
       content: (
         <>
           <CalendarCheck2Icon /> {t("header.sideHeader.menu.scheduleExceptions")}
@@ -73,6 +77,7 @@ const SideHeader = () => {
     },
     {
       href: "/provider/service",
+      role: "ROLE_PROVIDER",
       content: (
         <>
           <BoxIcon /> {t("header.sideHeader.menu.services")}
@@ -95,18 +100,25 @@ const SideHeader = () => {
         <Link to="/">RoadWise</Link>
       </h1>
       <div className="flex flex-col gap-4 flex-1">
-        {links.map((link, index) => {
-          return (
-            <Button
-              key={index}
-              variant={pathname === link.href ? "default" : "ghost"}
-              asChild
-              className="flex justify-start gap-2 px-4"
-            >
-              <Link to={link.href}> {link.content} </Link>
-            </Button>
-          )
-        })}
+        {links
+          .filter((link) => {
+            if (!link.role) {
+              return true
+            }
+            return auth.user?.roles.includes(link.role)
+          })
+          .map((link, index) => {
+            return (
+              <Button
+                key={index}
+                variant={pathname === link.href ? "default" : "ghost"}
+                asChild
+                className="flex justify-start gap-2 px-4"
+              >
+                <Link to={link.href}> {link.content} </Link>
+              </Button>
+            )
+          })}
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex gap-2">

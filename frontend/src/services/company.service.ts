@@ -4,7 +4,7 @@ import api from "@/utils/api.ts"
 import { toast, useToast } from "@/components/ui/use-toast.ts"
 import { t } from "i18next"
 import { useTranslation } from "react-i18next"
-import { CompanyFormSchema } from "@/zod-schemas/company"
+import { AddCompanyFormSchema, UpdateCompanyFormSchema } from "@/zod-schemas/company"
 import { formatQueryParams } from "@/utils/helpers"
 
 export function useFetchCompany(companyId?: number) {
@@ -68,7 +68,7 @@ export const useAddCompany = () => {
   const { toast } = useToast()
   const { t } = useTranslation()
   return useMutation({
-    mutationFn: async (body: CompanyFormSchema) => {
+    mutationFn: async (body: AddCompanyFormSchema) => {
       const result = await api
         .post(`companies`, body, {
           headers: {
@@ -99,7 +99,7 @@ export const useUpdateCompany = (companyId?: number) => {
   const { toast } = useToast()
   const { t } = useTranslation()
   return useMutation({
-    mutationFn: async (body: CompanyFormSchema) => {
+    mutationFn: async (body: UpdateCompanyFormSchema) => {
       const result = await api
         .patch(`companies/${companyId}`, body, {
           headers: {
