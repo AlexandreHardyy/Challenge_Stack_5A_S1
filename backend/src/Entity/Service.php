@@ -77,7 +77,7 @@ class Service
     private ?float $duration = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'categories-group-read', 'create-service', 'session-group-read-collection'])]
+    #[Groups(['agency-group-read', 'company-group-read', 'categories-group-read', 'create-service', 'session-group-read-collection'])]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]

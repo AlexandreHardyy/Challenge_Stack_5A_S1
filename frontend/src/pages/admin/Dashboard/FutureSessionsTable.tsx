@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/Table.tsx"
 import { useTranslation } from "react-i18next"
 import { UseQueryResult } from "@tanstack/react-query"
-import { Agency, Service, Session, User } from "@/utils/types.ts"
+import { Company, Service, Session, User } from "@/utils/types.ts"
 import { TFunction } from "i18next"
 import { ColumnDef } from "@tanstack/react-table"
 import { Spinner } from "@/components/loader/Spinner.tsx"
@@ -54,19 +54,19 @@ function historyColumns(t: TFunction<"translation", undefined>): ColumnDef<Sessi
 }
 
 const SessionsHistoryTable = ({
-  agenciesRequest,
-  agencyId,
+  companiesRequest,
+  companyId,
 }: {
-  agenciesRequest: UseQueryResult<Agency[]>
-  agencyId: number
+  companiesRequest: UseQueryResult<Company[]>
+  companyId: number
 }) => {
   const { t } = useTranslation()
 
-  if (agenciesRequest.status === "error") {
+  if (companiesRequest.status === "error") {
     return <div>{t("common.form.fetchingError")}</div>
   }
 
-  if (agenciesRequest.isLoading) {
+  if (companiesRequest.isLoading) {
     return (
       <div className="flex justify-center items-center h-[70vh]">
         <Spinner />
@@ -74,19 +74,12 @@ const SessionsHistoryTable = ({
     )
   }
 
-  const sessions: Session[] = agenciesRequest.data.flatMap((agency: Agency) => {
-    return agency.sessions.map((session: Session) => ({
-      ...session,
-      agency: {
-        ...agency,
-        id: agency.id,
-      },
-    }))
-  })
+  const sessions =
+    companiesRequest.data?.flatMap((company) => company.agencies.flatMap((agency) => agency.sessions)) ?? []
 
   const sessionsByAgencyInTheFuture: Session[] = sessions
     .filter(
-      (session: Session) => session.agency.id === agencyId && DateTime.fromISO(session.startDate) >= DateTime.now()
+      (session: Session) => session.agency.id === companyId && DateTime.fromISO(session.startDate) >= DateTime.now()
     )
     .map((session: Session) => ({
       ...session,
@@ -99,7 +92,7 @@ const SessionsHistoryTable = ({
   }
 
   return (
-    <DataTable isLoading={agenciesRequest.isLoading} columns={historyColumns(t)} data={sessionsByAgencyInTheFuture} />
+    <DataTable isLoading={companiesRequest.isLoading} columns={historyColumns(t)} data={sessionsByAgencyInTheFuture} />
   )
 }
 

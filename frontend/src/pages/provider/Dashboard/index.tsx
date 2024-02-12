@@ -86,9 +86,9 @@ const DashboardProvider = () => {
           .reduce((acc: number[], session: Session) => {
             const sessionEndDate = DateTime.fromISO(session.endDate)
             if (sessionEndDate < DateTime.fromJSDate(new Date())) {
-              const student = session.student.id
-              if (!(student in acc)) {
-                acc.push(student)
+              const instructor = session.instructor.id
+              if (!(instructor in acc)) {
+                acc.push(instructor)
               }
             }
             return acc
@@ -98,9 +98,9 @@ const DashboardProvider = () => {
           .reduce((acc: number[], session: Session) => {
             const sessionEndDate = DateTime.fromISO(session.endDate)
             if (sessionEndDate < DateTime.fromJSDate(new Date())) {
-              const student = session.student.id
-              if (!(student in acc)) {
-                acc.push(student)
+              const instructor = session.instructor.id
+              if (!(instructor in acc)) {
+                acc.push(instructor)
               }
             }
             return acc
@@ -117,9 +117,9 @@ const DashboardProvider = () => {
               sessionStartDate >= DateTime.fromJSDate(selectedDateRange.from) &&
               sessionEndDate <= DateTime.fromJSDate(selectedDateRange.to)
             ) {
-              const student = session.student.id
-              if (!(student in acc)) {
-                acc.push(student)
+              const instructor = session.instructor.id
+              if (!(instructor in acc)) {
+                acc.push(instructor)
               }
             }
             return acc
@@ -133,9 +133,9 @@ const DashboardProvider = () => {
               sessionStartDate >= DateTime.fromJSDate(selectedDateRange.from) &&
               sessionEndDate <= DateTime.fromJSDate(selectedDateRange.to)
             ) {
-              const student = session.student.id
-              if (!(student in acc)) {
-                acc.push(student)
+              const instructor = session.instructor.id
+              if (!(instructor in acc)) {
+                acc.push(instructor)
               }
             }
             return acc
@@ -152,14 +152,14 @@ const DashboardProvider = () => {
         <div className="flex h-16 items-center px-4 gap-4">
           <Select defaultValue={AGENCIES_ALL} onValueChange={(value) => setSelectedAgency(value)}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder={t("provider.homeProvider.selectAgencyPlaceholder")} />
+              <SelectValue placeholder={t("provider.dashboard.selectAgencyPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {agenciesRequest.isLoading ? (
                 <Loader />
               ) : (
                 <>
-                  <SelectItem value={AGENCIES_ALL}>{t("provider.homeProvider.selectAgencyAll")}</SelectItem>
+                  <SelectItem value={AGENCIES_ALL}>{t("provider.dashboard.selectAgencyAll")}</SelectItem>
                   {agencies?.map((agency: Agency) => (
                     <SelectItem key={agency.id} value={agency.name}>
                       {agency.name}
@@ -181,34 +181,34 @@ const DashboardProvider = () => {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="grid gap-4 grid-cols-4 lg:grid-cols-2">
           <CardStatistics
-            title={t("provider.homeProvider.cards.totalRevenue.title")}
+            title={t("provider.dashboard.cards.totalRevenue.title")}
             titleNumber={totalSessionsRevenueRange}
             subtitleNumber={totalPastSessionsRevenue}
-            subtitleLibelle={t("provider.homeProvider.cards.totalRevenue.subtitle")}
+            subtitleLibelle={t("provider.dashboard.cards.totalRevenue.subtitle")}
             icon={<Euro size={16} className="text-muted-foreground" />}
             isLoading={agenciesRequest.isLoading}
           />
           <CardStatistics
-            title={t("provider.homeProvider.cards.sessionsNumber.title")}
+            title={t("provider.dashboard.cards.sessionsNumber.title")}
             titleNumber={numberOfSessionsInDateRangeByAgency}
             subtitleNumber={numberOfSessionsByAgency}
-            subtitleLibelle={t("provider.homeProvider.cards.sessionsNumber.subtitle")}
+            subtitleLibelle={t("provider.dashboard.cards.sessionsNumber.subtitle")}
             icon={<CalendarCheck size={16} className="text-muted-foreground" />}
             isLoading={agenciesRequest.isLoading}
           />
           <CardStatistics
-            title={t("provider.homeProvider.cards.sessionsHours.title")}
+            title={t("provider.dashboard.cards.sessionsHours.title")}
             titleNumber={totalSessionsHours}
             subtitleNumber={totalPastSessionsHours}
-            subtitleLibelle={t("provider.homeProvider.cards.sessionsHours.subtitle")}
+            subtitleLibelle={t("provider.dashboard.cards.sessionsHours.subtitle")}
             icon={<CalendarClock size={16} className="text-muted-foreground" />}
             isLoading={agenciesRequest.isLoading}
           />
           <CardStatistics
-            title={t("provider.homeProvider.cards.sessionsStudents.title")}
+            title={t("provider.dashboard.cards.sessionsStudents.title")}
             titleNumber={totalSessionsStudents}
             subtitleNumber={totalPastSessionsStudents}
-            subtitleLibelle={t("provider.homeProvider.cards.sessionsStudents.subtitle")}
+            subtitleLibelle={t("provider.dashboard.cards.sessionsStudents.subtitle")}
             icon={<Users size={16} className="text-muted-foreground" />}
             isLoading={agenciesRequest.isLoading}
           />
@@ -216,7 +216,7 @@ const DashboardProvider = () => {
         <div className="grid gap-4 grid-cols-10 lg:grid-cols-2">
           <Card className="col-span-6">
             <CardHeader>
-              <CardTitle>{t("provider.homeProvider.revenueOverview")}</CardTitle>
+              <CardTitle>{t("provider.dashboard.revenueOverview")}</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
               <Overview data={overviewData} isLoading={agenciesRequest.isLoading} />
@@ -228,9 +228,9 @@ const DashboardProvider = () => {
             ) : (
               <>
                 <CardHeader>
-                  <CardTitle>{t("provider.homeProvider.yourServices.title")}</CardTitle>
+                  <CardTitle>{t("provider.dashboard.yourServices.title")}</CardTitle>
                   <CardDescription>
-                    {t("provider.homeProvider.yourServices.subtitle", { count: servicesNumber })}
+                    {t("provider.dashboard.yourServices.subtitle", { count: servicesNumber })}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -244,9 +244,7 @@ const DashboardProvider = () => {
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center h-32">
-                      <p className="text-sm text-muted-foreground">
-                        {t("provider.homeProvider.yourServices.noServices")}
-                      </p>
+                      <p className="text-sm text-muted-foreground">{t("provider.dashboard.yourServices.noServices")}</p>
                     </div>
                   )}
                 </CardContent>

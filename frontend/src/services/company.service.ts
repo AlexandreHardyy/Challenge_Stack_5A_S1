@@ -17,7 +17,7 @@ export function useFetchCompany(companyId?: number) {
       if (response.status !== 200) {
         toast({
           variant: "destructive",
-          title: t("provider.homeProvider.toast.error"),
+          title: t("provider.dashboard.toast.error"),
         })
       }
       return response.data
