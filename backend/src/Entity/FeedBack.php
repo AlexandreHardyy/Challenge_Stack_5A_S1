@@ -2,13 +2,29 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\FeedBackRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FeedBackRepository::class)]
+#[ApiResource(
+    operations: [
+        new Post(
+            denormalizationContext: ['groups' => ['create-feedback']],
+            openapi: new Operation(
+                tags: ['FeedBack'],
+                summary: 'Create feedback for a session',
+                description: 'Create a new feedback for a session'
+            )
+        )
+    ],
+)]
 class FeedBack
 {
     #[ORM\Id]
@@ -17,22 +33,30 @@ class FeedBack
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'feedBacks')]
+    #[Groups(['create-feedback'])]
     private ?User $client = null;
 
     #[ORM\ManyToOne(inversedBy: 'feedBacks')]
+    #[Groups(['create-feedback'])]
     private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'feedBacks')]
+    #[Groups(['create-feedback'])]
     private ?FeedBackBuilder $feedBackBuilder = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'feedBack', targetEntity: FeedBackGroup::class, orphanRemoval: true)]
+    #[Groups(['create-feedback'])]
     private Collection $feedBackGroups;
+
+    #[ORM\OneToOne(inversedBy: 'feedBack', cascade: ['persist', 'remove'])]
+    #[Groups(['create-feedback'])]
+    private ?Session $session = null;
 
     public function __construct()
     {
@@ -140,6 +164,18 @@ class FeedBack
                 $feedBackGroup->setFeedBack(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSession(): ?Session
+    {
+        return $this->session;
+    }
+
+    public function setSession(?Session $session): static
+    {
+        $this->session = $session;
 
         return $this;
     }

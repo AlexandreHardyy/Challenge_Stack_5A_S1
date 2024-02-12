@@ -33,6 +33,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource(
     operations: [
         new Post(
+            security: "is_granted('FEEDBACK_BUILDER_CREATE', object)",
             openapi: new Operation(
                 tags: ['FeedBackBuilder'],
                 summary: 'Create feedback builder for a company',
@@ -40,6 +41,7 @@ use Doctrine\ORM\Mapping as ORM;
             )
         ),
         new Patch(
+            security: "is_granted('FEEDBACK_BUILDER_EDIT', object)",
             openapi: new Operation(
                 tags: ['FeedBackBuilder'],
                 summary: 'Update feedback builder',
@@ -47,6 +49,7 @@ use Doctrine\ORM\Mapping as ORM;
             )
         ),
         new Delete(
+            security: "is_granted('FEEDBACK_BUILDER_EDIT', object)",
             openapi: new Operation(
                 tags: ['FeedBackBuilder'],
                 summary: 'Delete feedback builder',

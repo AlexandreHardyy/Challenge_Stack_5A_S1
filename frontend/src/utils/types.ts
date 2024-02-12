@@ -89,6 +89,7 @@ export interface Session {
   status: string
   studentMark?: number
   ratingService?: RatingService
+  feedBack: FeedBack
 }
 
 export interface Schedule {
@@ -122,6 +123,14 @@ export interface MediaObject {
   "@id": string
   id: number
   contentUrl: string
+}
+
+export interface FeedBack {
+  id: number
+  feedBackGroups: Array<{
+    question: string
+    answer: string
+  }>
 }
 export interface FeedBackBuilder {
   id: number

@@ -11,6 +11,7 @@ import { useCreateRatingSession } from "@/services/rating-service.service.ts"
 import { toast } from "@/components/ui/use-toast"
 import { useQueryClient } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
+import { ModalFormFeedBack } from "@/components/form/feedback-form"
 
 export function SessionDetails({ session }: { session?: Session }) {
   const { t } = useTranslation()
@@ -41,7 +42,6 @@ export function SessionDetails({ session }: { session?: Session }) {
 
   useEffect(() => {
     if (session && session.ratingService) {
-      console.log(session.ratingService)
       setStudentMark(session.ratingService.rating)
       setStudentComment(session.ratingService.comment)
     }
@@ -133,6 +133,9 @@ export function SessionDetails({ session }: { session?: Session }) {
                   </Button>
                 )}
               </div>
+              {!session.feedBack && (
+                <ModalFormFeedBack companyId={session?.instructor?.company!.id} sessionId={session?.id} />
+              )}
             </div>
           )}
         </CardContent>
