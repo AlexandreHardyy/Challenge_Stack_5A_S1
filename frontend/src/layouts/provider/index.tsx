@@ -6,7 +6,7 @@ const ProviderLayout = () => {
     <>
       <SideHeader />
       <main className="p-6 h-full m-h-[100vh] pl-64">
-        <ProtectedRoute roles={["ROLE_PROVIDER", "ROLE_ADMIN"]} />
+        <ProtectedRoute roles={["ROLE_PROVIDER", "ROLE_EMPLOYEE", "ROLE_ADMIN"]} />
       </main>
     </>
   )

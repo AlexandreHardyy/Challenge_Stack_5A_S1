@@ -7,6 +7,8 @@ import AdminAgenciesList from "./agencies-list"
 import AdminEmployeesList from "./employees-list"
 import { useTranslation } from "react-i18next"
 
+import defaultAgencyLogo from "@/assets/img/default-company-logo.svg"
+
 function CompanyDetails() {
   const { t } = useTranslation()
   const { companyId } = useParams()
@@ -37,8 +39,12 @@ function CompanyDetails() {
             <div className="border border-black rounded-sm">
               <img
                 alt="companylogo"
-                className="rounded-[185px] w-[185px] h-[185px]"
-                src="https://www.autoecole-du-griffe.fr/images/logo_auto-ecole_griffe__large.png"
+                className="w-[185px] h-[185px]"
+                src={
+                  companyRequest.data.image
+                    ? `${import.meta.env.VITE_API_URL_PUBLIC}${companyRequest.data.image?.contentUrl}`
+                    : defaultAgencyLogo
+                }
               />
             </div>
           </div>

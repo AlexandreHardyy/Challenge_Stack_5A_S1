@@ -6,10 +6,9 @@ const ProtectedRoute = ({ roles }: { roles?: string[] | undefined }) => {
   if (!token) {
     return <Navigate to="/login" />
   }
-  console.log(user?.roles)
 
   if (roles && user?.roles && !roles.some((r) => user.roles?.includes(r))) {
-    return <Navigate to="/login" />
+    return <Navigate to="/" />
   }
 
   return <Outlet />

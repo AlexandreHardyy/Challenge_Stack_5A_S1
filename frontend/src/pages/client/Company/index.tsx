@@ -9,6 +9,9 @@ import AgencySearchBar from "./agency-search-bar"
 import { MultipleAgenciesMap } from "@/components/maps/multiple-agencies-map"
 import "./map.css"
 import { buildAgencyMarkers } from "@/components/maps/utils"
+import { Spinner } from "@/components/loader/Spinner"
+
+import defaultAgencyLogo from "@/assets/img/default-company-logo.svg"
 
 function CompanyClient() {
   const { companyId } = useParams()
@@ -21,20 +24,32 @@ function CompanyClient() {
     return <h1>WTFFFFF</h1>
   }
 
+  if (companyRequest.status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <Spinner />
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-[37px] mt-[60px] mb-[83px]">
       <section className="flex justify-between w-[80%] mx-auto gap-[226px] md:w-full md:mx-0">
         <div className="flex flex-col justify-between">
           <div>
-            <h1 className="text-[64px] font-bold ">{companyRequest.data?.socialReason}</h1>
+            <h1 className="text-[64px] font-bold ">{companyRequest.data.socialReason}</h1>
             <p className="font-semibold ">{t("companyClient.section1.overallRating")}</p>
-            <p>{companyRequest.data?.description}</p>
+            <p>{companyRequest.data.description}</p>
           </div>
         </div>
         <img
           alt="companylogo"
           className="rounded-[185px] w-[185px] h-[185px]"
-          src="https://www.autoecole-du-griffe.fr/images/logo_auto-ecole_griffe__large.png"
+          src={
+            companyRequest.data.image
+              ? `${import.meta.env.VITE_API_URL_PUBLIC}${companyRequest.data.image.contentUrl}`
+              : defaultAgencyLogo
+          }
         />
       </section>
 
@@ -42,25 +57,23 @@ function CompanyClient() {
         <div className="w-[80%] flex flex-col mx-auto gap-[17px] md:w-full md:mx-0">
           <h2 className="text-[32px] font-bold">{t("companyClient.section2.ourDrivingSchools")}</h2>
           <div className="flex flex-col gap-[20px]">
-            <AgencySearchBar agencies={companyRequest.data?.agencies ?? []} setFilteredAgencies={setFilteredAgencies} />
+            <AgencySearchBar agencies={companyRequest.data.agencies ?? []} setFilteredAgencies={setFilteredAgencies} />
             <div className="flex gap-[20px]">
-              <AgencyList agencies={filteredAgencies ?? companyRequest.data?.agencies} />
+              <AgencyList agencies={filteredAgencies ?? companyRequest.data.agencies} />
               <div className="bg-background grow rounded-[8px]">
-                {companyRequest.data && (
-                  <MultipleAgenciesMap
-                    markersWIthCoordinates={buildAgencyMarkers(
-                      companyRequest.data.agencies.map((agency) => {
-                        return {
-                          ...agency,
-                          company: {
-                            ...agency.company,
-                            id: parseInt(companyId ?? ""),
-                          },
-                        }
-                      })
-                    )}
-                  />
-                )}
+                <MultipleAgenciesMap
+                  markersWIthCoordinates={buildAgencyMarkers(
+                    companyRequest.data.agencies.map((agency) => {
+                      return {
+                        ...agency,
+                        company: {
+                          ...agency.company,
+                          id: parseInt(companyId ?? ""),
+                        },
+                      }
+                    })
+                  )}
+                />
               </div>
             </div>
           </div>
