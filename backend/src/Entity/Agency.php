@@ -66,7 +66,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         )
     ],
-    normalizationContext: ['groups' => ['read-media_object']]
+    normalizationContext: ['groups' => ['read-media_object'], 'enable_max_depth' => true]
 )]
 #[ApiResource(
     uriTemplate: '/companies/{id}/agencies',
