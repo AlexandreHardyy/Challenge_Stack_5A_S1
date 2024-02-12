@@ -19,7 +19,7 @@ const Header = () => {
 
     return (
       <Avatar>
-        <AvatarImage src={finalImage} className="w-10 rounded object-cover" />
+        <AvatarImage src={finalImage} className="w-10 h-10 rounded object-cover" />
         <AvatarFallback>{email[0].toUpperCase()}</AvatarFallback>
       </Avatar>
     )

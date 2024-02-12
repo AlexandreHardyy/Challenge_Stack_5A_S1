@@ -125,22 +125,22 @@ const EmployeeForm = ({
     if (result.status === 201) {
       toast({
         variant: "success",
-        title: t("ProviderAgencies.form.toast.title"),
-        description: t("ProviderAgencies.form.toast.successCreate"),
+        title: t("ProviderEmployee.form.toast.title"),
+        description: t("ProviderEmployee.form.toast.successCreate"),
       })
       employees?.refetch()
     } else if (result.status === 200) {
       toast({
         variant: "success",
-        title: t("ProviderAgencies.form.toast.title"),
-        description: t("ProviderAgencies.form.toast.successUpdate"),
+        title: t("ProviderEmployee.form.toast.title"),
+        description: t("ProviderEmployee.form.toast.successUpdate"),
       })
       employees?.refetch()
     } else {
       toast({
         variant: "destructive",
-        title: t("ProviderAgencies.form.toast.title"),
-        description: t("ProviderAgencies.form.toast.error"),
+        title: t("ProviderEmployee.form.toast.title"),
+        description: t("ProviderEmployee.form.toast.error"),
       })
     }
   }
@@ -153,7 +153,7 @@ const EmployeeForm = ({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t("common.form.email")}</FormLabel>
               <FormControl>
                 <Input placeholder="Email" {...field} readOnly={isReadOnly} />
               </FormControl>
@@ -166,9 +166,9 @@ const EmployeeForm = ({
           name="firstname"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>First Name</FormLabel>
+              <FormLabel>{t("common.form.firstName")}</FormLabel>
               <FormControl>
-                <Input placeholder="First Name" {...field} readOnly={isReadOnly} />
+                <Input placeholder="Firstname" {...field} readOnly={isReadOnly} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -179,9 +179,9 @@ const EmployeeForm = ({
           name="lastname"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Last Name</FormLabel>
+              <FormLabel>{t("common.form.lastName")}</FormLabel>
               <FormControl>
-                <Input placeholder="Last Name" {...field} readOnly={isReadOnly} />
+                <Input placeholder="Lastmame" {...field} readOnly={isReadOnly} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -192,7 +192,7 @@ const EmployeeForm = ({
           name="phoneNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone number</FormLabel>
+              <FormLabel>{t("common.form.phoneNumber")}</FormLabel>
               <FormControl>
                 <Input placeholder="Phone Number" {...field} readOnly={isReadOnly} />
               </FormControl>
@@ -207,7 +207,7 @@ const EmployeeForm = ({
             render={() => {
               return (
                 <FormItem>
-                  <FormLabel>Agencies</FormLabel>
+                  <FormLabel>{t("ProviderEmployee.form.agencies")}</FormLabel>
                   {agencies && !agencies.isLoading && agencies.data && (
                     <FormControl>
                       <SelectMultiple
@@ -230,7 +230,11 @@ const EmployeeForm = ({
           />
         )}
 
-        {!isReadOnly && <Button type="submit">{employee ? "Update employee" : "Add employee"}</Button>}
+        {!isReadOnly && (
+          <Button type="submit">
+            {employee ? t("ProviderEmployee.form.cta.updateEmployee") : t("ProviderEmployee.form.cta.addEmployee")}
+          </Button>
+        )}
       </form>
     </Form>
   )
@@ -244,18 +248,20 @@ const ModalFormEmployee = ({
   variant?: "ghost" | "outline"
 }) => {
   const [isReadOnly, setIsReadOnly] = useState(!!employee)
+  const { t } = useTranslation()
+
   return (
     <Dialog onOpenChange={(open) => !open && setIsReadOnly(!!employee)}>
       <DialogTrigger asChild>
         <Button variant={variant} className="px-2">
-          {!employee ? "Add new employee" : <PencilIcon />}
+          {!employee ? t("ProviderEmployee.form.cta.addEmployee") : <PencilIcon />}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="pb-4">
             {!employee ? (
-              "Add new employee"
+              t("ProviderEmployee.form.cta.addEmployee")
             ) : (
               <>
                 Your employee{" "}
@@ -284,6 +290,7 @@ const EmployeeContext = React.createContext<{
 
 const Employees = () => {
   const { user } = useAuth()
+  const { t } = useTranslation()
 
   const employees = useFetchEmployeesByCompany(user?.company?.id)
   const agencies = useFetchAgenciesByCompany(user?.company?.id)
@@ -291,7 +298,7 @@ const Employees = () => {
   return (
     <EmployeeContext.Provider value={{ employees, agencies }}>
       <div className="flex flex-col gap-6">
-        <h1 className="text-3xl"> Your Employees </h1>
+        <h1 className="text-3xl"> {t("ProviderEmployee.title")} </h1>
         <div className="self-start w-full max-w-xl">
           <ModalFormEmployee variant="outline" />
         </div>

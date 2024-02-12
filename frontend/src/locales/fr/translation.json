@@ -257,6 +257,23 @@
       }
     }
   },
+  "ProviderEmployee": {
+    "title": "Mes employés",
+    "form": {
+      "agencies": "Agences",
+      "cta": {
+        "addEmployee": "Ajouter un employé",
+        "updateEmployee": "Modifier un employé"
+      },
+      "toast": {
+        "title": "Employé",
+        "successCreate": "Employé créé avec succès",
+        "successUpdate": "Employé modifié avec succès",
+        "successDelete": "Employé supprimé avec succès",
+        "error": "une erreur a eu lieu"
+      }
+    }
+  },
   "providerService": {
     "title": "Mes services",
     "form": {

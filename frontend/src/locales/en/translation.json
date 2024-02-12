@@ -258,6 +258,23 @@
       }
     }
   },
+  "ProviderEmployee": {
+    "title": "Your Employees",
+    "form": {
+      "agencies": "Agencies",
+      "cta": {
+        "addEmployee": "Add new employee",
+        "updateEmployee": "Update employee"
+      },
+      "toast": {
+        "title": "Employee",
+        "successCreate": "Employee created successfully",
+        "successUpdate": "Employee updated successfully",
+        "successDelete": "Employee deleted successfully",
+        "error": "an error occurred while updating"
+      }
+    }
+  },
   "providerService": {
     "title": "My services",
     "form": {
