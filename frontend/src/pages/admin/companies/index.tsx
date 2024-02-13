@@ -75,7 +75,7 @@ const ActionColumn = ({ company }: { company: Omit<Company, "users"> }) => {
         name={company.socialReason}
         onDelete={async () => {
           await deleteCompany.mutateAsync(company.id)
-          await queryClient.invalidateQueries(["companies"])
+          queryClient.invalidateQueries(["companies"])
         }}
       />
     </div>

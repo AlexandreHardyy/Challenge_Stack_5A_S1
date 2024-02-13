@@ -76,9 +76,6 @@ const SessionsHistoryTable = ({
 
   const sessions: Session[] | null = sessionsRequest.status === "success" ? sessionsRequest.data : []
 
-  // console.log("agencyId", sessions?.filter((session) => agenciesIdArray.includes(session.agency.id.toString())))
-  // console.log(agenciesIdArray)
-
   const sessionsByAgencyInTheFuture: Session[] = sessions
     .filter(
       (session: Session) =>

@@ -51,7 +51,7 @@ use ApiPlatform\OpenApi\Model\Operation;
                 summary: 'Returns a list of sessions for a specific agency',
                 description: 'Returns a list of sessions for a specific agency'
             ),
-            normalizationContext: ['groups' => ['session:read:collection:by-agencies']]
+            normalizationContext: ['groups' => ['session:read:collection:by_agency']]
         ),
     ],
     uriVariables: [
@@ -145,7 +145,7 @@ class Session
     private ?float $studentMark = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
-    #[Groups(['session:read:collection:by-agencies', 'session:read'])]
+    #[Groups(['session:read:collection:by_agency', 'session:read'])]
     private ?RatingService $ratingService = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
