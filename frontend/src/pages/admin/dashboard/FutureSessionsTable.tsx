@@ -74,7 +74,7 @@ const SessionsHistoryTable = ({
     )
   }
 
-  const sessions: Session[] | null = sessionsRequest.status === "success" ? sessionsRequest.data : []
+  const sessions: Session[] = sessionsRequest.status === "success" ? sessionsRequest.data : []
 
   const sessionsByAgencyInTheFuture: Session[] = sessions
     .filter(

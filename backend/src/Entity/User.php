@@ -85,13 +85,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
             )
         ),
         new Delete(
-            security: "is_granted('USER_EDIT', object)",
             uriTemplate: '/employees/{id}',
             openapi: new Operation(
                 tags: ['User'],
                 summary: 'delete a employee from your company',
                 description: 'Update a user for a company'
-            )
+            ),
+            security: "is_granted('USER_EDIT', object)"
         )
     ],
 )]

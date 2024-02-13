@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion.tsx"
-import { Agency } from "@/utils/types.ts"
+import { Agency, Session } from "@/utils/types.ts"
 import { computeServiceDuration } from "@/utils/helpers.ts"
 import { Flame, Star } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx"
@@ -16,20 +16,20 @@ import {
 } from "@/components/ui/drawer.tsx"
 import { Button } from "@/components/ui/button.tsx"
 import { Loader } from "@/components/ui/loader.tsx"
-import FutureSessionsTable from "@/pages/provider/Dashboard/FutureSessionsTable.tsx"
+import FutureSessionsTable from "@/pages/provider/dashboard/FutureSessionsTable.tsx"
 import { UseQueryResult } from "@tanstack/react-query"
 
 function YourServices({
   agencies,
   selectedAgency,
   mostSoldService,
-  agenciesRequest,
+  sessionsRequest,
   isSessionsLoading,
 }: Readonly<{
   agencies: Agency[] | null
   selectedAgency: string
   mostSoldService: [string, number] | undefined
-  agenciesRequest: UseQueryResult<Agency[]>
+  sessionsRequest: UseQueryResult<Session[]>
   isSessionsLoading: boolean
 }>) {
   const allAgencyNameArray = agencies?.map((agency) => agency.name)
@@ -94,7 +94,7 @@ function YourServices({
                 {isSessionsLoading ? (
                   <Loader />
                 ) : (
-                  <FutureSessionsTable agenciesRequest={agenciesRequest} agencyId={agency.id} />
+                  <FutureSessionsTable sessionsRequest={sessionsRequest} agencyId={agency.id} />
                 )}
                 <DrawerFooter>
                   <DrawerClose>
