@@ -1,4 +1,4 @@
-import { Company, Session } from "./types"
+import { Session } from "./types"
 import { DateTime } from "luxon"
 
 const AGENCIES_ALL: string = "AllAgencies"
@@ -67,18 +67,18 @@ export const calculateMostSoldService = (sessions: Session[], dateRange: { from:
     .shift()
 }
 
-export const calculateMostSoldAgency = (Companies: Company[], dateRange: { from: Date; to: Date }) => {
-  //renvoyer le nom de l'agence qui a fait le plus de sessions dans la période donnée
-  const agenciesCount = Companies.reduce(
-    (acc, company) => {
-      company.agencies.forEach((agency) => {
-        const sessions = agency.sessions.filter(
-          (session) =>
-            DateTime.fromISO(session.startDate) >= DateTime.fromJSDate(dateRange.from) &&
-            DateTime.fromISO(session.endDate) <= DateTime.fromJSDate(dateRange.to)
-        )
-        acc[agency.name] = sessions.length
-      })
+export const calculateMostSoldAgency = (sessions: Session[], dateRange: { from: Date; to: Date }) => {
+  const agenciesCount = sessions.reduce(
+    (acc, session) => {
+      const sessionStartDate = DateTime.fromISO(session.startDate)
+      const sessionEndDate = DateTime.fromISO(session.endDate)
+      if (
+        sessionStartDate >= DateTime.fromJSDate(dateRange.from) &&
+        sessionEndDate <= DateTime.fromJSDate(dateRange.to)
+      ) {
+        const agencyName = session.agency.name
+        acc[agencyName] = (acc[agencyName] || 0) + 1
+      }
       return acc
     },
     {} as Record<string, number>
@@ -102,29 +102,6 @@ export const calculateOverviewData = (sessions: Session[]) =>
         return acc + session.service.price
       }
       return acc
-    }, 0)
-    return {
-      name: month.toFormat("LLL"),
-      total: total,
-    }
-  }).reverse()
-
-export const calculateOverviewDataByCompanies = (companies: Company[]) =>
-  Array.from({ length: 12 }, (_, i) => {
-    const month = DateTime.local().minus({ months: i })
-    const total = companies.reduce((acc, company) => {
-      const companyTotal = company.agencies.reduce((acc, agency) => {
-        const agencyTotal = agency.sessions.reduce((acc, session) => {
-          const sessionStartDate = DateTime.fromISO(session.startDate)
-          const sessionEndDate = DateTime.fromISO(session.endDate)
-          if (sessionStartDate >= month.startOf("month") && sessionEndDate <= month.endOf("month")) {
-            return acc + session.service.price
-          }
-          return acc
-        }, 0)
-        return acc + agencyTotal
-      }, 0)
-      return acc + companyTotal
     }, 0)
     return {
       name: month.toFormat("LLL"),

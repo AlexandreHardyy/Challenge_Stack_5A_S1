@@ -8,7 +8,7 @@ type AdminEmployeesListProps = {
   employees: Pick<Employee, "id" | "firstname" | "lastname" | "email">[]
 }
 
-function AdminEmployeesList({ employees }: AdminEmployeesListProps) {
+function AdminEmployeesList({ employees }: Readonly<AdminEmployeesListProps>) {
   const { t } = useTranslation()
 
   const columns: ColumnDef<Pick<Employee, "id" | "firstname" | "lastname" | "email">>[] = [
@@ -36,7 +36,11 @@ function AdminEmployeesList({ employees }: AdminEmployeesListProps) {
         <CardTitle>{t("admin.companies.table.companyDetails.employeesList")}</CardTitle>
       </CardHeader>
       <CardContent>
-        <DataTable columns={columns} data={employees} />
+        {employees ? (
+          <DataTable columns={columns} data={employees} />
+        ) : (
+          <p>{t("admin.companies.table.companyDetails.noEmployees")}</p>
+        )}
       </CardContent>
     </Card>
   )

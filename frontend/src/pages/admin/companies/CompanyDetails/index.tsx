@@ -8,6 +8,7 @@ import AdminEmployeesList from "./employees-list"
 import { useTranslation } from "react-i18next"
 
 import defaultAgencyLogo from "@/assets/img/default-company-logo.svg"
+import { formatDate } from "@/utils/helpers.ts"
 
 function CompanyDetails() {
   const { t } = useTranslation()
@@ -59,13 +60,13 @@ function CompanyDetails() {
               {t("admin.companies.table.phoneNumber")}: {companyRequest.data.phoneNumber}
             </p>
             <p>
-              {t("admin.companies.table.isVerified")}: {companyRequest.data.isVerified}
+              {t("admin.companies.table.isVerified")}: {companyRequest.data.isVerified ? "true" : "false"}
             </p>
             <p>
               {t("admin.companies.table.sirenNumber")}: {companyRequest.data.siren}
             </p>
             <p>
-              {t("admin.companies.table.createdAt")}: {companyRequest.data.createdAt}
+              {t("admin.companies.table.createdAt")}: {formatDate(companyRequest.data.createdAt)}
             </p>
             <p>
               {t("admin.companies.table.description")}: {companyRequest.data.description}

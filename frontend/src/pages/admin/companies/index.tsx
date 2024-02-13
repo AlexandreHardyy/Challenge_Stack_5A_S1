@@ -43,16 +43,14 @@ const ModalCompanyForm = ({
             {!company ? (
               t("admin.companies.cta.new")
             ) : (
-              <>
-                <div className="flex items-center">
-                  <h2>{t("admin.companies.table.company")}</h2>
-                  {isReadOnly && (
-                    <Button variant={"ghost"} onClick={() => setIsReadOnly(!isReadOnly)}>
-                      <PencilIcon />
-                    </Button>
-                  )}{" "}
-                </div>
-              </>
+              <div className="flex items-center">
+                <h2>{t("admin.companies.table.company")}</h2>
+                {isReadOnly && (
+                  <Button variant={"ghost"} onClick={() => setIsReadOnly(!isReadOnly)}>
+                    <PencilIcon />
+                  </Button>
+                )}{" "}
+              </div>
             )}
           </DialogTitle>
           <DialogDescription>
@@ -77,7 +75,7 @@ const ActionColumn = ({ company }: { company: Omit<Company, "users"> }) => {
         name={company.socialReason}
         onDelete={async () => {
           await deleteCompany.mutateAsync(company.id)
-          queryClient.invalidateQueries(["companies"])
+          await queryClient.invalidateQueries(["companies"])
         }}
       />
     </div>
