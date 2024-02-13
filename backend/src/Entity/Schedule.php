@@ -39,12 +39,15 @@ class Schedule
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['disponibility:read:collection'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column]
+    #[Groups(['disponibility:read:collection'])]
     private ?int $startHour = null;
 
     #[ORM\Column]
+    #[Groups(['disponibility:read:collection'])]
     private ?int $endHour = null;
 
     #[ORM\ManyToOne(inversedBy: 'schedules')]
@@ -56,6 +59,7 @@ class Schedule
     private ?User $employee = null;
 
     #[ORM\OneToMany(mappedBy: 'schedule', targetEntity: ScheduleException::class)]
+    #[Groups(['disponibility:read:collection'])]
     private Collection $scheduleExceptions;
 
     public function __construct()

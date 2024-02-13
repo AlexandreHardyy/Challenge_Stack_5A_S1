@@ -64,10 +64,12 @@ final class DisponibilityProvider implements ProviderInterface
     foreach($schedules as $schedule) {
         $results[$schedule->getEmployee()->getId()]['schedules'][] = $schedule;
 
-        $exceptions = $schedule->getScheduleExceptions();
-        foreach($exceptions as $exception) {
-            $results[$schedule->getEmployee()->getId()]['scheduleExceptions'][] = $exception;
-        }
+        // $exceptions = $schedule->getScheduleExceptions();
+        // foreach($exceptions as $exception) {
+        //     if ($exception->getStatus() == "VALIDATED") {
+        //         $results[$schedule->getEmployee()->getId()]['scheduleExceptions'][] = $exception;
+        //     }
+        // }
     }
     
     return array_map(static function ($result, $index) {
@@ -75,29 +77,9 @@ final class DisponibilityProvider implements ProviderInterface
             $index,
             new ArrayCollection($result["sessions"]),
             new ArrayCollection($result["schedules"]),
-            new ArrayCollection($result["scheduleExceptions"])
+            // new ArrayCollection($result["scheduleExceptions"])
         );
     }, $results, array_keys($results));
-    
-    
-    
-    // $instructorsAvailability = [];
-
-    // dump($results);
-    // foreach ($results as $result) {
-    //     $instructor = $result['instructeur'];
-    //     $sessions = $instructor->getSessions();
-    //     $schedules = $instructor->getSchedules();
-    //     $scheduleExceptions = [];
-        
-    //     foreach ($schedules as $schedule) {
-    //         $scheduleExceptions = array_merge($scheduleExceptions, $schedule->getScheduleExceptions()->toArray());
-    //     }
-
-    //     $instructorsAvailability[] = new Disponibility($sessions, $schedules, new ArrayCollection($scheduleExceptions));
-    // }
-
-    // return $instructorsAvailability;
     
     }
 }
