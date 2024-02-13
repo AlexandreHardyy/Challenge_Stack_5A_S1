@@ -273,6 +273,10 @@
     "title": "Mes employés",
     "form": {
       "agencies": "Agences",
+      "email": "Email",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phoneNumber": "Numéro de téléphone",
       "cta": {
         "addEmployee": "Ajouter un employé",
         "updateEmployee": "Modifier un employé"

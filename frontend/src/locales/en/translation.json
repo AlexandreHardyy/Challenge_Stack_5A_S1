@@ -274,6 +274,10 @@
     "title": "Your Employees",
     "form": {
       "agencies": "Agencies",
+      "email": "Email",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phoneNumber": "Phone's Number",
       "cta": {
         "addEmployee": "Add new employee",
         "updateEmployee": "Update employee"
