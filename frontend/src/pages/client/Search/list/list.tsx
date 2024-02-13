@@ -48,7 +48,7 @@ function CompaniesAgenciesList({ setAgenciesDataForMap }: CompaniesAgenciesListP
   } = useFetchAgencies(
     {
       name: filters?.name,
-      "services.category.name": filters?.category,
+      "services.name": filters?.category,
       address: filters?.address,
       city: filters?.city,
       zip: filters?.zip,

@@ -21,10 +21,11 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['company-group-read', 'read-media_object'], 'enable_max_depth' => true],
+    // normalizationContext: ['groups' => ['company-group-read', 'read-media_object'], 'enable_max_depth' => true],
     operations: [
         new GetCollection(
             security: "is_granted('ROLE_USER')",
+            normalizationContext: ['groups' => ['company:read:collection']],
             openapi: new Operation(
                 tags: ['Company'],
                 summary: 'Return companies',
@@ -33,6 +34,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         ),
         new Get(
             security: "is_granted('ROLE_USER')",
+            normalizationContext: ['groups' => ['company:read']],
             openapi: new Operation(
                 tags: ['Company'],
                 summary: 'Return one company',
@@ -72,56 +74,51 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company-group-read', 'agency-group-read', 'read-user'])]
+    #[Groups(['company:read:collection', 'agency:read:collection'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'update-company'])]
+    #[Groups(['update-company', 'company:read:collection', 'company:read'])]
     private ?string $socialReason = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'update-company'])]
+    #[Groups(['update-company', 'company:read:collection'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['company-group-read', 'update-company'])]
+    #[Groups(['update-company', 'company:read:collection'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['company-group-read', 'update-company'])]
+    #[Groups(['update-company'])]
     private ?string $siren = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['company-group-read', 'update-company'])]
+    #[Groups(['update-company', 'company:read:collection', 'company:read'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['company-group-read', 'update-company'])]
+    #[Groups(['update-company'])]
     private ?bool $isVerified = false;
 
     #[ORM\Column]
-    #[Groups(['company-group-read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['company-group-read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Agency::class, orphanRemoval: true)]
-    #[Groups(['company-group-read'])]
+    #[Groups(['company:read'])]
     private Collection $agencies;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Category::class, orphanRemoval: true)]
-    #[Groups(['company-group-read', 'agency-group-read'])]
     private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: User::class)]
-    #[MaxDepth(1)]
-    #[Groups(['company-group-read'])]
     private Collection $users;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[Groups(['read-media_object', 'update-company'])]
+    #[Groups(['update-company'])]
     private ?MediaObject $image = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: FeedBackBuilder::class)]

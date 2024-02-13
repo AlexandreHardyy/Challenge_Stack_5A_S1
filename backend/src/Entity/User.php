@@ -23,13 +23,24 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true]),
-        new Get(normalizationContext: ['groups' => ['read-user', 'employee:read', 'read-media_object'], 'enable_max_depth' => true],
-                security: "is_granted('USER_VIEW', object)"),
-        new Post(denormalizationContext: ['groups' => ['create-user']]),
-        new Patch(denormalizationContext: ['groups' => ['update-user']],  security: "is_granted('USER_EDIT', object)")
+        new GetCollection(
+            // normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true]
+            normalizationContext: ['groups' => ['user:read:collection']]
+        ),
+        new Get(
+            // normalizationContext: ['groups' => ['read-user', 'employee:read', 'read-media_object'], 'enable_max_depth' => true],
+            normalizationContext: ['groups' => ['user:read']],
+            security: "is_granted('USER_VIEW', object)"
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['create-user']]
+        ),
+        new Patch(
+            denormalizationContext: ['groups' => ['update-user']],  
+            security: "is_granted('USER_EDIT', object)"
+        )
     ],
-    normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true],
+    // normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true],
 )]
 
 #[ApiResource(
@@ -39,7 +50,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             uriVariables: [
                 'id' => new Link(toProperty: 'company', fromClass: Company::class)
             ],
-            normalizationContext:['groups' => ['read-user'], 'enable_max_depth' => true],
+            // normalizationContext:['groups' => ['read-user'], 'enable_max_depth' => true],
+            normalizationContext:['groups' => ['user:read:collection:by_agencies']],
             openapi: new Operation(
                 tags: [ 'Company', 'User' ],
                 summary: 'Returns a list of users for a specific company',
@@ -82,7 +94,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             uriVariables: [
                 'id' => new Link(toProperty: 'company', fromClass: Company::class)
             ],
-            normalizationContext: [ 'groups' => [ 'schedule_exceptions:read' ], 'enable_max_depth' => true ],
+            // normalizationContext: [ 'groups' => [ 'schedule_exceptions:read' ], 'enable_max_depth' => true ],
         )
     ],
 )]
@@ -114,10 +126,11 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     uriTemplate: '/user/me',
     operations: [
         new Get(
-            normalizationContext: [
-                'groups' => ['read-user', 'read-media_object'],
-                'enable_max_depth' => true,
-            ],
+            // normalizationContext: [
+            //     'groups' => ['read-user', 'read-media_object'],
+            //     'enable_max_depth' => true,
+            // ],
+            normalizationContext: ['groups' => ['user:read:me']],
             security: "is_granted('USER_VIEW', object)"
         ),
     ]
@@ -132,17 +145,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read-user', 'agency-group-read', 'session-group-read', 'session-group-read-collection', 'company-group-read'])]
+    #[Groups(['agency:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'company-group-read'])]
+    #[Groups(['create-user', 'update-user', 'create-employee', 'create-provider', 'user:read:me'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     #[Assert\Email()]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['read-user', 'update-user'])]
+    #[Groups(['update-user', 'user:read:me'])]
     private array $roles = [];
 
     /**
@@ -157,64 +170,55 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read', 'session-group-read-collection'])]
+    #[Groups(['create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read', 'session-group-read-collection'])]
+    #[Groups(['create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 
     #[ORM\Column]
-    #[Groups(['read-user', 'update-user'])]
+    #[Groups(['update-user'])]
     private ?bool $isVerified = false;
 
     #[ORM\Column]
-    #[Groups(['read-user'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['read-user', 'update-user'])]
+    #[Groups(['update-user'])]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['employee:read', 'create-employee', 'create-provider', 'update-provider'])]
+    #[Groups(['create-employee', 'create-provider', 'update-provider'])]
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]
-    #[MaxDepth(1)]
-    #[Groups(['employee:read', 'update-employee'])]
+    #[Groups(['update-employee'])]
     private Collection $agencies;
 
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Session::class, orphanRemoval: true)]
-    #[MaxDepth(1)]
-    #[Groups(['student:read'])]
     private Collection $studentSessions;
 
     #[ORM\OneToMany(mappedBy: 'instructor', targetEntity: Session::class, orphanRemoval: true)]
     // TODO: Find a better way than MaxDepth
-    #[MaxDepth(1)]
-    #[Groups(['employee:read'])]
     private Collection $instructorSessions;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Schedule::class, orphanRemoval: true)]
-    #[MaxDepth(1)]
-    #[Groups(['employee:read', 'schedule_exceptions:read'])]
     private Collection $schedules;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read'])]
+    #[Groups(['create-user', 'update-user', 'create-employee', 'create-provider'])]
     private ?string $phoneNumber = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[Groups(['update-user', 'read-media_object'])]
+    #[Groups(['update-user'])]
     private ?MediaObject $image = null;
     
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: FeedBack::class)]
     private Collection $feedBacks;
 
-    #[Groups('employee:read')]
     public function getStudentMarks(): ?float
     {
         $totalMark = 0;
