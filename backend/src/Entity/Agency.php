@@ -75,8 +75,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
-            // normalizationContext:['groups' => ['agency:read:collection:by-companies'], 'enable_max_depth' => true],
-            normalizationContext:['groups' => ['agency:read:collection:by-companies']],
+            // normalizationContext:['groups' => ['agency:read:collection:by_company'], 'enable_max_depth' => true],
+            normalizationContext:['groups' => ['agency:read:collection:by_company']],
             openapi: new Operation(
                 tags: [ 'Agency', 'Company' ],
                 summary: 'Returns a list of agencies for a specific company',
@@ -96,19 +96,19 @@ class Agency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['agency:read:collection', 'company:read', 'agency:read'])]
+    #[Groups(['agency:read:collection', 'company:read', 'agency:read', 'user:read:collection:by_company', 'agency:read:collection:by_company', 'session:read',])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company'])]
     private ?string $zip = null;
 
     #[ORM\Column]
@@ -119,20 +119,20 @@ class Agency
 
     #[ORM\ManyToOne(inversedBy: 'agencies')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['create-agency', 'agency:read:collection'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'session:read'])]
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read'])]
+    #[Groups(['user:read:collection:by_company', 'create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company', 'session:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['agency:read:collection', 'agency:read'])]
+    #[Groups(['agency:read:collection', 'agency:read', 'agency:read:collection:by_company'])]
     private ?string $description = null;
 
     #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'agencies')]
     // #[Groups(['create-agency'])]
-    #[Groups(['agency:read:collection', 'agency:read'])]
+    #[Groups(['agency:read:collection', 'agency:read', 'agency:read:collection:by_company'])]
     private Collection $services;
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY)]
