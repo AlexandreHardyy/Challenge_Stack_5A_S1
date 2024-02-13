@@ -73,11 +73,11 @@ class Service
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['create-service', 'agency:read', 'category:read:collection:by_company', 'session:read:collection'])]
+    #[Groups(['create-service', 'agency:read', 'category:read:collection:by_company', 'session:read:collection', 'agency:read:collection:by_company'])]
     private ?float $duration = null;
 
     #[ORM\Column]
-    #[Groups(['create-service', 'agency:read', 'category:read:collection:by_company', 'session:read:collection'])]
+    #[Groups(['create-service', 'agency:read', 'category:read:collection:by_company', 'session:read:collection', 'agency:read:collection:by_company'])]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
