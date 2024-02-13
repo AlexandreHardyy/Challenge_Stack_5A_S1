@@ -138,3 +138,19 @@ export interface FeedBackBuilder {
   isSelected?: boolean
   questions: string[]
 }
+
+export interface ScheduleDisponibilties {
+  date: string
+  startHour: number
+  endHour: number
+  scheduleExceptions: {
+    startHour: number
+    endHour: number
+  }[]
+}
+
+export interface Disponibility {
+  userId: number
+  sessions: Pick<Session, "id" | "startDate" | "endDate">[]
+  schedules: ScheduleDisponibilties[]
+}

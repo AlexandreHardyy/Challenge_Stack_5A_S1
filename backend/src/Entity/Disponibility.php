@@ -31,8 +31,8 @@ class Disponibility
     protected Collection $sessions,
     #[Groups(['disponibility:read:collection'])]
     protected Collection $schedules,
-    #[Groups(['disponibility:read:collection'])]
-    protected Collection $scheduleExceptions
+    // #[Groups(['disponibility:read:collection'])]
+    // protected Collection $scheduleExceptions
   )
   {
   }
@@ -52,8 +52,8 @@ class Disponibility
     return $this->schedules;
   }
 
-  public function getScheduleExceptions(): Collection 
-  {
-    return $this->scheduleExceptions;
-  }
+  // public function getScheduleExceptions(): Collection 
+  // {
+  //   return $this->scheduleExceptions;
+  // }
 }

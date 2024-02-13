@@ -5,9 +5,9 @@ import { useAuth } from "@/context/AuthContext"
 import { useAddSession } from "@/services/sessions.service"
 import { computeServiceDuration } from "@/utils/helpers"
 import { Agency, Service } from "@/utils/types"
+import { useQueryClient } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
 import { DateTime } from "luxon"
-import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
 interface ConfirmationModalProps {
@@ -18,7 +18,6 @@ interface ConfirmationModalProps {
   instructorId?: number
   agency: Agency
   onModalOpenChange: (value: boolean) => void
-  sessionsReFetch: () => void
 }
 
 export default function ConfirmationModal({
@@ -28,24 +27,22 @@ export default function ConfirmationModal({
   instructorId,
   agency,
   onModalOpenChange,
-  sessionsReFetch,
 }: ConfirmationModalProps) {
   const user = useAuth().user
   const { t } = useTranslation()
-  const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
   const sessionMutation = useAddSession({
     onSuccess: () => {
-      setIsLoading(false)
       toast({
         variant: "success",
         title: "Session reserved !",
         description: "Your session has been reserved. You will receive soon a confirmation email",
       })
+      queryClient.invalidateQueries(["getDisponibilities"])
       onModalOpenChange(false)
-      sessionsReFetch()
+      // sessionsReFetch()
     },
     onError: () => {
-      setIsLoading(false)
       toast({
         variant: "destructive",
         title: "An error occurred!",
@@ -76,12 +73,11 @@ export default function ConfirmationModal({
         </div>
         <DialogFooter className="flex flex-row-reverse justify-start gap-2">
           <Button
-            disabled={isLoading}
+            disabled={sessionMutation.isLoading}
             onClick={async () => {
-              setIsLoading(true)
               sessionMutation.mutate({
                 // TODO: remove "!"
-                student: `/api/users/${user!.id}`,
+                student: `/api/users/${user?.id}`,
                 instructor: `/api/users/${instructorId}`,
                 service: `/api/services/${service.id}`,
                 agency: `/api/agencies/${agency.id}`,
@@ -91,7 +87,7 @@ export default function ConfirmationModal({
               })
             }}
           >
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {sessionMutation.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t("common.cta.submit")}
           </Button>
           <Button variant="secondary" onClick={() => onModalOpenChange(false)}>

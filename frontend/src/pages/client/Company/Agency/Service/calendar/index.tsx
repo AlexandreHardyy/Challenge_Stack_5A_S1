@@ -1,189 +1,51 @@
 import { Button } from "@/components/ui/button"
 import { DateTime } from "luxon"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import ConfirmationModal from "./modal"
-import { Agency, Employee, Schedule, Service, Session } from "@/utils/types"
-import { BEGINNING_HOUR, BEGINNING_MINUTE, END_HOUR, END_MINUTE } from "@/utils/helpers"
+import { Agency, Service } from "@/utils/types"
+import {
+  computeSessionsByDisponibilities,
+  useFetchDisponibilities,
+} from "@/services/disponibilities/disponibilities.service"
+import { Loader2 } from "lucide-react"
 
 interface CalendarProps {
   service: Service
   agency: Agency
-  existingSessions: Session[]
   selectedInstructorId?: string
-  sessionsReFetch: () => void
 }
 
-interface WeekRange {
-  beginningOfTheWeek: DateTime
-  endOfTheWeek: DateTime
-}
-
-interface ParsedSchedule {
-  id: number
-  startHour: DateTime
-  endHour: DateTime
-  employee: Pick<Employee, "id" | "firstname" | "lastname">
-  scheduleExceptions: {
-    start: DateTime
-    end: DateTime
-  }[]
-}
-
-function computeCalendarHours(weekRange: WeekRange, granularity: number) {
-  let dayIndex = weekRange.beginningOfTheWeek.set({ hour: BEGINNING_HOUR, minute: BEGINNING_MINUTE })
-  let endOfDay = dayIndex.set({ hour: END_HOUR, minute: END_MINUTE })
-  const endOfWeek = weekRange.endOfTheWeek.set({ hour: END_HOUR, minute: END_MINUTE })
-
-  const calendarValues = []
-  let splitDayByInterval = []
-
-  while (dayIndex.diff(endOfWeek).toMillis() <= 0) {
-    splitDayByInterval.push(dayIndex)
-    dayIndex = dayIndex.plus({ minute: granularity })
-
-    if (dayIndex.diff(endOfDay).toMillis() > 0) {
-      calendarValues.push({
-        weekday: dayIndex,
-        splitDayByInterval,
-      })
-      splitDayByInterval = []
-      dayIndex = dayIndex.plus({ day: 1 }).set({ hour: BEGINNING_HOUR, minute: BEGINNING_MINUTE })
-      endOfDay = dayIndex.set({ hour: END_HOUR, minute: END_MINUTE })
-    }
-  }
-
-  return calendarValues
-}
-
-function checkIsSessionNotAvailable(
-  sessionStart: DateTime,
-  sessionEnd: DateTime,
-  exeptions: {
-    start: DateTime
-    end: DateTime
-  }[]
-) {
-  return exeptions.some((exeption) => {
-    if (exeption.end <= sessionStart) return false
-    if (exeption.start >= sessionEnd) return false
-
-    return true
-  })
-}
-
-function checkIsSessionInSchedules(sessionStart: DateTime, sessionEnd: DateTime, schedules: ParsedSchedule[]) {
-  return schedules.some((schedule) => {
-    if (schedule.scheduleExceptions.length > 0) {
-      if (checkIsSessionNotAvailable(sessionStart, sessionEnd, schedule.scheduleExceptions)) return false
-    }
-    if (sessionStart >= schedule.startHour && sessionEnd <= schedule.endHour) return true
-
-    return false
-  })
-}
-
-function checkNotAvailableSessionByInstructor(
-  instructorIds: number[],
-  sessionStart: DateTime,
-  sessionEnd: DateTime,
-  existingSessions: Session[],
-  schedules: ParsedSchedule[]
-) {
-  return instructorIds.map((instructorId) => {
-    return {
-      instructorId,
-      instructorNotAvailable: checkIsSessionNotAvailable(
-        sessionStart,
-        sessionEnd,
-        existingSessions
-          .filter((existingSession) => existingSession.instructor.id === instructorId)
-          .map((existingSession) => {
-            return {
-              start: DateTime.fromJSDate(new Date(existingSession.startDate)),
-              end: DateTime.fromJSDate(new Date(existingSession.endDate)),
-            }
-          })
-      ),
-      instructorIsWorking: checkIsSessionInSchedules(
-        sessionStart,
-        sessionEnd,
-        schedules.filter((schedule) => schedule.employee.id === instructorId)
-      ),
-    }
-  })
-}
-
-function retrieveSchedules(
-  schedules: Schedule[],
-  weekRange: { beginningOfTheWeek: DateTime; endOfTheWeek: DateTime },
-  selectedInstructorId?: number
-): ParsedSchedule[] {
-  return schedules
-    .filter((schedule) => {
-      if (
-        DateTime.fromISO(schedule.date) >= weekRange.beginningOfTheWeek &&
-        DateTime.fromISO(schedule.date) <= weekRange.endOfTheWeek
-      ) {
-        if (selectedInstructorId) {
-          return schedule.employee.id === selectedInstructorId
-        }
-
-        return true
-      }
-
-      return false
-    })
-    .map((schedule) => {
-      const scheduleDate = DateTime.fromISO(schedule.date)
-      return {
-        id: schedule.id,
-        startHour: scheduleDate.set({ hour: schedule.startHour }),
-        endHour: scheduleDate.set({ hour: schedule.endHour }),
-        employee: schedule.employee,
-        scheduleExceptions: schedule.scheduleExceptions.reduce(
-          (acc: Array<{ start: DateTime; end: DateTime }>, scheduleException) => {
-            if (scheduleException.status !== "VALIDATED") {
-              return acc
-            }
-            acc.push({
-              start: scheduleDate.set({ hour: scheduleException.startHour }),
-              end: scheduleDate.set({ hour: scheduleException.endHour }),
-            })
-
-            return acc
-          },
-          []
-        ),
-      }
-    })
-}
-
-export default function Calendar({
-  service,
-  agency,
-  selectedInstructorId,
-  existingSessions,
-  sessionsReFetch,
-}: CalendarProps) {
-  const granularity = service.duration
-
+export default function Calendar({ service, agency, selectedInstructorId }: CalendarProps) {
   const [weekRange, setWeekRange] = useState({
     beginningOfTheWeek: DateTime.now().startOf("day"),
     endOfTheWeek: DateTime.now().plus({ day: 6 }).startOf("day"),
   })
-  const [sessions, setSessions] = useState(computeCalendarHours(weekRange, granularity))
+
   const [hourSelected, setHourSelected] = useState<DateTime>(DateTime.now())
   const [chosenInstructorIdForSession, setChosenInstructorIdForSession] = useState<number>()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const { data: disponibilities, status: disponibilitiesStatus } = useFetchDisponibilities({ agency })
+
+  if (disponibilitiesStatus === "error") {
+    return <h1>WTFFFFF</h1>
+  }
+
+  if (disponibilitiesStatus === "loading") {
+    return <Loader2 />
+  }
+
   const today = DateTime.now()
 
   const instructorIds = selectedInstructorId ? [parseInt(selectedInstructorId)] : agency.users!.map((user) => user.id)
-  const schedules = retrieveSchedules(
-    agency.schedules,
+
+  const sessions = computeSessionsByDisponibilities({
+    disponibilities: disponibilities.filter(
+      (disponibility) => instructorIds?.includes(parseInt(`${disponibility.userId}`))
+    ),
+    service,
     weekRange,
-    selectedInstructorId ? parseInt(selectedInstructorId) : undefined
-  )
+  })
 
   function modifyWeekRange(type: "previous" | "next") {
     setWeekRange({
@@ -202,10 +64,6 @@ export default function Calendar({
     setIsModalOpen(true)
   }
 
-  useEffect(() => {
-    setSessions(computeCalendarHours(weekRange, granularity))
-  }, [weekRange, granularity])
-
   return (
     <>
       <ConfirmationModal
@@ -215,7 +73,6 @@ export default function Calendar({
         agency={agency}
         instructorId={chosenInstructorIdForSession}
         onModalOpenChange={setIsModalOpen}
-        sessionsReFetch={sessionsReFetch}
       />
       <div className="flex gap-1">
         <Button
@@ -236,36 +93,21 @@ export default function Calendar({
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
-                  {day.splitDayByInterval.map((hour) => {
-                    // TODO: remove "!"
-                    const sessionAvailabilityByInstructor = checkNotAvailableSessionByInstructor(
-                      instructorIds,
-                      hour,
-                      hour.plus({ minute: service.duration }),
-                      existingSessions,
-                      schedules
-                    ).filter((sessionAvailability) => sessionAvailability.instructorIsWorking)
-
-                    if (!sessionAvailabilityByInstructor.length) {
-                      return <div key={hour.toMillis()} className="h-9 rounded-[8px] px-3 bg-secondary"></div>
+                  {day.sessions.map((session) => {
+                    if (session.status === "closed") {
+                      return <div key={session.hour.toMillis()} className="h-9 rounded-[8px] px-3 bg-secondary"></div>
                     }
 
-                    const isSessionNotAvailable = sessionAvailabilityByInstructor.every(
-                      (item) => item.instructorNotAvailable
-                    )
-
-                    const availableInstructors = sessionAvailabilityByInstructor
-                      .filter((item) => !item.instructorNotAvailable)
-                      .map((item) => item.instructorId)
+                    const isSessionNotAvailable = session.instructorsAvailable.length === 0
 
                     return (
                       <Button
-                        disabled={isSessionNotAvailable || hour < today}
-                        key={hour.toMillis()}
+                        disabled={isSessionNotAvailable || session.hour < today}
+                        key={session.hour.toMillis()}
                         size="sm"
-                        onClick={() => onHourSelected(hour, availableInstructors)}
+                        onClick={() => onHourSelected(session.hour, session.instructorsAvailable)}
                       >
-                        {hour.toFormat("HH':'mm")}
+                        {session.hour.toFormat("HH':'mm")}
                       </Button>
                     )
                   })}

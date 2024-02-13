@@ -48,9 +48,11 @@ class ScheduleException
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['disponibility:read:collection'])]
     private ?int $startHour = null;
 
     #[ORM\Column]
+    #[Groups(['disponibility:read:collection'])]
     private ?int $endHour = null;
 
     #[ORM\ManyToOne(inversedBy: 'scheduleExceptions')]
