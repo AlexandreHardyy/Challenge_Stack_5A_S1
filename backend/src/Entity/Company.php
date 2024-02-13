@@ -74,7 +74,7 @@ class Company
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company:read:collection', 'agency:read:collection'])]
+    #[Groups(['user:read:me', 'company:read', 'company:read:collection', 'agency:read:collection', 'session:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -82,23 +82,23 @@ class Company
     private ?string $socialReason = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['update-company', 'company:read:collection'])]
+    #[Groups(['update-company', 'company:read', 'company:read:collection'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['update-company', 'company:read:collection'])]
+    #[Groups(['update-company', 'company:read', 'company:read:collection'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['update-company'])]
+    #[Groups(['company:read', 'update-company'])]
     private ?string $siren = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['update-company', 'company:read:collection', 'company:read'])]
+    #[Groups(['update-company', 'company:read', 'company:read:collection', 'company:read'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['update-company'])]
+    #[Groups(['company:read', 'update-company'])]
     private ?bool $isVerified = false;
 
     #[ORM\Column]

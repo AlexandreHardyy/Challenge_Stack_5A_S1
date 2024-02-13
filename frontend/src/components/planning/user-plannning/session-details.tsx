@@ -12,11 +12,14 @@ import { toast } from "@/components/ui/use-toast"
 import { useQueryClient } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
 import { ModalFormFeedBack } from "@/components/form/feedback-form"
+import { useFetchSessionById } from "@/services/sessions.service"
+import { Spinner } from "@/components/loader/Spinner"
 
-export function SessionDetails({ session }: { session?: Session }) {
+export function SessionDetails({ sessionId }: { sessionId?: number }) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
+  const { data: session, refetch, isLoading: isSessionLoading } = useFetchSessionById(sessionId)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [studentMark, setStudentMark] = useState<number>()
   const [studentComment, setStudentComment] = useState<string>()
@@ -52,7 +55,7 @@ export function SessionDetails({ session }: { session?: Session }) {
       <Card className="w-1/4 mt-[66px] ml-3 flex justify-center items-center">
         <CardContent className="">
           <h3 className="font-bold text-[24px] text-center">
-            {t("provider.myPlanning.sessionDetails.noSessionSelected")}
+            {isSessionLoading ? <Spinner /> : t("provider.myPlanning.sessionDetails.noSessionSelected")}
           </h3>
         </CardContent>
       </Card>
@@ -134,7 +137,7 @@ export function SessionDetails({ session }: { session?: Session }) {
                 )}
               </div>
               {!session.feedBack && (
-                <ModalFormFeedBack companyId={session?.instructor?.company!.id} sessionId={session?.id} />
+                <ModalFormFeedBack companyId={session?.agency.company.id} sessionId={session?.id} />
               )}
             </div>
           )}

@@ -8,7 +8,7 @@ import { AddCompanyFormSchema, UpdateCompanyFormSchema } from "@/zod-schemas/com
 import { formatQueryParams } from "@/utils/helpers"
 
 export function useFetchCompany(companyId?: number) {
-  const fetchCompanyUrl = `${import.meta.env.VITE_API_URL}companies/${companyId}`
+  const fetchCompanyUrl = `/companies/${companyId}`
 
   return useQuery<Company>(
     ["getCompany", fetchCompanyUrl],
