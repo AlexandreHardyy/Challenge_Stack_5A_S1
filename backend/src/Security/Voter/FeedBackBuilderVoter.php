@@ -14,7 +14,6 @@ class FeedBackBuilderVoter extends Voter
 {
     public const CREATE = 'FEEDBACK_BUILDER_CREATE';
     public const EDIT = 'FEEDBACK_BUILDER_EDIT';
-    public const VIEW = 'FEEDBACK_BUILDER_VIEW';
 
     public function __construct(private Security $security, private RequestStack $requestStack)
     {}
@@ -23,7 +22,7 @@ class FeedBackBuilderVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW, self::CREATE]);
+        return in_array($attribute, [self::EDIT, self::CREATE]);
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool

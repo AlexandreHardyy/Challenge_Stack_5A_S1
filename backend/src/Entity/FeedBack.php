@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\FeedBackRepository;
@@ -16,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(
+            security: "is_granted('ROLE_USER')",
             denormalizationContext: ['groups' => ['create-feedback']],
             openapi: new Operation(
                 tags: ['FeedBack'],
@@ -24,6 +27,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
             )
         )
     ],
+)]
+#[ApiResource(
+    uriTemplate: '/feed_back_builders/{id}/feed_backs',
+    security: "is_granted('ROLE_PROVIDER') or is_granted('ROLE_ADMIN')",
+    operations: [
+        new GetCollection(
+            openapi: new Operation(
+                tags: [ 'FeedBack' ],
+                summary: 'Returns a list of feedbacks for a specific feedback builder',
+                description: 'Returns a list of feedbacks for a specific feedback builder'
+            )
+        ),
+    ],
+    uriVariables: [
+        'id' => new Link(toProperty: 'feedBackBuilder', fromClass: FeedBackBuilder::class)
+    ]
 )]
 class FeedBack
 {
