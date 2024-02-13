@@ -4,27 +4,30 @@ import Calendar from "./calendar"
 import { useFetchAgencyById } from "@/services/agency.service"
 import { InstructorSelect } from "./instructor-select"
 import { useState } from "react"
-import { useFetchSessions } from "@/services/sessions.service"
 import { useTranslation } from "react-i18next"
-import { DateTime } from "luxon"
+import { Loader2 } from "lucide-react"
 
 export default function ServiceClient() {
   const { agencyId, serviceId } = useParams()
   const { t } = useTranslation()
   const [selectedInstructor, setSelectedInstructor] = useState<string>()
 
-  const requestAgency = useFetchAgencyById(agencyId)
-  const requestSessions = useFetchSessions({
-    agency: agencyId,
-    status: "created",
-    "startDate[after]": DateTime.now().toISO({ includeOffset: false }) ?? "",
-  })
+  const { data: agency, status: agencyStatus } = useFetchAgencyById(agencyId)
+  // const requestSessions = useFetchSessions({
+  //   agency: agencyId,
+  //   status: "created",
+  //   "startDate[after]": DateTime.now().toISO({ includeOffset: false }) ?? "",
+  // })
 
-  if (requestAgency.status === "error" || requestSessions.status === "error") {
+  if (agencyStatus === "error") {
     return <h1>WTFFFFF</h1>
   }
 
-  const service = requestAgency.data?.services.find((service) => service.id === parseInt(serviceId!))
+  if (agencyStatus === "loading") {
+    return <Loader2 />
+  }
+
+  const service = agency.services.find((service) => service.id === parseInt(serviceId!))
 
   return (
     <div className="flex flex-col gap-[50px] mt-[60px] mb-[83px]">
@@ -46,26 +49,10 @@ export default function ServiceClient() {
             </p>
           </div>
         )}
-        {requestAgency.data?.users && (
-          <InstructorSelect instructors={requestAgency.data.users} setSelectedInstructor={setSelectedInstructor} />
-        )}
+        {agency.users && <InstructorSelect instructors={agency.users} setSelectedInstructor={setSelectedInstructor} />}
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0 flex justify-center">
-        {service && requestAgency.data && requestSessions.data && (
-          <Calendar
-            service={service}
-            agency={requestAgency.data}
-            existingSessions={
-              selectedInstructor
-                ? requestSessions.data.filter(
-                    (existingSession) => existingSession.instructor.id === parseInt(selectedInstructor)
-                  )
-                : requestSessions.data
-            }
-            sessionsReFetch={requestSessions.refetch}
-            selectedInstructorId={selectedInstructor}
-          />
-        )}
+        {service && agency && <Calendar service={service} agency={agency} selectedInstructorId={selectedInstructor} />}
       </section>
     </div>
   )

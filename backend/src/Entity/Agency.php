@@ -25,7 +25,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     security: "is_granted('ROLE_USER')",
     operations: [
         new Get(
-            normalizationContext:['groups' => ['agency-group-read'], 'enable_max_depth' => true],
+            // normalizationContext:['groups' => ['agency:read'], 'enable_max_depth' => true],
+            normalizationContext:['groups' => ['agency:read']],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Returns agency by Id',
@@ -33,7 +34,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         ),
         new GetCollection(
-            normalizationContext:['groups' => ['agency-group-read'], 'enable_max_depth' => true],
+            // normalizationContext:['groups' => ['agency:read:collection'], 'enable_max_depth' => true],
+            normalizationContext:['groups' => ['agency:read:collection']],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Returns agencies',
@@ -66,14 +68,15 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             )
         )
     ],
-    normalizationContext: ['groups' => ['read-media_object'], 'enable_max_depth' => true]
+    // normalizationContext: ['groups' => ['read-media_object'], 'enable_max_depth' => true]
 )]
 #[ApiResource(
     uriTemplate: '/companies/{id}/agencies',
     security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
-            normalizationContext:['groups' => ['agency-group-read'], 'enable_max_depth' => true],
+            // normalizationContext:['groups' => ['agency:read:collection:by_company'], 'enable_max_depth' => true],
+            normalizationContext:['groups' => ['agency:read:collection:by_company']],
             openapi: new Operation(
                 tags: [ 'Agency', 'Company' ],
                 summary: 'Returns a list of agencies for a specific company',
@@ -85,73 +88,71 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         'id' => new Link(toProperty: 'company', fromClass: Company::class)
     ]
 )]
-#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'services.category.name' => 'partial', 'address' => 'partial', 'city' => 'partial', 'zip' => 'partial',])]
+
+
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'services.name' => 'partial', 'address' => 'partial', 'city' => 'partial', 'zip' => 'partial',])]
 class Agency
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company-group-read', 'agency-group-read', 'session-group-read-collection', 'employee:read'])]
+    #[Groups(['agency:read:collection', 'company:read', 'agency:read', 'user:read:collection:by_company', 'agency:read:collection:by_company', 'session:read',])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company'])]
     private ?string $zip = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'agencies')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['agency-group-read', 'create-agency'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'session:read'])]
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read', 'create-agency', 'read-user', 'session-group-read-collection'])]
+    #[Groups(['user:read:collection:by_company', 'create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company', 'session:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['agency-group-read'])]
+    #[Groups(['agency:read:collection', 'agency:read', 'agency:read:collection:by_company'])]
     private ?string $description = null;
 
     #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'agencies')]
-    #[Groups(['agency-group-read', 'create-agency'])]
+    // #[Groups(['create-agency'])]
+    #[Groups(['agency:read:collection', 'agency:read', 'agency:read:collection:by_company'])]
     private Collection $services;
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY)]
-    #[Groups(['company-group-read', 'agency-group-read', 'create-agency'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'company:read', 'agency:read'])]
     private array $geoloc = [];
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'agencies')]
-    #[MaxDepth(1)]
-    #[Groups(['agency-group-read', 'company-group-read'])]
+    // #[MaxDepth(1)]
+    #[Groups(['agency:read'])]
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Schedule::class, orphanRemoval: true)]
-    #[MaxDepth(1)]
-    #[Groups(['agency-group-read'])]
+    // #[MaxDepth(1)]
     private Collection $schedules;
     
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Session::class, orphanRemoval: true)]
-    #[MaxDepth(1)]
-    #[Groups(['session-group-read-collection', 'employee:read', 'company-group-read'])]
+    // #[MaxDepth(1)]
     private Collection $sessions;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: MediaObject::class)]
-    #[Groups(['read-media_object'])]
     private Collection $image;
 
     public function __construct()

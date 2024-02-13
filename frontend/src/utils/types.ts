@@ -89,6 +89,7 @@ export interface Session {
   status: string
   studentMark?: number
   ratingService?: RatingService
+  feedBack: FeedBack
 }
 
 export interface Schedule {
@@ -123,9 +124,33 @@ export interface MediaObject {
   id: number
   contentUrl: string
 }
+
+export interface FeedBack {
+  id: number
+  feedBackGroups: Array<{
+    question: string
+    answer: string
+  }>
+}
 export interface FeedBackBuilder {
   id: number
   title: string
   isSelected?: boolean
   questions: string[]
+}
+
+export interface ScheduleDisponibilties {
+  date: string
+  startHour: number
+  endHour: number
+  scheduleExceptions: {
+    startHour: number
+    endHour: number
+  }[]
+}
+
+export interface Disponibility {
+  userId: number
+  sessions: Pick<Session, "id" | "startDate" | "endDate">[]
+  schedules: ScheduleDisponibilties[]
 }

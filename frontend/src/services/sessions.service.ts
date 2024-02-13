@@ -4,6 +4,17 @@ import { Session } from "@/utils/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { DateTime } from "luxon"
 
+export function useFetchSessionById(id?: number) {
+  return useQuery<Session>(["getSessionById", id], async ({ queryKey: [, sessionId] }) => {
+    const response = await api.get(`sessions/${sessionId}`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getSessionById)")
+    }
+
+    return response.data
+  })
+}
+
 type useFetchSessionsQueryParams = {
   agency?: string | string[]
   status?: "created" | "cancelled"
@@ -14,27 +25,20 @@ export function useFetchSessions(queryParams?: useFetchSessionsQueryParams) {
   const formatedQueryParams = formatQueryParams(queryParams)
   const url = `sessions${formatedQueryParams}`
 
-  console.log("queryParams", queryParams)
   ///////////
 
   // if (!agencyId || !serviceId) {
   //   throw new Error("agency and service must be specified")
   // }
 
-  return useQuery<Session[]>(
-    ["getSessions"],
-    async () => {
-      const response = await api.get(url)
-      if (response.status !== 200) {
-        throw new Error("Something went wrong with the request (getSessions)")
-      }
-
-      return response.data["hydra:member"]
-    },
-    {
-      retry: false,
+  return useQuery<Session[]>(["getSessions"], async () => {
+    const response = await api.get(url)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getSessions)")
     }
-  )
+
+    return response.data["hydra:member"]
+  })
 
   // const url = `${import.meta.env.VITE_API_URL}sessions?agency=${agencyId}&status=created`
 
@@ -53,6 +57,28 @@ export function useFetchSessions(queryParams?: useFetchSessionsQueryParams) {
   //     retry: false,
   //   }
   // )
+}
+
+export function useFetchSessionsByInstructor(userId?: number) {
+  return useQuery<Session[]>(["getSessionsByInstructor"], async () => {
+    const response = await api.get(`instructors/${userId}/sessions`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getSessions)")
+    }
+
+    return response.data["hydra:member"]
+  })
+}
+
+export function useFetchSessionsByStudent(userId?: number) {
+  return useQuery<Session[]>(["getSessionsByStudent"], async () => {
+    const response = await api.get(`students/${userId}/sessions`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getSessions)")
+    }
+
+    return response.data["hydra:member"]
+  })
 }
 
 interface SessionForm {

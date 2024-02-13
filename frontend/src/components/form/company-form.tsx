@@ -111,19 +111,21 @@ export const CompanyForm = ({ company, isReadOnly = false, isAdmin = false }: Co
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="isVerified"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-              <FormLabel>{t("admin.companies.table.isVerifiedLabel")}</FormLabel>
-              <FormControl>
-                <Checkbox checked={field.value} onCheckedChange={field.onChange} readOnly={isReadOnly || !isAdmin} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {isAdmin && (
+          <FormField
+            control={form.control}
+            name="isVerified"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormLabel>{t("admin.companies.table.isVerifiedLabel")}</FormLabel>
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} readOnly={isReadOnly} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         {!isReadOnly && (
           <Button type="submit">{company ? t("admin.companies.cta.edit") : t("admin.companies.cta.add")}</Button>

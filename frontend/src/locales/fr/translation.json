@@ -41,6 +41,18 @@
       "cancel": "Annuler"
     }
   },
+  "feedBackInfo": {
+    "cta": {
+      "addtionalFeedBack": "Envoyer feedback additionnel",
+      "sendFeedBack": "Envoyer feedback"
+    },
+    "toast": {
+      "title": "Feedback",
+      "success": "Feedback envoyer avec succès",
+      "error": "Une erreur. Please try again later."
+    },
+    "placeholderQuestion": "Answer question ..."
+  },
   "searchClient": {
     "form": {
       "categoryToggle": "Categorie",
@@ -237,7 +249,7 @@
     }
   },
   "ProviderFeedBackBuilders": {
-    "title": "Contructeur de formualireFeedback",
+    "title": "Contructeur de formulaire de feedback",
     "form": {
       "title": "Titre",
       "isSelected": "Selectionné",

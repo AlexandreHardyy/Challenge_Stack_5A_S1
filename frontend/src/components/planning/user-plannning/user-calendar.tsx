@@ -2,15 +2,18 @@ import FullCalendar from "@fullcalendar/react"
 import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import { Session, Student } from "@/utils/types"
+import { useEffect } from "react"
+import { UseQueryResult } from "@tanstack/react-query"
 
 type StudentCalendarProps = {
-  setSelectedSession: (session: Session) => void
+  setSelectedSessionId: (sessionId?: number) => void
   student: Student
+  sessions: UseQueryResult<Session[], unknown>
 }
 
-function StudentCalendar({ setSelectedSession, student }: StudentCalendarProps) {
+function StudentCalendar({ setSelectedSessionId, student, sessions }: StudentCalendarProps) {
   const sessionEvents =
-    student.studentSessions?.map((studentSession) => {
+    sessions.data?.map((studentSession) => {
       return {
         title: `${studentSession.service.name} ${studentSession.instructor.firstname} ${studentSession.instructor.lastname}`,
         start: studentSession.startDate,
@@ -21,6 +24,10 @@ function StudentCalendar({ setSelectedSession, student }: StudentCalendarProps) 
     }) ?? []
 
   const events = [...sessionEvents]
+
+  useEffect(() => {
+    setSelectedSessionId(undefined)
+  }, [student])
 
   return (
     <div className="grow">
@@ -37,7 +44,7 @@ function StudentCalendar({ setSelectedSession, student }: StudentCalendarProps) 
         }}
         eventClick={(info) => {
           const event = info.event
-          setSelectedSession(event.extendedProps.session)
+          setSelectedSessionId(event.extendedProps.session.id)
         }}
       />
     </div>
