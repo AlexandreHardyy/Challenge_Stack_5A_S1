@@ -125,12 +125,13 @@ export interface MediaObject {
   contentUrl: string
 }
 
+export interface FeedBackGroup {
+  question: string
+  answer: string
+}
 export interface FeedBack {
   id: number
-  feedBackGroups: Array<{
-    question: string
-    answer: string
-  }>
+  feedBackGroups: FeedBackGroup[]
 }
 export interface FeedBackBuilder {
   id: number

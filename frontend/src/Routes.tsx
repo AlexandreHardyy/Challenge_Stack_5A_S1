@@ -34,6 +34,7 @@ import ResetPassword from "@/pages/auth/ResetPassword.tsx"
 import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
 import ProtectedRoute from "@/components/security/ProtectedRoute.tsx"
 import FeedBackBuilders from "@/pages/provider/feedback-builders"
+import FeedBacks from "@/pages/provider/feedback-builders/feedbacks"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -178,6 +179,10 @@ const Routes = () => {
             {
               path: "feedback-builders",
               element: <FeedBackBuilders />,
+            },
+            {
+              path: "feedback-builders/:id/feedbacks",
+              element: <FeedBacks />,
             },
           ],
           errorElement: <NotFound />,
