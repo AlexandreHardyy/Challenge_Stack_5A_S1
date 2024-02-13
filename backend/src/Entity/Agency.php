@@ -96,7 +96,7 @@ class Agency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['agency:read:collection', 'company:read', 'agency:read', 'user:read:collection:by_company', 'agency:read:collection:by_company', 'session:read',])]
+    #[Groups(['agency:read:collection', 'company:read', 'agency:read', 'user:read:collection:by_company', 'agency:read:collection:by_company', 'session:read', 'user:read' ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -123,7 +123,7 @@ class Agency
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read:collection:by_company', 'create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company', 'session:read'])]
+    #[Groups(['user:read:collection:by_company', 'create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company', 'session:read', 'user:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
