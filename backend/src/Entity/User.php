@@ -59,7 +59,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
                 summary: 'Returns a list of users for a specific company',
                 description: 'Returns a list of users for a specific company'
             ),
-            normalizationContext: ['groups' => ['user:read:collection:by_company', 'user:read:collection:by_agencies']],
+            normalizationContext: ['groups' => ['user:read:collection:by_company', 'user:read:collection:by_agency']],
         )
     ],
 )]
@@ -189,7 +189,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['user:read:me', 'create-employee', 'create-provider', 'update-provider', 'user:read:collection', 'user:read:collection:by_agencies'])]
+    #[Groups(['user:read:me', 'create-employee', 'create-provider', 'update-provider', 'user:read:collection', 'user:read:collection:by_agency'])]
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]

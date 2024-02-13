@@ -80,7 +80,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 summary: 'Returns a list of agencies for a specific company',
                 description: 'Returns a list of agencies for a specific company'
             ),
-            normalizationContext: ['groups' => ['agency:read:collection:by-companies']]
+            normalizationContext: ['groups' => ['agency:read:collection:by_company']]
         ),
     ],
     uriVariables: [
