@@ -72,7 +72,6 @@ export const calculateMostSoldAgency = (Companies: Company[], dateRange: { from:
   const agenciesCount = Companies.reduce(
     (acc, company) => {
       company.agencies.forEach((agency) => {
-        console.log(agency)
         const sessions = agency.sessions.filter(
           (session) =>
             DateTime.fromISO(session.startDate) >= DateTime.fromJSDate(dateRange.from) &&

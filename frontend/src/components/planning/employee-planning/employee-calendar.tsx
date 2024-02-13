@@ -5,23 +5,18 @@ import { Schedule, Session } from "@/utils/types"
 import { useTranslation } from "react-i18next"
 import { EventInput } from "@fullcalendar/core/index.js"
 import { addHours } from "date-fns"
-import { UseQueryResult } from "@tanstack/react-query"
 
 type EmployeeCalendarProps = {
   setSelectedSessionId: (sessionId: number) => void
-  sessions: UseQueryResult<Session[], unknown>
-  schedules: UseQueryResult<Schedule[], unknown>
+  sessions?: Session[]
+  schedules?: Schedule[]
 }
 
 function EmployeeCalendar({ setSelectedSessionId, sessions, schedules }: EmployeeCalendarProps) {
   const { t } = useTranslation()
 
-  if (sessions.isLoading || schedules.isLoading) {
-    return <></>
-  }
-
   const sessionEvents =
-    sessions.data?.map((instructorSession) => {
+    sessions?.map((instructorSession) => {
       return {
         title: `${instructorSession.service.name} ${instructorSession.student.firstname} ${instructorSession.student.lastname}`,
         start: instructorSession.startDate,
@@ -31,7 +26,7 @@ function EmployeeCalendar({ setSelectedSessionId, sessions, schedules }: Employe
       }
     }) ?? []
 
-  const scheduleEvents = schedules.data?.reduce((events: EventInput[], schedule) => {
+  const scheduleEvents = schedules?.reduce((events: EventInput[], schedule) => {
     events.push({
       title: `${t("provider.myPlanning.workDay")}`,
       start: addHours(new Date(schedule.date), schedule.startHour),

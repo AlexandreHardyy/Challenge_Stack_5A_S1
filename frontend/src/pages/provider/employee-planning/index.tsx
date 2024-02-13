@@ -64,7 +64,11 @@ function EmployeePlanning() {
   return (
     <div>
       <div className="flex">
-        <EmployeeCalendar setSelectedSessionId={setSelectedSessionId} sessions={sessions} schedules={schedules} />
+        <EmployeeCalendar
+          setSelectedSessionId={setSelectedSessionId}
+          sessions={sessions.data}
+          schedules={schedules.data}
+        />
         <SessionDetails sessionId={selectedSessionId} />
       </div>
       <div className="flex flex-col gap-6 pt-10">

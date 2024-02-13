@@ -23,7 +23,7 @@ export const FormSchedules = ({ agenciesAvalaibles }: { agenciesAvalaibles?: Age
 
   const submit = async (values: ScheduleFormSchema) => {
     await schedules.mutateAsync(values)
-    queryClient.invalidateQueries(["getUserById"])
+    queryClient.invalidateQueries(["getSchedulesByUser"])
   }
 
   const form = useForm<ScheduleFormSchema>({

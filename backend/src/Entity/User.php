@@ -182,7 +182,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]
-    #[Groups(['user:read:collection:by_company', 'update-employee'])]
+    #[Groups(['user:read:collection:by_company', 'update-employee', 'user:read'])]
     private Collection $agencies;
 
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Session::class, orphanRemoval: true)]
