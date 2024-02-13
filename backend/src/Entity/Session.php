@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\SessionRepository;
@@ -18,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\OpenApi\Model\Operation;
 
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[ApiResource(
@@ -25,11 +27,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Post(validationContext: ['groups' => ['session-create']], security: "is_granted('ROLE_USER')"),
         new Get(
-            normalizationContext: ['groups' => ['session-group-read']],
+            normalizationContext: ['groups' => ['session:read']],
             security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['session-group-read-collection'], 'enable_max_depth' => true]
+            normalizationContext: ['groups' => ['session:read:collection']],
+            // normalizationContext: ['groups' => ['session-group-read-collection'], 'enable_max_depth' => true]
         ),
         new Patch(
             validationContext: ['groups' => ['session-group-update']],
@@ -38,6 +41,25 @@ use Symfony\Component\Validator\Constraints as Assert;
         )
     ]
 )]
+#[ApiResource(
+    uriTemplate: '/agencies/{id}/sessions',
+    security: "is_granted('ROLE_USER')",
+    operations: [
+        new GetCollection(
+            // normalizationContext:['groups' => ['agency:read:collection:by-companies'], 'enable_max_depth' => true],
+            normalizationContext:['groups' => ['session:read:collection:by-agencies']],
+            openapi: new Operation(
+                tags: [ 'Agency', 'Session' ],
+                summary: 'Returns a list of sessions for a specific agency',
+                description: 'Returns a list of sessions for a specific agency'
+            )
+        ),
+    ],
+    uriVariables: [
+        'id' => new Link(toProperty: 'agency', fromClass: Agency::class)
+    ]
+)]
+
 #[ApiFilter(SearchFilter::class, properties: ['service' => 'exact', 'agency' => 'exact', 'status' => 'exact'])]
 #[ApiFilter(DateFilter::class, properties: ['startDate'])]
 class Session
@@ -45,55 +67,45 @@ class Session
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'studentSessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[MaxDepth(1)]
     // SECURITY
-    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection'])]
     private ?User $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'instructorSessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[MaxDepth(1)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'student:read'])]
     private ?User $instructor = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
+    #[Groups(['disponibility:read:collection'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
     // SECURITY
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection', 'student:read'])]
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session-group-read', 'session-group-update', 'employee:read', 'student:read'])]
     private ?string $status = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['session-group-update', 'employee:read'])]
+    #[Groups(['session-group-update'])]
     private ?float $studentMark = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
-    #[Groups(['session-group-read', 'employee:read', 'student:read'])]
+    #[Groups(['session:read:collection:by-agencies'])]
     private ?RatingService $ratingService = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
-    #[Groups(['session-group-read', 'student:read'])]
     private ?FeedBack $feedBack = null;
 
     public function getId(): ?int

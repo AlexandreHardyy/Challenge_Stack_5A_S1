@@ -30,7 +30,7 @@ export function useFetchAgencyById(agencyId?: string) {
 
 type FetchAgenciesQueryParams = {
   name?: string
-  "services.category.name"?: string
+  "services.name"?: string
   address?: string
   city?: string
   zip?: string

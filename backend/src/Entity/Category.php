@@ -51,7 +51,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
-            normalizationContext:['groups' => ['categories-group-read']],
+            normalizationContext:['groups' => ['category:read:collection:by-companies']],
             openapi: new Operation(
                 tags: [ 'Category' ],
                 summary: 'Returns a service of an agency',
@@ -68,11 +68,10 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['company-group-read', 'agency-group-read', 'categories-group-read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['company-group-read', 'agency-group-read', 'categories-group-read', 'create-category', 'update-category'])]
+    #[Groups(['create-category', 'update-category', 'agency:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'categories')]
@@ -81,7 +80,6 @@ class Category
     private ?Company $company = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Service::class, orphanRemoval: true)]
-    #[Groups(['categories-group-read'])]
     private Collection $services;
 
     public function __construct()

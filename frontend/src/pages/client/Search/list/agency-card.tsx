@@ -14,7 +14,7 @@ function AgencyCard({ agency }: AgencyCardProps) {
   const { t } = useTranslation()
 
   const { filters, setFilters } = useSearchFiltersContext()
-  const categoriesNames = new Set(agency.services.map((service) => service.category.name))
+  const categoriesNames = new Set(agency.services.map((service) => service.name))
 
   function onSetCategory(categoryName: string) {
     setFilters({

@@ -61,28 +61,28 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'categories-group-read'])]
+    #[Groups(['agency:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['agency-group-read', 'categories-group-read', 'read-user', 'create-service', 'session-group-read-collection'])]
+    #[Groups(['create-service', 'agency:read:collection', 'agency:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['agency-group-read', 'categories-group-read', 'create-service'])]
+    #[Groups(['create-service', 'agency:read'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'categories-group-read', 'create-service', 'session-group-read-collection'])]
+    #[Groups(['create-service', 'agency:read'])]
     private ?float $duration = null;
 
     #[ORM\Column]
-    #[Groups(['agency-group-read', 'company-group-read', 'categories-group-read', 'create-service', 'session-group-read-collection'])]
+    #[Groups(['create-service', 'agency:read'])]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['agency-group-read', 'create-service'])]
+    #[Groups(['create-service', 'agency:read'])]
     private ?Category $category = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'services')]
