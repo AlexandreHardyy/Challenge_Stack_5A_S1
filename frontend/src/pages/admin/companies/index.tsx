@@ -43,16 +43,14 @@ const ModalCompanyForm = ({
             {!company ? (
               t("admin.companies.cta.new")
             ) : (
-              <>
-                <div className="flex items-center">
-                  <h2>{t("admin.companies.table.company")}</h2>
-                  {isReadOnly && (
-                    <Button variant={"ghost"} onClick={() => setIsReadOnly(!isReadOnly)}>
-                      <PencilIcon />
-                    </Button>
-                  )}{" "}
-                </div>
-              </>
+              <div className="flex items-center">
+                <h2>{t("admin.companies.table.company")}</h2>
+                {isReadOnly && (
+                  <Button variant={"ghost"} onClick={() => setIsReadOnly(!isReadOnly)}>
+                    <PencilIcon />
+                  </Button>
+                )}{" "}
+              </div>
             )}
           </DialogTitle>
           <DialogDescription>

@@ -64,7 +64,7 @@ const ActionColumn = ({ agency }: { agency: Agency }) => {
         name={agency.name}
         onDelete={async () => {
           await deleteAgency.mutateAsync(agency.id)
-          queryClient.invalidateQueries(["getAgencies"])
+          await queryClient.invalidateQueries(["getAgencies"])
         }}
       />
       <ModalAgencyForm agency={agency} />

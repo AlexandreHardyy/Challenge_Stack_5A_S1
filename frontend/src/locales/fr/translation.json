@@ -536,7 +536,8 @@
         "companyDetails": {
           "mainInformations": "Informations principales",
           "agenciesList": "List des agences",
-          "employeesList": "List des employés"
+          "employeesList": "List des employés",
+          "noEmployees": "Pas encore d'employés"
         },
         "errors": {
           "socialReason": "Social reason must be at least 2 characters.",

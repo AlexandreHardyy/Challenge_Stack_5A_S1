@@ -6,16 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Loader } from "@/components/ui/loader.tsx"
 import { Euro, Users } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import CardStatistics from "@/pages/admin/Dashboard/CardStatistics.tsx"
-import Overview from "@/pages/admin/Dashboard/overview.tsx"
-import { Agency, Company, Session } from "@/utils/types.ts"
-import {
-  calculateMostSoldAgency,
-  calculateOverviewDataByCompanies,
-  calculateTotalRevenueByCompanies,
-} from "@/utils/kpi.ts"
+import CardStatistics from "@/pages/admin/dashboard/CardStatistics.tsx"
+import Overview from "@/pages/admin/dashboard/overview.tsx"
+import { Company, Session, User } from "@/utils/types.ts"
+import { calculateMostSoldAgency, calculateOverviewData, calculateTotalRevenueByCompanies } from "@/utils/kpi.ts"
 import { useFetchCompanies } from "@/services/company.service.ts"
-import YourAgencies from "@/pages/admin/Dashboard/your-agencies.tsx"
+import { useFetchUsers } from "@/services/user/user.service.ts"
+import YourAgencies from "@/pages/admin/dashboard/your-agencies.tsx"
+import { useFetchSessions } from "@/services/sessions.service.ts"
 
 const COMPANIES_ALL: string = "AllCompanies"
 
@@ -30,78 +28,53 @@ const DashboardProvider = () => {
   const companiesRequest = useFetchCompanies()
   const companies: Company[] | null = companiesRequest.status === "success" ? companiesRequest.data : []
 
+  const companiesEmployeesRequest = useFetchUsers()
+  const companiesEmployees: User[] | null =
+    companiesEmployeesRequest.status === "success" ? companiesEmployeesRequest.data : []
+
+  const totalEmployeesNumber = companiesEmployees ? companiesEmployees.length : 0
+
+  const totalEmployeesNumberByAgencyInDateRange = companiesEmployees
+    ? selectedCompany === COMPANIES_ALL
+      ? companiesEmployees.length
+      : companiesEmployees.filter((employee) => employee.company?.socialReason === selectedCompany).length
+    : 0
+
   const agenciesNumber = companies
     ? selectedCompany === COMPANIES_ALL
       ? companies.reduce((acc, company) => acc + company.agencies.length, 0)
       : companies.find((company) => company.socialReason === selectedCompany)?.agencies.length ?? 0
     : 0
 
-  const totalEmployeesNumber = companies.reduce((acc, company: Company) => {
-    return (
-      acc +
-      company.agencies.reduce((acc, agency: Agency) => {
-        if (agency.users) {
-          return acc + agency.users.length
-        }
-        return acc
-      }, 0)
-    )
-  }, 0)
-
-  const allSessions: Session[] = []
-
-  if (companies) {
-    companies.forEach((company: Company) => {
-      if (company.agencies) {
-        company.agencies.forEach((agency: Agency) => {
-          if (agency.sessions) {
-            allSessions.push(...agency.sessions)
-          }
-        })
-      }
+  const agenciesIdArray = companies?.reduce((acc, company) => {
+    company.agencies.forEach((agency) => {
+      acc.push(agency.id.toString())
     })
-  }
+    return acc
+  }, [] as string[])
+
+  const sessionsRequest = useFetchSessions({
+    agency: agenciesIdArray,
+  })
+  const sessions: Session[] | null = sessionsRequest.status === "success" ? sessionsRequest.data : []
 
   const totalCompaniesRevenue = calculateTotalRevenueByCompanies(
-    allSessions,
+    sessions,
     (session: Session) => DateTime.fromISO(session.endDate) < DateTime.fromJSDate(new Date()),
     selectedCompany
   )
 
   const totalCompaniesRevenueRange = calculateTotalRevenueByCompanies(
-    allSessions,
+    sessions,
     (session: Session) =>
       DateTime.fromISO(session.startDate) >= DateTime.fromJSDate(selectedDateRange.from) &&
       DateTime.fromISO(session.endDate) <= DateTime.fromJSDate(selectedDateRange.to),
     selectedCompany
   )
 
-  const totalEmployeesNumberByAgencyInDateRange = companies
-    ? selectedCompany === COMPANIES_ALL
-      ? companies.reduce((acc, company) => {
-          return (
-            acc +
-            company.agencies.reduce((acc, agency) => {
-              if (agency.users) {
-                return acc + agency.users.length
-              }
-              return acc
-            }, 0)
-          )
-        }, 0)
-      : companies
-          .find((company) => company.socialReason === selectedCompany)
-          ?.agencies.reduce((acc, agency) => {
-            if (agency.users) {
-              return acc + agency.users.length
-            }
-            return acc
-          }, 0) ?? 0
-    : 0
+  const mostSoldAgency = calculateMostSoldAgency(sessions, selectedDateRange)
 
-  const mostSoldAgency = calculateMostSoldAgency(companies, selectedDateRange)
-
-  const overviewData = calculateOverviewDataByCompanies(companies)
+  const overviewData = calculateOverviewData(sessions)
 
   return (
     <div className="md:flex flex-col">
@@ -153,30 +126,6 @@ const DashboardProvider = () => {
             icon={<Users size={16} className="text-muted-foreground" />}
             isLoading={companiesRequest.isLoading}
           />
-          {/*<CardStatistics*/}
-          {/*  title={t("admin.dashboard.cards.sessionsNumber.title")}*/}
-          {/*  titleNumber={numberOfSessionsInDateRangeByCompany}*/}
-          {/*  subtitleNumber={numberOfSessionsByCompany}*/}
-          {/*  subtitleLibelle={t("admin.dashboard.cards.sessionsNumber.subtitle")}*/}
-          {/*  icon={<CalendarCheck size={16} className="text-muted-foreground" />}*/}
-          {/*  isLoading={companiesRequest.isLoading}*/}
-          {/*/>*/}
-          {/*<CardStatistics*/}
-          {/*  title={t("admin.dashboard.cards.sessionsHours.title")}*/}
-          {/*  titleNumber={totalSessionsHours}*/}
-          {/*  subtitleNumber={totalPastSessionsHours}*/}
-          {/*  subtitleLibelle={t("admin.dashboard.cards.sessionsHours.subtitle")}*/}
-          {/*  icon={<CalendarClock size={16} className="text-muted-foreground" />}*/}
-          {/*  isLoading={companiesRequest.isLoading}*/}
-          {/*/>*/}
-          {/*<CardStatistics*/}
-          {/*  title={t("admin.dashboard.cards.sessionsStudents.title")}*/}
-          {/*  titleNumber={totalSessionsStudents}*/}
-          {/*  subtitleNumber={totalPastSessionsStudents}*/}
-          {/*  subtitleLibelle={t("admin.dashboard.cards.sessionsStudents.subtitle")}*/}
-          {/*  icon={<Users size={16} className="text-muted-foreground" />}*/}
-          {/*  isLoading={companiesRequest.isLoading}*/}
-          {/*/>*/}
         </div>
         <div className="grid gap-4 grid-cols-10 lg:grid-cols-2">
           <Card className="col-span-6">
@@ -204,7 +153,7 @@ const DashboardProvider = () => {
                       companies={companies}
                       selectedCompany={selectedCompany}
                       mostSoldAgency={mostSoldAgency}
-                      companiesRequest={companiesRequest}
+                      sessionsRequest={sessionsRequest}
                       areCompaniesLoading={companiesRequest.isLoading}
                     />
                   ) : (

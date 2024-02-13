@@ -13,80 +13,80 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\AgencyRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: AgencyRepository::class)]
 #[ApiResource(
-    security: "is_granted('ROLE_USER')",
     operations: [
         new Get(
             // normalizationContext:['groups' => ['agency:read'], 'enable_max_depth' => true],
-            normalizationContext:['groups' => ['agency:read']],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Returns agency by Id',
                 description: 'Returns a single agency provided by the id'
-            )
+            ),
+            normalizationContext: ['groups' => ['agency:read']]
         ),
         new GetCollection(
             // normalizationContext:['groups' => ['agency:read:collection'], 'enable_max_depth' => true],
-            normalizationContext:['groups' => ['agency:read:collection']],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Returns agencies',
                 description: 'Returns several agencies'
-            )
+            ),
+            normalizationContext: ['groups' => ['agency:read:collection']]
         ),
         new Patch(
-            security: "is_granted('AGENCY_EDIT', object)",
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Update agency by Id',
                 description: 'Update agency provided by the id'
-            )
+            ),
+            security: "is_granted('AGENCY_EDIT', object)"
         ),
         new Post(
-            security: "is_granted('AGENCY_CREATE', object)",
-            denormalizationContext: ['groups' => 'create-agency'],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'new agency',
                 description: 'Create a new agency for a company'
-            )
+            ),
+            denormalizationContext: ['groups' => 'create-agency'],
+            security: "is_granted('AGENCY_CREATE', object)"
         ),
         new Delete(
-            security: "is_granted('AGENCY_EDIT', object)",
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'delete agency',
                 description: 'delete an agency'
-            )
+            ),
+            security: "is_granted('AGENCY_EDIT', object)"
         )
     ],
+    security: "is_granted('ROLE_USER')",
     // normalizationContext: ['groups' => ['read-media_object'], 'enable_max_depth' => true]
 )]
 #[ApiResource(
     uriTemplate: '/companies/{id}/agencies',
-    security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
-            // normalizationContext:['groups' => ['agency:read:collection:by_company'], 'enable_max_depth' => true],
-            normalizationContext:['groups' => ['agency:read:collection:by_company']],
+            // normalizationContext:['groups' => ['agency:read:collection:by-companies'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Agency', 'Company' ],
                 summary: 'Returns a list of agencies for a specific company',
                 description: 'Returns a list of agencies for a specific company'
-            )
+            ),
+            normalizationContext: ['groups' => ['agency:read:collection:by_company']]
         ),
     ],
     uriVariables: [
         'id' => new Link(toProperty: 'company', fromClass: Company::class)
-    ]
+    ],
+    security: "is_granted('ROLE_USER')"
 )]
 
 
@@ -96,7 +96,7 @@ class Agency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['agency:read:collection', 'company:read', 'agency:read', 'user:read:collection:by_company', 'agency:read:collection:by_company', 'session:read', 'user:read' ])]
+    #[Groups(['company:read:collection', 'session:read:collection', 'agency:read:collection', 'company:read', 'agency:read', 'user:read:collection:by_company', 'agency:read:collection:by_company', 'session:read', 'user:read' ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -112,10 +112,10 @@ class Agency
     private ?string $zip = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'agencies')]
     #[ORM\JoinColumn(nullable: false)]
@@ -123,7 +123,7 @@ class Agency
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read:collection:by_company', 'create-agency', 'agency:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company', 'session:read', 'user:read'])]
+    #[Groups(['user:read:collection:by_company', 'create-agency', 'agency:read:collection', 'company:read:collection', 'session:read:collection', 'company:read', 'agency:read', 'agency:read:collection:by_company', 'session:read', 'user:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -140,16 +140,13 @@ class Agency
     private array $geoloc = [];
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'agencies')]
-    // #[MaxDepth(1)]
     #[Groups(['agency:read'])]
     private Collection $users;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Schedule::class, orphanRemoval: true)]
-    // #[MaxDepth(1)]
     private Collection $schedules;
     
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Session::class, orphanRemoval: true)]
-    // #[MaxDepth(1)]
     private Collection $sessions;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: MediaObject::class)]
@@ -166,14 +163,14 @@ class Agency
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
     public function getId(): ?int
     {
@@ -216,24 +213,24 @@ class Agency
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
