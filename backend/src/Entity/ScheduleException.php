@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -40,19 +41,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
     ]
 )]
+
 class ScheduleException
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['schedule:read:collection:by_user'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['disponibility:read:collection'])]
+    #[Groups(['disponibility:read:collection', 'schedule:read:collection:by_user'])]
     private ?int $startHour = null;
 
     #[ORM\Column]
-    #[Groups(['disponibility:read:collection'])]
+    #[Groups(['disponibility:read:collection', 'schedule:read:collection:by_user'])]
     private ?int $endHour = null;
 
     #[ORM\ManyToOne(inversedBy: 'scheduleExceptions')]
@@ -60,7 +63,7 @@ class ScheduleException
     private ?Schedule $schedule = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['schedule-exception-validation'])]
+    #[Groups(['schedule:read:collection:by_user', 'schedule-exception-validation'])]
     private ?string $status = null;
 
     public function getId(): ?int

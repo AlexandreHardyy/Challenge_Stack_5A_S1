@@ -249,7 +249,7 @@
     }
   },
   "ProviderFeedBackBuilders": {
-    "title": "Contructeur de formualireFeedback",
+    "title": "Contructeur de formulaire de feedback",
     "form": {
       "title": "Titre",
       "isSelected": "Selectionné",

@@ -1,21 +1,27 @@
 import FullCalendar from "@fullcalendar/react"
 import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
-import { Employee, Session } from "@/utils/types"
+import { Schedule, Session } from "@/utils/types"
 import { useTranslation } from "react-i18next"
 import { EventInput } from "@fullcalendar/core/index.js"
 import { addHours } from "date-fns"
+import { UseQueryResult } from "@tanstack/react-query"
 
 type EmployeeCalendarProps = {
-  setSelectedSession: (session: Session) => void
-  instructor: Employee
+  setSelectedSessionId: (sessionId: number) => void
+  sessions: UseQueryResult<Session[], unknown>
+  schedules: UseQueryResult<Schedule[], unknown>
 }
 
-function EmployeeCalendar({ setSelectedSession, instructor }: EmployeeCalendarProps) {
+function EmployeeCalendar({ setSelectedSessionId, sessions, schedules }: EmployeeCalendarProps) {
   const { t } = useTranslation()
 
+  if (sessions.isLoading || schedules.isLoading) {
+    return <></>
+  }
+
   const sessionEvents =
-    instructor.instructorSessions?.map((instructorSession) => {
+    sessions.data?.map((instructorSession) => {
       return {
         title: `${instructorSession.service.name} ${instructorSession.student.firstname} ${instructorSession.student.lastname}`,
         start: instructorSession.startDate,
@@ -25,7 +31,7 @@ function EmployeeCalendar({ setSelectedSession, instructor }: EmployeeCalendarPr
       }
     }) ?? []
 
-  const scheduleEvents = instructor.schedules?.reduce((events: EventInput[], schedule) => {
+  const scheduleEvents = schedules.data?.reduce((events: EventInput[], schedule) => {
     events.push({
       title: `${t("provider.myPlanning.workDay")}`,
       start: addHours(new Date(schedule.date), schedule.startHour),
@@ -49,7 +55,7 @@ function EmployeeCalendar({ setSelectedSession, instructor }: EmployeeCalendarPr
     return events
   }, [])
 
-  const events = [...sessionEvents, ...scheduleEvents]
+  const events = [...sessionEvents, ...(scheduleEvents ?? [])]
 
   return (
     <div className="grow">
@@ -66,7 +72,7 @@ function EmployeeCalendar({ setSelectedSession, instructor }: EmployeeCalendarPr
         }}
         eventClick={(info) => {
           const event = info.event
-          setSelectedSession(event.extendedProps.session)
+          setSelectedSessionId(event.extendedProps.session.id)
         }}
       />
     </div>

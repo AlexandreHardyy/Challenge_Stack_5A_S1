@@ -8,7 +8,7 @@ import { AddCompanyFormSchema, UpdateCompanyFormSchema } from "@/zod-schemas/com
 import { formatQueryParams } from "@/utils/helpers"
 
 export function useFetchCompany(companyId?: number) {
-  const fetchCompanyUrl = `${import.meta.env.VITE_API_URL}companies/${companyId}`
+  const fetchCompanyUrl = `/companies/${companyId}`
 
   return useQuery<Company>(
     ["getCompany", fetchCompanyUrl],
@@ -38,7 +38,7 @@ export function useFetchCompanies(
   return useQuery({
     queryKey: ["companies", url],
     queryFn: async ({ queryKey }): Promise<Company[]> => {
-      const [_key, url] = queryKey
+      const [, url] = queryKey
       const response = await api.get(url)
       if (response.status !== 200) {
         throw new Error("Something went wrong with the request (getCompanies)")

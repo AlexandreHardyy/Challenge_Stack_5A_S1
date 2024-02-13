@@ -16,7 +16,6 @@ use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -28,7 +27,7 @@ use ApiPlatform\OpenApi\Model\Operation;
         new Post(validationContext: ['groups' => ['session-create']], security: "is_granted('ROLE_USER')"),
         new Get(
             normalizationContext: ['groups' => ['session:read']],
-            security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
+            security: "is_granted('ROLE_PROVIDER') or (is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user))"
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['session:read:collection']],
@@ -46,7 +45,7 @@ use ApiPlatform\OpenApi\Model\Operation;
     security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
-            // normalizationContext:['groups' => ['agency:read:collection:by-companies'], 'enable_max_depth' => true],
+            // normalizationContext:['groups' => ['agency:read:collection:by_company'], 'enable_max_depth' => true],
             normalizationContext:['groups' => ['session:read:collection:by-agencies']],
             openapi: new Operation(
                 tags: [ 'Agency', 'Session' ],
@@ -60,6 +59,42 @@ use ApiPlatform\OpenApi\Model\Operation;
     ]
 )]
 
+#[ApiResource(
+    uriTemplate: '/instructors/{id}/sessions',
+    security: "is_granted('ROLE_USER')",
+    operations: [
+        new GetCollection(
+            normalizationContext:['groups' => ['session:read:collection:by_instructor']],
+            openapi: new Operation(
+                tags: [ 'Agency', 'Session' ],
+                summary: 'Returns a list of sessions for a specific instructor',
+                description: 'Returns a list of sessions for a specific instructor'
+            )
+        ),
+    ],
+    uriVariables: [
+        'id' => new Link(toProperty: 'instructor', fromClass: User::class)
+    ]
+)]
+
+#[ApiResource(
+    uriTemplate: '/students/{id}/sessions',
+    security: "is_granted('ROLE_USER')",
+    operations: [
+        new GetCollection(
+            normalizationContext:['groups' => ['session:read:collection:by_student']],
+            openapi: new Operation(
+                tags: [ 'Agency', 'Session' ],
+                summary: 'Returns a list of sessions for a specific instructor',
+                description: 'Returns a list of sessions for a specific instructor'
+            )
+        ),
+    ],
+    uriVariables: [
+        'id' => new Link(toProperty: 'student', fromClass: User::class)
+    ]
+)]
+
 #[ApiFilter(SearchFilter::class, properties: ['service' => 'exact', 'agency' => 'exact', 'status' => 'exact'])]
 #[ApiFilter(DateFilter::class, properties: ['startDate'])]
 class Session
@@ -67,46 +102,53 @@ class Session
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['session:read', 'session:read:collection:by_instructor', 'session:read:collection:by_student'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'studentSessions')]
     #[ORM\JoinColumn(nullable: false)]
     // SECURITY
+    #[Groups(['session:read:collection:by_instructor', 'session:read'])]
     private ?User $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'instructorSessions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['session:read', 'session:read:collection:by_student'])]
     private ?User $instructor = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['disponibility:read:collection'])]
+    #[Groups(['disponibility:read:collection', 'session:read:collection:by_instructor', 'session:read:collection:by_student', 'session:read'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['disponibility:read:collection'])]
+    #[Groups(['disponibility:read:collection', 'session:read:collection:by_instructor', 'session:read:collection:by_student', 'session:read'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
     // SECURITY
+    #[Groups(['session:read:collection:by_instructor', 'session:read:collection:by_student', 'session:read'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['session:read'])]
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
+    #[Groups(['session:read:collection:by_instructor', 'session:read:collection:by_student', 'session-group-update'])]
     private ?string $status = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['session-group-update'])]
+    #[Groups(['session-group-update', 'session:read'])]
     private ?float $studentMark = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
-    #[Groups(['session:read:collection:by-agencies'])]
+    #[Groups(['session:read:collection:by-agencies', 'session:read'])]
     private ?RatingService $ratingService = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
+    #[Groups(['session:read'])]
     private ?FeedBack $feedBack = null;
 
     public function getId(): ?int

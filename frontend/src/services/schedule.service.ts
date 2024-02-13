@@ -43,30 +43,44 @@ export const useAddSchedule = () => {
   })
 }
 
+export function useFetchScheduleByUser(userId?: number) {
+  return useQuery({
+    queryKey: ["getSchedulesByUser"],
+    queryFn: async (): Promise<Schedule[]> => {
+      const schedules = await api.get(`users/${userId}/schedules`)
+
+      return schedules?.data["hydra:member"]
+    },
+  })
+}
+
 export function useFetchScheduleExceptionsByCompany(companyId?: number) {
   return useQuery({
     queryKey: ["getScheduleExceptions"],
     queryFn: async (): Promise<ScheduleException[]> => {
-      const response = await api.get(`companies/${companyId}/employees/schedule_exceptions`)
-      if (response.status !== 200) {
-        throw new Error("Something went wrong with the request (getScheduleExceptions)")
-      }
+      const employees = (await api.get(`companies/${companyId}/users`))?.data["hydra:member"]
 
-      const scheduleExceptions = response.data["hydra:member"].reduce((result: object[], employee: Employee) => {
-        for (const schedule of employee.schedules) {
-          for (const scheduleExceptions of schedule.scheduleExceptions) {
-            result.push({
-              firstname: employee.firstname,
-              lastname: employee.lastname,
-              date: schedule.date,
-              ...scheduleExceptions,
-            })
+      const scheduleExceptions = (
+        await Promise.all(
+          employees?.map((employee: Employee) => {
+            return api.get(`users/${employee.id}/schedules`)
+          })
+        )
+      )
+        .map((response) => response.data["hydra:member"])
+        .reduce((result: object[], schedules: Schedule[], index: number) => {
+          for (const schedule of schedules) {
+            for (const scheduleExceptions of schedule.scheduleExceptions) {
+              result.push({
+                firstname: employees[index].firstname,
+                lastname: employees[index].lastname,
+                date: schedule.date,
+                ...scheduleExceptions,
+              })
+            }
           }
-        }
-
-        return result
-      }, [])
-
+          return result
+        }, [])
       return scheduleExceptions
     },
   })
@@ -76,12 +90,12 @@ export function useFetchScheduleExceptionsByEmployee(employeeId?: number) {
   return useQuery({
     queryKey: ["getScheduleExceptions"],
     queryFn: async (): Promise<ScheduleException[]> => {
-      const response = await api.get(`users/${employeeId}`)
+      const response = await api.get(`users/${employeeId}/schedules`)
       if (response.status !== 200) {
         throw new Error("Something went wrong with the request (getScheduleExceptions)")
       }
 
-      const scheduleExceptions = response.data.schedules.reduce((result: object[], schedule: Schedule) => {
+      const scheduleExceptions = response.data["hydra:member"].reduce((result: object[], schedule: Schedule) => {
         for (const scheduleExceptions of schedule.scheduleExceptions) {
           result.push({
             date: schedule.date,
