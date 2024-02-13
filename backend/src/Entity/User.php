@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
@@ -83,6 +84,15 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
                 description: 'Update a user for a company'
             )
         ),
+        new Delete(
+            security: "is_granted('USER_EDIT', object)",
+            uriTemplate: '/employees/{id}',
+            openapi: new Operation(
+                tags: ['User'],
+                summary: 'delete a employee from your company',
+                description: 'Update a user for a company'
+            )
+        )
     ],
 )]
 
@@ -157,13 +167,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:read:collection:by_company','session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student'])]
+    #[Groups(['user:read', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['user:read', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student'])]
-    #[Assert\NotBlank(groups: [ 'create-user'])]
+    #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 
     #[ORM\Column]

@@ -1,6 +1,8 @@
+import { useToast } from "@/components/ui/use-toast"
 import api from "@/utils/api.ts"
 import { User } from "@/utils/types"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useTranslation } from "react-i18next"
 
 export function useFetchUserMe() {
   return useQuery<User>({
@@ -107,4 +109,29 @@ export const updateUserById = async (userId: number, body: UserForm) => {
       },
     })
     .catch((err) => err.response)
+}
+
+export const useDeleteUserById = () => {
+  const { toast } = useToast()
+  const { t } = useTranslation()
+  return useMutation({
+    mutationFn: async (userId: number) => {
+      const result = await api.delete(`employees/${userId}`).catch((err) => err.response)
+      if (result.status === 204) {
+        toast({
+          variant: "success",
+          title: t("ProviderEmployee.form.toast.title"),
+          description: t("ProviderEmployee.form.toast.successDelete"),
+        })
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("ProviderEmployee.form.toast.title"),
+          description: t("ProviderEmployee.form.toast.error"),
+        })
+      }
+
+      return result
+    },
+  })
 }
