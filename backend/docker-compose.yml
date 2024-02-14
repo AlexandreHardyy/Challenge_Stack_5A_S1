@@ -24,6 +24,7 @@ services:
         condition: service_healthy
         restart: true
     environment:
+      TZ: Europe/Paris
       SERVER_NAME: ${SERVER_NAME:-localhost}, caddy:80
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
