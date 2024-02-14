@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 summary: 'Returns agency by Id',
                 description: 'Returns a single agency provided by the id'
             ),
-            normalizationContext: ['groups' => ['agency:read']]
+            normalizationContext: ['groups' => ['agency:read', 'read-media_object']]
         ),
         new GetCollection(
             // normalizationContext:['groups' => ['agency:read:collection'], 'enable_max_depth' => true],
@@ -80,7 +80,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 summary: 'Returns a list of agencies for a specific company',
                 description: 'Returns a list of agencies for a specific company'
             ),
-            normalizationContext: ['groups' => ['agency:read:collection:by_company']]
+            normalizationContext: ['groups' => ['agency:read:collection:by_company', 'read-media_object']]
         ),
     ],
     uriVariables: [

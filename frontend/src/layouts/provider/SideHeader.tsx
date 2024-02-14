@@ -96,9 +96,14 @@ const SideHeader = () => {
 
   return (
     <header className="flex flex-col p-4 w-56 h-full fixed left-0 top-0 bg-background drop-shadow-md z-50 gap-8">
-      <h1 className="self-center text-2xl">
-        <Link to="/">RoadWise</Link>
-      </h1>
+      <div className={"flex gap-3"}>
+        <Link to="/">
+          <img src="/logo_solo.png" alt="logo" className="w-10 rounded" />
+        </Link>
+        <h1 className="self-center text-2xl">
+          <Link to="/">RoadWise</Link>
+        </h1>
+      </div>
       <div className="flex flex-col gap-4 flex-1">
         {links
           .filter((link) => {

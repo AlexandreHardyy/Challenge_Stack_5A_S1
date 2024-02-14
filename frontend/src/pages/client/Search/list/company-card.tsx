@@ -17,7 +17,7 @@ function CompanyCard({ company }: CompanyCardProps) {
       <div className="py-2 pl-2">
         <img
           alt="companylogo"
-          className="rounded-[92px] w-[92px] h-[92px]"
+          className="rounded-[92px] w-[92px] h-[92px] object-cover"
           src={company.image ? `${import.meta.env.VITE_API_URL_PUBLIC}${company.image.contentUrl}` : defaultAgencyLogo}
         />
       </div>

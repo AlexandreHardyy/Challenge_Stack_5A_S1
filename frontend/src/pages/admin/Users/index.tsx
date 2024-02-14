@@ -7,6 +7,7 @@ import { Spinner } from "@/components/loader/Spinner.tsx"
 import { TFunction } from "i18next"
 import { useTranslation } from "react-i18next"
 import ModalUserForm from "./ModalUserForm"
+import { Badge } from "@/components/ui/badge.tsx"
 
 function usersColumns(t: TFunction<"translation", undefined>): ColumnDef<User>[] {
   return [
@@ -29,6 +30,15 @@ function usersColumns(t: TFunction<"translation", undefined>): ColumnDef<User>[]
     {
       accessorKey: "roles",
       header: t("admin.users.table.roles"),
+      cell: ({ row }) => {
+        return (
+          <div className={"flex gap-2"}>
+            {row.original.roles?.map((role) => {
+              return <Badge key={role}>{role.split("_")[1]}</Badge>
+            })}
+          </div>
+        )
+      },
     },
     {
       accessorKey: "isVerified",
@@ -45,21 +55,10 @@ function usersColumns(t: TFunction<"translation", undefined>): ColumnDef<User>[]
     {
       accessorKey: "actions",
       header: t("admin.users.table.actions"),
-      cell: ({ row: { getValue: val } }) => {
+      cell: ({ row: { original: user } }) => {
         return (
           // Problem here
-          <ModalUserForm
-            user={{
-              id: val("id"),
-              firstname: val("firstname"),
-              lastname: val("lastname"),
-              email: val("email"),
-              roles: val("roles"),
-              isVerified: val("isVerified"),
-              createdAt: val("createdAt"),
-              updatedAt: val("updatedAt"),
-            }}
-          />
+          <ModalUserForm user={user} />
         )
       },
     },

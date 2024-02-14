@@ -50,7 +50,7 @@ const ResetPasswordForm = () => {
         variant: "success",
         title: t("common.form.passwordResetSuccess"),
       })
-      navigate("/login", { replace: true })
+      navigate("/auth/login", { replace: true })
     } catch (e) {
       toast({
         variant: "destructive",

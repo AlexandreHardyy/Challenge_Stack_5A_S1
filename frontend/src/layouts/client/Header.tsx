@@ -15,14 +15,16 @@ const Header = () => {
   return (
     <header className="flex px-8 py-4 items-center justify-between sticky top-0 bg-background drop-shadow-md z-50 h-18">
       <h1>
-        <Link to="/">RoadWise</Link>
+        <Link to="/">
+          <img src="/logo.png" alt="logo" className="w-14 rounded" />
+        </Link>
       </h1>
       <div className="flex gap-8">
         <Button variant="ghost" asChild>
-          <Link to="/#">{t("header.menu.services")}</Link>
+          <Link to="/search">{t("landing.ctaStudent")}</Link>
         </Button>
         <Button variant="ghost" asChild>
-          <Link to="/#">{t("header.menu.FAQ")}</Link>
+          <Link to="/provider/new">{t("landing.ctaProvider")}</Link>
         </Button>
         <Button variant="ghost" asChild>
           <Link to="/#">{t("header.menu.about")}</Link>
@@ -32,10 +34,10 @@ const Header = () => {
         <div className="flex gap-4">
           <ModeToggle />
           <Button variant="secondary" asChild>
-            <Link to="/register">{t("header.cta.signUp")}</Link>
+            <Link to="auth/register">{t("header.cta.signUp")}</Link>
           </Button>
           <Button asChild>
-            <Link to="/login">{t("header.cta.signIn")}</Link>
+            <Link to="auth/login">{t("header.cta.signIn")}</Link>
           </Button>
         </div>
       ) : (

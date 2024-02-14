@@ -44,7 +44,7 @@ function CompanyClient() {
         </div>
         <img
           alt="companylogo"
-          className="rounded-[185px] w-[185px] h-[185px]"
+          className="rounded-[185px] w-[185px] h-[185px] object-cover"
           src={
             companyRequest.data.image
               ? `${import.meta.env.VITE_API_URL_PUBLIC}${companyRequest.data.image.contentUrl}`

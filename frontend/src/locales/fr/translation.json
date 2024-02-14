@@ -152,7 +152,9 @@
       "sendMeEmail": "Envoyez-moi un email",
       "ResetMyPassword": "Réinitialiser mon mot de passe",
       "passwordResetSuccess": "Votre mot de passe a été réinitialisé avec succès.",
-      "uploadImage": "Télécharger une image"
+      "uploadImage": "Télécharger une image",
+      "noAccount": "Pas de compte ?",
+      "haveAccount": "Déjà un compte ?"
     },
     "cta": {
       "update": "Update",
@@ -177,6 +179,8 @@
     "title": "Réservez, Roulez, Réussissez. Votre Avenir sur la Voie Rapide !",
     "subtitle": "Notre application simplifie la planification des leçons de conduite pour de multiples auto-écoles, optimisant l'efficacité et la satisfaction des instructeurs et des élèves.",
     "ctaDiscover": "Découvrez maintenant",
+    "ctaProvider": "Devenir prestataire",
+    "ctaStudent": "Rechercher une auto-école",
     "section1": {
       "title": "Réservez, Roulez, Réussissez. Votre Avenir sur la Voie Rapide !"
     },

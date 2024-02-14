@@ -153,7 +153,9 @@
       "sendMeEmail": "Send me an email",
       "ResetMyPassword": "Reset my password",
       "passwordResetSuccess": "Your password has been reset successfully.",
-      "uploadImage": "Upload new image"
+      "uploadImage": "Upload new image",
+      "noAccount": "Don't have an account ?",
+      "haveAccount": "Already have an account ?"
     },
     "cta": {
       "update": "Update",
@@ -178,6 +180,8 @@
     "title": "Book, Drive, Succeed. Your Future on the Fast Lane!",
     "subtitle": "Our app simplifies the planning of driving lessons for multiple driving schools, optimizing the efficiency and satisfaction of instructors and students.",
     "ctaDiscover": "Discover now",
+    "ctaProvider": "Become a provider",
+    "ctaStudent": "Find a driving school",
     "section1": {
       "title": "Book, Drive, Succeed. Your Future on the Fast Lane!"
     },
