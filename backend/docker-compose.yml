@@ -31,6 +31,7 @@ services:
       - php_socket:/var/run/php
       - caddy_data:/data
       - caddy_config:/config
+      - ./public/media:/srv/app/public/media
     ports:
       # HTTP
       - target: 80
