@@ -18,11 +18,11 @@ class RatingService
     private ?int $id = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    #[Groups(['session:read:collection:by_agency'])]
+    #[Groups(['session:read:collection:by_agency', 'session:read', 'agency:read'])]
     private ?int $rating = null;
 
     #[ORM\Column(length: 1000)]
-    #[Groups(['session:read:collection:by_agency'])]
+    #[Groups(['session:read:collection:by_agency', 'session:read', 'agency:read'])]
     private ?string $comment = null;
 
     #[ORM\ManyToOne(inversedBy: 'ratingServices')]

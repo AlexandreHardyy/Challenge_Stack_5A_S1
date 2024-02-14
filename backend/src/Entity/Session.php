@@ -24,7 +24,7 @@ use ApiPlatform\OpenApi\Model\Operation;
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[ApiResource(
     operations: [
-        new Post(security: "is_granted('ROLE_USER')", validationContext: ['groups' => ['session-create']]),
+        new Post(security: "is_granted('SESSION_CREATE', object)", validationContext: ['groups' => ['session-create']]),
         new Get(
             normalizationContext: ['groups' => ['session:read']],
             security: "is_granted('ROLE_PROVIDER') or (is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user))"
@@ -137,7 +137,7 @@ class Session
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session:read:collection:by_instructor', 'session:read:collection:by_student', 'session-group-update'])]
+    #[Groups(['session:read:collection:by_instructor', 'session:read:collection:by_student', 'session-group-update', 'session:read'])]
     private ?string $status = null;
 
     #[ORM\Column(nullable: true)]
@@ -145,7 +145,7 @@ class Session
     private ?float $studentMark = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
-    #[Groups(['session:read:collection:by_agency', 'session:read'])]
+    #[Groups(['session:read:collection:by_agency', 'session:read', 'agency:read'])]
     private ?RatingService $ratingService = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]

@@ -27,7 +27,7 @@ export interface Agency {
   }
   services: Service[]
   geoloc: [string, string]
-  users?: Pick<Employee, "id" | "firstname" | "lastname">[]
+  users?: Pick<Employee, "id" | "firstname" | "lastname" | "image" | "email">[]
   schedules: Schedule[]
   sessions: Session[]
   image?: MediaObject[]
