@@ -100,11 +100,25 @@ export function computeSessionsByDisponibilities({
   })
 }
 
-export function useFetchDisponibilities({ agency }: { agency: Agency }) {
-  const url = `agencies/${agency.id}/disponibilities`
+type UseFetchDisponibilitiesParams = {
+  agency: Agency
+  queryParams?: {
+    startDate: string
+    endDate: string
+  }
+}
+
+export function useFetchDisponibilities({ agency, queryParams }: UseFetchDisponibilitiesParams) {
+  let url = `agencies/${agency.id}/disponibilities`
+
+  if (queryParams) {
+    url = url + `?${new URLSearchParams(queryParams)}`
+  }
+
+  console.log(url)
 
   return useQuery<Disponibility[]>(
-    ["getDisponibilities"],
+    ["getDisponibilities", url],
     async () => {
       const response = await api.get(url)
       if (response.status !== 200) {

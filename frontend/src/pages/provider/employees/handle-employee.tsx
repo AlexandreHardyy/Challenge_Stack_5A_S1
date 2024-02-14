@@ -55,7 +55,11 @@ const HandleEmployee = () => {
         </CardContent>
       </Card>
       <div className="flex">
-        <EmployeeCalendar setSelectedSessionId={setSelectedSessionId} schedules={schedules} sessions={sessions} />
+        <EmployeeCalendar
+          setSelectedSessionId={setSelectedSessionId}
+          schedules={schedules.data}
+          sessions={sessions.data}
+        />
         <SessionDetails sessionId={selectedSessionId} />
       </div>
     </div>

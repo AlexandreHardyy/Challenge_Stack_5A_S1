@@ -9,6 +9,7 @@ import { MultipleAgenciesMap } from "@/components/maps/multiple-agencies-map"
 import { buildAgencyMarkers } from "@/components/maps/utils"
 import { Rating } from "react-simple-star-rating"
 import { Spinner } from "@/components/loader/Spinner"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 
 function AgencyClient() {
   const { agencyId } = useParams()
@@ -53,10 +54,23 @@ function AgencyClient() {
       <section id={styles.section2} className="pt-[40px] pb-[60px] bg-secondary">
         <div className="w-[80%] mx-auto md:w-full md:mx-0">
           <h2 className="text-[32px] font-bold">{t("agencyClient.gallery")}</h2>
-          <div className="flex gap-[20px] mt-[17px]">
-            <div className="w-[480px] h-[270px] bg-background"></div>
-            <div className="w-[480px] h-[270px] bg-background"></div>
-          </div>
+          <Carousel>
+            <CarouselContent>
+              {agencyRequest.data.image?.map((image) => {
+                return (
+                  <CarouselItem key={image.id} className={"basis-1/3 h-60"}>
+                    <img
+                      className={"h-full w-full object-cover"}
+                      src={`${import.meta.env.VITE_API_URL_PUBLIC}${image.contentUrl}`}
+                      alt={"agencies image"}
+                    />
+                  </CarouselItem>
+                )
+              })}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
       </section>
       <section className="w-[80%] mx-auto md:w-full md:mx-0">

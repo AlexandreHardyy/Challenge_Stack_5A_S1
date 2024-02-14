@@ -161,9 +161,42 @@ const ModalFormAgency = ({ agency, variant = "ghost" }: { agency?: Agency; varia
             )}
           </DialogTitle>
           <DialogDescription>
+            <ModalFormAgencyImages agency={agency} isReadOnly={isReadOnly} />
             <AgencyForm agency={agency} isReadOnly={isReadOnly} />
           </DialogDescription>
         </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+const ModalFormAgencyImages = ({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boolean }) => {
+  console.log(agency)
+  return (
+    <Dialog onOpenChange={(open) => !open && isReadOnly}>
+      <DialogTrigger asChild>
+        <Button variant={"ghost"} className="px-2" disabled={isReadOnly}>
+          Gestion des images
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="pb-4">Gestion des images</DialogTitle>
+        </DialogHeader>
+        <div className={"flex flex-col gap-3"}>
+          {agency !== undefined
+            ? agency?.image?.map((image) => {
+                return (
+                  <img
+                    className={"w-20 h-20 object-cover"}
+                    src={`${import.meta.env.VITE_API_URL_PUBLIC}${image.contentUrl}`}
+                    alt={"agencies images"}
+                    key={image.id}
+                  />
+                )
+              })
+            : null}
+        </div>
       </DialogContent>
     </Dialog>
   )

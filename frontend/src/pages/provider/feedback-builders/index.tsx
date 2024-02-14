@@ -7,6 +7,9 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useAuth } from "@/context/AuthContext"
 import { useDeleteFeedBackBuilderById, useFetchFeedBackBuildersByCompany } from "@/services/feedback-builders.service"
 import { ModalFormFeedBackBuilder } from "./form"
+import { Button } from "@/components/ui/button"
+import { EyeIcon } from "lucide-react"
+import { Link } from "react-router-dom"
 
 const columns: ColumnDef<FeedBackBuilder>[] = [
   {
@@ -51,6 +54,11 @@ const ActionColumn = ({ feedBackBuilder }: { feedBackBuilder: FeedBackBuilder })
         }}
       />
       <ModalFormFeedBackBuilder feedBackBuilder={feedBackBuilder} />
+      <Button variant={"ghost"} className="px-2">
+        <Link to={`/provider/feedback-builders/${feedBackBuilder.id}/feedbacks`}>
+          <EyeIcon />
+        </Link>
+      </Button>
     </>
   )
 }

@@ -6,8 +6,8 @@ import AdminLayout from "@/layouts/admin"
 
 import Landing from "@/pages/Landing"
 import NotFound from "@/pages/NotFound"
-import DashboardAdmin from "@/pages/admin/Dashboard"
-import DashboardProvider from "@/pages/provider/Dashboard"
+import DashboardAdmin from "@/pages/admin/dashboard"
+import DashboardProvider from "@/pages/provider/dashboard"
 import Employees from "@/pages/provider/employees"
 import HandleEmployee from "@/pages/provider/employees/handle-employee"
 import Login from "@/pages/auth/Login.tsx"
@@ -34,6 +34,8 @@ import ResetPassword from "@/pages/auth/ResetPassword.tsx"
 import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
 import ProtectedRoute from "@/components/security/ProtectedRoute.tsx"
 import FeedBackBuilders from "@/pages/provider/feedback-builders"
+import AuthLayout from "@/layouts/auth/AuthLayout.tsx"
+import FeedBacks from "@/pages/provider/feedback-builders/feedbacks"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -47,22 +49,6 @@ const Routes = () => {
             {
               path: "",
               element: <Landing />,
-            },
-            {
-              path: "login",
-              element: <Login />,
-            },
-            {
-              path: "register",
-              element: <Register />,
-            },
-            {
-              path: "register/welcome",
-              element: <RegisterSuccess />,
-            },
-            {
-              path: "/forgot-password",
-              element: <ForgotPassword />,
             },
             {
               path: "/reset-password/:token",
@@ -108,6 +94,28 @@ const Routes = () => {
             },
           ],
           errorElement: <NotFound />,
+        },
+        {
+          path: "auth",
+          element: <AuthLayout />,
+          children: [
+            {
+              path: "login",
+              element: <Login />,
+            },
+            {
+              path: "register",
+              element: <Register />,
+            },
+            {
+              path: "forgot-password",
+              element: <ForgotPassword />,
+            },
+            {
+              path: "register/welcome",
+              element: <RegisterSuccess />,
+            },
+          ],
         },
         {
           element: <ProviderLayout />,
@@ -178,6 +186,10 @@ const Routes = () => {
             {
               path: "feedback-builders",
               element: <FeedBackBuilders />,
+            },
+            {
+              path: "feedback-builders/:id/feedbacks",
+              element: <FeedBacks />,
             },
           ],
           errorElement: <NotFound />,

@@ -83,15 +83,16 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-          <div className="flex gap-2">
-            <Button disabled={loginMutation.isLoading} type="submit">
-              {loginMutation.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {t("header.cta.signIn")}
-            </Button>
-            <Button variant="link" className="text-secondary-foreground" asChild>
-              <Link to={"/forgot-password"}>{t("common.form.forgotPassword")} ?</Link>
-            </Button>
-          </div>
+          <Button disabled={loginMutation.isLoading} type="submit" className={"w-full"}>
+            {loginMutation.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {t("header.cta.signIn")}
+          </Button>
+          <Button variant={"secondary"} disabled={loginMutation.isLoading} className={"w-full"} asChild>
+            <Link to={"/auth/register"}> {t("common.form.noAccount")}</Link>
+          </Button>
+          <Button variant="link" className="text-secondary-foreground" asChild>
+            <Link to={"/auth/forgot-password"}>{t("common.form.forgotPassword")}</Link>
+          </Button>
         </form>
       </Form>
     </>

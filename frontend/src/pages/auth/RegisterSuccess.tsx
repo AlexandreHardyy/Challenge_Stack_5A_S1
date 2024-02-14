@@ -1,5 +1,7 @@
 import styles from "@/styles/RegisterSuccess.module.css"
 import { useTranslation } from "react-i18next"
+import { Button } from "@/components/ui/button.tsx"
+import { Link } from "react-router-dom"
 
 const RegisterSuccess = () => {
   const { t } = useTranslation()
@@ -33,6 +35,9 @@ const RegisterSuccess = () => {
         <h1 className="text-2xl text-semibold">{t("common.validation.registerSuccess")}</h1>
         <p>{t("common.validation.checkEmail")}</p>
       </div>
+      <Button asChild>
+        <Link to="/auth/login">{t("header.cta.signIn")}</Link>
+      </Button>
     </div>
   )
 }

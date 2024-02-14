@@ -1,6 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion.tsx"
-import { Agency } from "@/utils/types.ts"
-import { computeServiceDuration } from "@/utils/helpers.ts"
+import { Company, Session } from "@/utils/types.ts"
 import { Flame, Star } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx"
 import { t } from "i18next"
@@ -16,52 +15,52 @@ import {
 } from "@/components/ui/drawer.tsx"
 import { Button } from "@/components/ui/button.tsx"
 import { Loader } from "@/components/ui/loader.tsx"
-import FutureSessionsTable from "@/pages/provider/Dashboard/FutureSessionsTable.tsx"
+import FutureSessionsTable from "@/pages/admin/dashboard/FutureSessionsTable.tsx"
 import { UseQueryResult } from "@tanstack/react-query"
 
-function YourServices({
-  agencies,
-  selectedAgency,
-  mostSoldService,
-  agenciesRequest,
-  isSessionsLoading,
+function YourAgencies({
+  companies,
+  selectedCompany,
+  mostSoldAgency,
+  sessionsRequest,
+  areCompaniesLoading,
 }: Readonly<{
-  agencies: Agency[] | null
-  selectedAgency: string
-  mostSoldService: [string, number] | undefined
-  agenciesRequest: UseQueryResult<Agency[]>
-  isSessionsLoading: boolean
+  companies: Company[] | null
+  selectedCompany: string
+  mostSoldAgency: [string, number] | undefined
+  sessionsRequest: UseQueryResult<Session[]>
+  areCompaniesLoading: boolean
 }>) {
-  const allAgencyNameArray = agencies?.map((agency) => agency.name)
+  const allCompanyNameArray = companies?.map((company) => company.socialReason)
 
   // Filtrer les agences en fonction de l'agence sélectionnée
-  const filteredAgencies =
-    selectedAgency === "AllAgencies"
-      ? agencies ?? []
-      : agencies?.filter((agency) => agency.name === selectedAgency) ?? []
+  const filteredCompanies =
+    selectedCompany === "AllCompanies"
+      ? companies ?? []
+      : companies?.filter((agency) => agency.socialReason === selectedCompany) ?? []
 
   return (
     <div className="space-y-8">
-      <Accordion type="multiple" defaultValue={allAgencyNameArray}>
-        {filteredAgencies.map((agency) => (
-          <AccordionItem key={agency.id} value={agency.name}>
+      <Accordion type="multiple" defaultValue={allCompanyNameArray}>
+        {filteredCompanies.map((company) => (
+          <AccordionItem key={company.id} value={company.socialReason}>
             <AccordionTrigger>
               <div className="flex items-center gap-2">
-                {agency.name}
+                {company.socialReason}
                 <div className="flex items-center gap-1">
                   <Star size={16} className="text-yellow-500" />
                   3.5
                 </div>
               </div>
             </AccordionTrigger>
-            <Drawer key={agency.id}>
+            <Drawer key={company.id}>
               <DrawerTrigger className="w-full">
                 <AccordionContent className="flex flex-col px-2 hover:underline">
-                  {agency.services.map((service) => (
-                    <div key={service.id} className="flex">
+                  {company.agencies.map((agency) => (
+                    <div key={agency.id} className="flex">
                       <p className={"text-sm text-muted-foreground flex items-center gap-2"}>
-                        {service.name}
-                        {mostSoldService && mostSoldService[0] && mostSoldService[0] === service.name && (
+                        {agency.name}
+                        {mostSoldAgency && mostSoldAgency[0] && mostSoldAgency[0] === agency.name && (
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
@@ -70,15 +69,16 @@ function YourServices({
                                 </span>
                               </TooltipTrigger>
                               <TooltipContent>
-                                <p>{t("provider.dashboard.yourServices.tooltip")}</p>
+                                <p>{t("admin.dashboard.yourAgencies.tooltip")}</p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
                         )}
                       </p>
-                      <div className={"ml-auto flex items-center gap-2"}>
-                        <p className={"text-sm text-muted-foreground"}>{computeServiceDuration(service.duration)}</p>
-                        <p className={"text-sm text-muted-foreground"}>{service.price}€</p>
+                      <div className={"ml-auto flex items-center gap-1"}>
+                        <p className={"text-sm text-muted-foreground"}>{agency.address}</p>
+                        <p className={"text-sm text-muted-foreground"}>{agency.city}</p>
+                        <p className={"text-sm text-muted-foreground"}>{agency.zip}</p>
                       </div>
                     </div>
                   ))}
@@ -86,15 +86,21 @@ function YourServices({
               </DrawerTrigger>
               <DrawerContent>
                 <DrawerHeader>
-                  <DrawerTitle>{t("provider.dashboard.yourServices.drawer.title")}</DrawerTitle>
+                  <DrawerTitle>{t("admin.dashboard.yourAgencies.drawer.title")}</DrawerTitle>
                   <DrawerDescription>
-                    {t("provider.dashboard.yourServices.drawer.description", { agencyName: agency.name })}
+                    {t("admin.dashboard.yourAgencies.drawer.description", { companyName: company.socialReason })}
                   </DrawerDescription>
                 </DrawerHeader>
-                {isSessionsLoading ? (
+                {areCompaniesLoading ? (
                   <Loader />
                 ) : (
-                  <FutureSessionsTable agenciesRequest={agenciesRequest} agencyId={agency.id} />
+                  <FutureSessionsTable
+                    sessionsRequest={sessionsRequest}
+                    agenciesIdArray={company.agencies.reduce((acc, agency) => {
+                      acc.push(agency.id.toString())
+                      return acc
+                    }, [] as string[])}
+                  />
                 )}
                 <DrawerFooter>
                   <DrawerClose>
@@ -110,4 +116,4 @@ function YourServices({
   )
 }
 
-export default YourServices
+export default YourAgencies

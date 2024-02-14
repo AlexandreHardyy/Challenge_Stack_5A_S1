@@ -72,7 +72,7 @@ const RegisterForm = () => {
         phoneNumber: values.phoneNumber,
         plainPassword: values.password,
       })
-      navigate("/register/welcome")
+      navigate("/auth/register/welcome")
     } catch (e) {
       form.setFocus("firstname")
     }
@@ -89,32 +89,34 @@ const RegisterForm = () => {
       )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="firstname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("common.form.firstName")}</FormLabel>
-                <FormControl>
-                  <Input {...field} autoComplete="given-name" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("common.form.lastName")}</FormLabel>
-                <FormControl>
-                  <Input {...field} autoComplete="family-name" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className={"flex gap-3"}>
+            <FormField
+              control={form.control}
+              name="firstname"
+              render={({ field }) => (
+                <FormItem className={"w-full"}>
+                  <FormLabel>{t("common.form.firstName")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} autoComplete="given-name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastname"
+              render={({ field }) => (
+                <FormItem className={"w-full"}>
+                  <FormLabel>{t("common.form.lastName")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} autoComplete="family-name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="email"
@@ -141,32 +143,34 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("common.form.password")}</FormLabel>
-                <FormControl>
-                  <Input {...field} type="password" autoComplete="new-password" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="passwordConfirmation"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("common.form.confirmPassword")}</FormLabel>
-                <FormControl>
-                  <Input {...field} type="password" autoComplete="new-password" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className={"flex gap-3"}>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className={"w-full"}>
+                  <FormLabel>{t("common.form.password")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="password" autoComplete="new-password" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="passwordConfirmation"
+              render={({ field }) => (
+                <FormItem className={"w-full"}>
+                  <FormLabel>{t("common.form.confirmPassword")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="password" autoComplete="new-password" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="cgu"
@@ -187,9 +191,12 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <Button disabled={registerMutation.isLoading} type="submit">
+          <Button disabled={registerMutation.isLoading} type="submit" className={"w-full"}>
             {registerMutation.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t("common.cta.createMyAccount")}
+          </Button>
+          <Button variant={"secondary"} disabled={registerMutation.isLoading} className={"w-full"} asChild>
+            <Link to={"/auth/login"}> {t("common.form.haveAccount")}</Link>
           </Button>
         </form>
       </Form>

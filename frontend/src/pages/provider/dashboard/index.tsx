@@ -8,9 +8,9 @@ import { CalendarCheck, CalendarClock, Euro, Users } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import { useFetchAgenciesByCompany } from "@/services/agency.service.ts"
 import { useAuth } from "@/context/AuthContext.tsx"
-import YourServices from "@/pages/provider/Dashboard/your-services.tsx"
-import CardStatistics from "@/pages/provider/Dashboard/CardStatistics.tsx"
-import Overview from "@/pages/provider/Dashboard/overview.tsx"
+import YourServices from "@/pages/provider/dashboard/your-services.tsx"
+import CardStatistics from "@/pages/provider/dashboard/CardStatistics.tsx"
+import Overview from "@/pages/provider/dashboard/overview.tsx"
 import { Agency, Session } from "@/utils/types.ts"
 import {
   calculateMostSoldService,
@@ -21,6 +21,7 @@ import {
   filterSessionsByAgency,
   filterSessionsByDateRange,
 } from "@/utils/kpi.ts"
+import { useFetchSessions } from "@/services/sessions.service.ts"
 
 const AGENCIES_ALL: string = "AllAgencies"
 
@@ -43,8 +44,16 @@ const DashboardProvider = () => {
       : agencies.find((agency) => agency.name === selectedAgency)?.services.length ?? 0
     : 0
 
-  const sessions =
-    agenciesRequest.status === "success" ? agenciesRequest.data.flatMap((agency: Agency) => agency.sessions) : []
+  const agenciesIdArray =
+    agencies?.reduce((acc, agency) => {
+      acc.push(agency.id.toString())
+      return acc
+    }, [] as string[]) ?? []
+
+  const sessionsRequest = useFetchSessions({
+    agency: agenciesIdArray,
+  })
+  const sessions: Session[] | null = sessionsRequest.status === "success" ? sessionsRequest.data : []
 
   const numberOfSessionsByAgency =
     selectedAgency === AGENCIES_ALL ? sessions.length : filterSessionsByAgency(sessions, selectedAgency).length
@@ -239,8 +248,8 @@ const DashboardProvider = () => {
                       agencies={agencies}
                       selectedAgency={selectedAgency}
                       mostSoldService={mostSoldService}
-                      agenciesRequest={agenciesRequest}
-                      isSessionsLoading={agenciesRequest.isLoading}
+                      sessionsRequest={sessionsRequest}
+                      isSessionsLoading={sessionsRequest.isLoading}
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center h-32">
