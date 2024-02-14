@@ -34,6 +34,7 @@ import ResetPassword from "@/pages/auth/ResetPassword.tsx"
 import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
 import ProtectedRoute from "@/components/security/ProtectedRoute.tsx"
 import FeedBackBuilders from "@/pages/provider/feedback-builders"
+import AuthLayout from "@/layouts/auth/AuthLayout.tsx"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -47,22 +48,6 @@ const Routes = () => {
             {
               path: "",
               element: <Landing />,
-            },
-            {
-              path: "login",
-              element: <Login />,
-            },
-            {
-              path: "register",
-              element: <Register />,
-            },
-            {
-              path: "register/welcome",
-              element: <RegisterSuccess />,
-            },
-            {
-              path: "/forgot-password",
-              element: <ForgotPassword />,
             },
             {
               path: "/reset-password/:token",
@@ -108,6 +93,28 @@ const Routes = () => {
             },
           ],
           errorElement: <NotFound />,
+        },
+        {
+          path: "auth",
+          element: <AuthLayout />,
+          children: [
+            {
+              path: "login",
+              element: <Login />,
+            },
+            {
+              path: "register",
+              element: <Register />,
+            },
+            {
+              path: "forgot-password",
+              element: <ForgotPassword />,
+            },
+            {
+              path: "register/welcome",
+              element: <RegisterSuccess />,
+            },
+          ],
         },
         {
           element: <ProviderLayout />,

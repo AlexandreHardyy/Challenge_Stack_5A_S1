@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useTranslation } from "react-i18next"
 import { useMutation } from "@tanstack/react-query"
 import { forgotPassword } from "@/services/user/auth.service.ts"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useToast } from "@/components/ui/use-toast.ts"
 
 const ForgotPasswordForm = () => {
@@ -39,7 +39,7 @@ const ForgotPasswordForm = () => {
         variant: "success",
         title: t("Un email de réinitialisation de mot de passe a été envoyé."),
       })
-      navigate("/login", { replace: true })
+      navigate("auth/login", { replace: true })
     } catch (e) {
       toast({
         variant: "destructive",
@@ -64,8 +64,13 @@ const ForgotPasswordForm = () => {
             </FormItem>
           )}
         />
-        <div className="flex gap-2">
-          <Button type="submit">{t("common.form.sendMeEmail")}</Button>
+        <div className="flex flex-col gap-3">
+          <Button type="submit" className={"w-full"}>
+            {t("common.form.sendMeEmail")}
+          </Button>
+          <Button variant={"secondary"} className={"w-full"} asChild>
+            <Link to={"/auth/register"}> {t("header.cta.signIn")} ?</Link>
+          </Button>
         </div>
       </form>
     </Form>
