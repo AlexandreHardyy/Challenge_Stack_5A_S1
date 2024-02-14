@@ -119,7 +119,7 @@ class Company
     private Collection $users;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[Groups(['update-company'])]
+    #[Groups(['update-company', 'company:read', 'company:read:collection'])]
     private ?MediaObject $image = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: FeedBackBuilder::class)]

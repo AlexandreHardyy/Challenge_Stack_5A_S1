@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { DateTime } from "luxon"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import ConfirmationModal from "./modal"
 import { Agency, Service } from "@/utils/types"
 import {
@@ -8,6 +8,7 @@ import {
   useFetchDisponibilities,
 } from "@/services/disponibilities/disponibilities.service"
 import { Loader2 } from "lucide-react"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface CalendarProps {
   service: Service
@@ -24,8 +25,29 @@ export default function Calendar({ service, agency, selectedInstructorId }: Cale
   const [hourSelected, setHourSelected] = useState<DateTime>(DateTime.now())
   const [chosenInstructorIdForSession, setChosenInstructorIdForSession] = useState<number>()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const queryClient = useQueryClient()
 
-  const { data: disponibilities, status: disponibilitiesStatus } = useFetchDisponibilities({ agency })
+  const { data: disponibilities, status: disponibilitiesStatus } = useFetchDisponibilities({
+    agency,
+    queryParams: {
+      startDate: weekRange.beginningOfTheWeek.toISO() ?? "",
+      endDate: weekRange.endOfTheWeek.toISO() ?? "",
+    },
+  })
+
+  const instructorIds = selectedInstructorId ? [parseInt(selectedInstructorId)] : agency.users!.map((user) => user.id)
+
+  const sessions = useMemo(() => {
+    if (disponibilities) {
+      return computeSessionsByDisponibilities({
+        disponibilities: disponibilities.filter(
+          (disponibility) => instructorIds?.includes(parseInt(`${disponibility.userId}`))
+        ),
+        service,
+        weekRange,
+      })
+    }
+  }, [disponibilities, service, weekRange, instructorIds])
 
   if (disponibilitiesStatus === "error") {
     return <h1>WTFFFFF</h1>
@@ -37,25 +59,16 @@ export default function Calendar({ service, agency, selectedInstructorId }: Cale
 
   const today = DateTime.now()
 
-  const instructorIds = selectedInstructorId ? [parseInt(selectedInstructorId)] : agency.users!.map((user) => user.id)
-
-  const sessions = computeSessionsByDisponibilities({
-    disponibilities: disponibilities.filter(
-      (disponibility) => instructorIds?.includes(parseInt(`${disponibility.userId}`))
-    ),
-    service,
-    weekRange,
-  })
-
   function modifyWeekRange(type: "previous" | "next") {
-    setWeekRange({
+    setWeekRange((prevWeekRange) => ({
       beginningOfTheWeek:
         type === "next"
-          ? weekRange.beginningOfTheWeek.plus({ day: 7 })
-          : weekRange.beginningOfTheWeek.minus({ day: 7 }),
+          ? prevWeekRange.beginningOfTheWeek.plus({ day: 7 })
+          : prevWeekRange.beginningOfTheWeek.minus({ day: 7 }),
       endOfTheWeek:
-        type === "next" ? weekRange.endOfTheWeek.plus({ day: 7 }) : weekRange.endOfTheWeek.minus({ day: 7 }),
-    })
+        type === "next" ? prevWeekRange.endOfTheWeek.plus({ day: 7 }) : prevWeekRange.endOfTheWeek.minus({ day: 7 }),
+    }))
+    queryClient.invalidateQueries(["getDisponibilities"])
   }
 
   function onHourSelected(datetime: DateTime, availableInstructors: number[]) {
@@ -83,7 +96,7 @@ export default function Calendar({ service, agency, selectedInstructorId }: Cale
           {"<"}
         </Button>
         <div className="flex gap-8">
-          {sessions.map((day) => {
+          {sessions?.map((day) => {
             return (
               <div key={day.weekday.weekdayShort} className="flex flex-col gap-4">
                 <div className="text-center">

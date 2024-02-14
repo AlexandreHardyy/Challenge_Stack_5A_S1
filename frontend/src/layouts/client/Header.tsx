@@ -3,27 +3,14 @@ import { Link, useNavigate } from "react-router-dom"
 import { ModeToggle } from "@/components/Mode-toggle.tsx"
 import { useTranslation } from "react-i18next"
 import { useAuth } from "@/context/AuthContext.tsx"
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Popover, PopoverContent } from "@/components/ui/popover"
 import { PopoverTrigger } from "@radix-ui/react-popover"
+import UserAvatar from "@/components/user-avatar"
 
 const Header = () => {
   const { t } = useTranslation()
   const auth = useAuth()
   const navigate = useNavigate()
-
-  const UserAvatar = ({ email, image }: { email: string; image: string | null }) => {
-    const placeholderImage = `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${email}`
-
-    const finalImage = image ? `${import.meta.env.VITE_API_URL_PUBLIC}${image}` : placeholderImage
-
-    return (
-      <Avatar>
-        <AvatarImage src={finalImage} className="w-10 h-10 rounded object-cover" />
-        <AvatarFallback>{email[0].toUpperCase()}</AvatarFallback>
-      </Avatar>
-    )
-  }
 
   return (
     <header className="flex px-8 py-4 items-center justify-between sticky top-0 bg-background drop-shadow-md z-50 h-18">
@@ -56,7 +43,11 @@ const Header = () => {
           <ModeToggle />
           <Popover>
             <PopoverTrigger>
-              <UserAvatar email={auth.user?.email ?? ""} image={auth.user?.image?.contentUrl ?? null} />
+              <UserAvatar
+                email={auth.user?.email ?? ""}
+                image={auth.user?.image?.contentUrl ?? null}
+                className="w-10 h-10 rounded object-cover"
+              />
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-3">
               <Button variant={"outline"} onClick={() => navigate("/user/profile")}>
