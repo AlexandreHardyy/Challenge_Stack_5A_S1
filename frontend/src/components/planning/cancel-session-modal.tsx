@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { toast } from "@/components/ui/use-toast"
 import { useUpdateSession } from "@/services/sessions.service"
 import { Session } from "@/utils/types"
+import { useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -14,6 +15,7 @@ type CancelSessionModalProps = {
 
 function CancelSessionModal({ session, isModalOpen, onModalOpenChange }: CancelSessionModalProps) {
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -25,6 +27,9 @@ function CancelSessionModal({ session, isModalOpen, onModalOpenChange }: CancelS
         title: `${t("provider.myPlanning.sessionDetails.modal.toastSuccessTitle")}`,
         description: `${t("provider.myPlanning.sessionDetails.modal.toastSuccessDescription")}`,
       })
+      ;("getSessionsByStudent")
+      queryClient.invalidateQueries(["getSessionsByStudent"])
+      queryClient.invalidateQueries(["getSessionById"])
       onModalOpenChange(false)
     },
     onError: () => {

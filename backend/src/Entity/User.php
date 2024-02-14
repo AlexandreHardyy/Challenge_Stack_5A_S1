@@ -142,11 +142,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['agency:read', 'user:read', 'user:read:me', 'user:read:collection:by_company', 'agency:read'])]
+    #[Groups(['agency:read', 'user:read', 'user:read:me', 'user:read:collection:by_company'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user:read', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider', 'user:read:me', 'session:read', 'user:read:collection'])]
+    #[Groups(['user:read', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider', 'user:read:me', 'session:read', 'user:read:collection', 'agency:read'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     #[Assert\Email]
     private ?string $email = null;
@@ -167,12 +167,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection'])]
+    #[Groups(['user:read', 'user:read:me', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection'])]
+    #[Groups(['user:read', 'user:read:me', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 
@@ -206,11 +206,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $schedules;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['user:read', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider'])]
+    #[Groups(['user:read', 'user:read:me', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider'])]
     private ?string $phoneNumber = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[Groups(['update-user'])]
+    #[Groups(['update-user', 'user:read:me', 'agency:read'])]
     private ?MediaObject $image = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: FeedBack::class)]
