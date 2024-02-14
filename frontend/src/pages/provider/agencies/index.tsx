@@ -64,7 +64,7 @@ const ActionColumn = ({ agency }: { agency: Agency }) => {
         name={agency.name}
         onDelete={async () => {
           await deleteAgency.mutateAsync(agency.id)
-          queryClient.invalidateQueries(["getAgencies"])
+          await queryClient.invalidateQueries(["getAgencies"])
         }}
       />
       <ModalAgencyForm agency={agency} />
@@ -80,19 +80,19 @@ const Agencies = () => {
   const { user } = useAuth()
 
   const agencies = useFetchAgenciesByCompany(user?.company?.id)
-  const services = useFetchServicesGroupByCategory(user?.company?.id)
+  const categories = useFetchServicesGroupByCategory(user?.company?.id)
   const { t } = useTranslation()
 
   const formattedServices = useMemo(() => {
-    return !services?.data
+    return !categories?.data
       ? []
-      : services.data.reduce<Service[]>((services, category) => {
+      : categories.data.reduce<Service[]>((services, category) => {
           category.services?.forEach((service) => {
             services.push(service)
           })
           return services
         }, [])
-  }, [services.data])
+  }, [categories.data])
 
   return (
     <AgencyContext.Provider value={{ services: formattedServices }}>

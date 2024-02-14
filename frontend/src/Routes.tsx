@@ -6,8 +6,8 @@ import AdminLayout from "@/layouts/admin"
 
 import Landing from "@/pages/Landing"
 import NotFound from "@/pages/NotFound"
-import DashboardAdmin from "@/pages/admin/Dashboard"
-import DashboardProvider from "@/pages/provider/Dashboard"
+import DashboardAdmin from "@/pages/admin/dashboard"
+import DashboardProvider from "@/pages/provider/dashboard"
 import Employees from "@/pages/provider/employees"
 import HandleEmployee from "@/pages/provider/employees/handle-employee"
 import Login from "@/pages/auth/Login.tsx"
@@ -35,6 +35,7 @@ import ScheduleExceptions from "@/pages/provider/schedule-exceptions"
 import ProtectedRoute from "@/components/security/ProtectedRoute.tsx"
 import FeedBackBuilders from "@/pages/provider/feedback-builders"
 import AuthLayout from "@/layouts/auth/AuthLayout.tsx"
+import FeedBacks from "@/pages/provider/feedback-builders/feedbacks"
 
 const Routes = () => {
   const router = createBrowserRouter([
@@ -185,6 +186,10 @@ const Routes = () => {
             {
               path: "feedback-builders",
               element: <FeedBackBuilders />,
+            },
+            {
+              path: "feedback-builders/:id/feedbacks",
+              element: <FeedBacks />,
             },
           ],
           errorElement: <NotFound />,

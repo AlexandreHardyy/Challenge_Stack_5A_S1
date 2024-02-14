@@ -125,16 +125,33 @@ export interface MediaObject {
   contentUrl: string
 }
 
+export interface FeedBackGroup {
+  question: string
+  answer: string
+}
 export interface FeedBack {
   id: number
-  feedBackGroups: Array<{
-    question: string
-    answer: string
-  }>
+  feedBackGroups: FeedBackGroup[]
 }
 export interface FeedBackBuilder {
   id: number
   title: string
   isSelected?: boolean
   questions: string[]
+}
+
+export interface ScheduleDisponibilties {
+  date: string
+  startHour: number
+  endHour: number
+  scheduleExceptions: {
+    startHour: number
+    endHour: number
+  }[]
+}
+
+export interface Disponibility {
+  userId: number
+  sessions: Pick<Session, "id" | "startDate" | "endDate">[]
+  schedules: ScheduleDisponibilties[]
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
@@ -10,6 +11,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\OpenApi\Model\Operation;
 use App\Repository\UserRepository;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -19,17 +23,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true]),
-        new Get(normalizationContext: ['groups' => ['read-user', 'employee:read', 'read-media_object'], 'enable_max_depth' => true],
-                security: "is_granted('USER_VIEW', object)"),
-        new Post(denormalizationContext: ['groups' => ['create-user']]),
-        new Patch(denormalizationContext: ['groups' => ['update-user']],  security: "is_granted('USER_EDIT', object)")
+        new GetCollection(
+            // normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true]
+            normalizationContext: ['groups' => ['user:read:collection']]
+        ),
+        new Get(
+            // normalizationContext: ['groups' => ['read-user', 'employee:read', 'read-media_object'], 'enable_max_depth' => true],
+            normalizationContext: ['groups' => ['user:read']],
+            security: "is_granted('USER_VIEW', object)"
+        ),
+        new Post(
+            denormalizationContext: ['groups' => ['create-user']]
+        ),
+        new Patch(
+            denormalizationContext: ['groups' => ['update-user']],
+            security: "is_granted('USER_EDIT', object)"
+        )
     ],
-    normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true],
+    // normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true],
 )]
 
 #[ApiResource(
@@ -39,12 +53,13 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             uriVariables: [
                 'id' => new Link(toProperty: 'company', fromClass: Company::class)
             ],
-            normalizationContext:['groups' => ['read-user'], 'enable_max_depth' => true],
+            // normalizationContext:['groups' => ['read-user'], 'enable_max_depth' => true],
             openapi: new Operation(
-                tags: [ 'Company', 'User' ],
+                tags: ['User'],
                 summary: 'Returns a list of users for a specific company',
                 description: 'Returns a list of users for a specific company'
-            )
+            ),
+            normalizationContext: ['groups' => ['user:read:collection:by_company', 'user:read:collection:by_agency']],
         )
     ],
 )]
@@ -53,36 +68,30 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     uriTemplate: '/employees',
     operations: [
         new Post(
-            security: "is_granted('USER_CREATE', object)",
-            denormalizationContext: [ 'groups' => [ 'create-employee' ] ],
             openapi: new Operation(
-                tags: [ 'User' ],
+                tags: ['User'],
                 summary: 'create a new employee',
                 description: 'Create a new user for a company'
-            )
+            ),
+            denormalizationContext: ['groups' => ['create-employee']],
+            security: "is_granted('USER_CREATE', object)",
         ),
         new Patch(
-            security: "is_granted('USER_EDIT', object)",
             uriTemplate: '/employees/{id}',
-            denormalizationContext: [ 'groups' => [ 'create-employee', 'update-employee' ] ],
             openapi: new Operation(
-                tags: [ 'User' ],
+                tags: ['User'],
                 summary: 'update a employee',
                 description: 'Update a user for a company'
             )
         ),
-        new GetCollection(
-            uriTemplate: '/companies/{id}/employees/schedule_exceptions',
-            security: "is_granted('ROLE_PROVIDER')",
+        new Delete(
+            uriTemplate: '/employees/{id}',
             openapi: new Operation(
-                tags: [ 'Schedule' ],
-                summary: 'schedule exceptions',
-                description: 'get schedule exceptions from company'
+                tags: ['User'],
+                summary: 'delete a employee from your company',
+                description: 'Update a user for a company'
             ),
-            uriVariables: [
-                'id' => new Link(toProperty: 'company', fromClass: Company::class)
-            ],
-            normalizationContext: [ 'groups' => [ 'schedule_exceptions:read' ], 'enable_max_depth' => true ],
+            security: "is_granted('USER_EDIT', object)"
         )
     ],
 )]
@@ -91,21 +100,21 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     uriTemplate: '/providers',
     operations: [
         new Post(
-            denormalizationContext: [ 'groups' => [ 'create-provider' ] ],
             openapi: new Operation(
-                tags: [ 'Company', 'User' ],
+                tags: ['Company', 'User'],
                 summary: 'create a new provider',
                 description: 'Create a new user related to a company'
-            )
+            ),
+            denormalizationContext: ['groups' => ['create-provider']],
         ),
         new Patch(
             uriTemplate: '/providers/{id}',
-            denormalizationContext: [ 'groups' => [ 'create-provider', 'update-provider' ] ],
             openapi: new Operation(
-                tags: [ 'Company', 'User' ],
+                tags: ['Company', 'User'],
                 summary: 'update a provider',
                 description: 'Update a user related to a company'
-            )
+            ),
+            denormalizationContext: ['groups' => ['create-provider', 'update-provider']],
         )
     ],
 )]
@@ -114,10 +123,11 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     uriTemplate: '/user/me',
     operations: [
         new Get(
-            normalizationContext: [
-                'groups' => ['read-user', 'read-media_object'],
-                'enable_max_depth' => true,
-            ],
+            // normalizationContext: [
+            //     'groups' => ['read-user', 'read-media_object'],
+            //     'enable_max_depth' => true,
+            // ],
+            normalizationContext: ['groups' => ['user:read:me']],
             security: "is_granted('USER_VIEW', object)"
         ),
     ]
@@ -132,89 +142,81 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read-user', 'agency-group-read', 'session-group-read', 'session-group-read-collection', 'company-group-read'])]
+    #[Groups(['agency:read', 'user:read', 'user:read:me', 'user:read:collection:by_company', 'agency:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'company-group-read'])]
+    #[Groups(['user:read', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider', 'user:read:me', 'session:read', 'user:read:collection'])]
     #[Assert\NotBlank(groups: ['create-user'])]
-    #[Assert\Email()]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(['read-user', 'update-user'])]
+    #[Groups(['update-user', 'user:read:me', 'user:read:collection'])]
     private array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var string|null The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Groups([ 'create-user' ])]
+    #[Groups(['create-user'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     #[Assert\Regex(pattern: '/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}/')]
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read', 'session-group-read-collection'])]
+    #[Groups(['user:read', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read', 'company-group-read', 'schedule_exceptions:read', 'session-group-read-collection'])]
+    #[Groups(['user:read', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection'])]
     #[Assert\NotBlank(groups: ['create-user'])]
     private ?string $lastname = null;
 
     #[ORM\Column]
-    #[Groups(['read-user', 'update-user'])]
+    #[Groups(['update-user', 'user:read:collection'])]
     private ?bool $isVerified = false;
 
     #[ORM\Column]
-    #[Groups(['read-user'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[Groups(['user:read:collection'])]
+    private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['read-user', 'update-user'])]
-    private ?\DateTimeInterface $updatedAt = null;
+    #[Groups(['update-user', 'user:read:collection'])]
+    private ?DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['employee:read', 'create-employee', 'create-provider', 'update-provider'])]
+    #[Groups(['user:read:me', 'create-employee', 'create-provider', 'update-provider', 'user:read:collection', 'user:read:collection:by_agency'])]
     private ?Company $company = null;
 
     #[ORM\ManyToMany(targetEntity: Agency::class, inversedBy: 'users', cascade: ["persist"])]
-    #[MaxDepth(1)]
-    #[Groups(['employee:read', 'update-employee'])]
+    #[Groups(['user:read:collection:by_company', 'update-employee', 'user:read'])]
     private Collection $agencies;
 
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Session::class, orphanRemoval: true)]
-    #[MaxDepth(1)]
-    #[Groups(['student:read'])]
     private Collection $studentSessions;
 
     #[ORM\OneToMany(mappedBy: 'instructor', targetEntity: Session::class, orphanRemoval: true)]
-    // TODO: Find a better way than MaxDepth
-    #[MaxDepth(1)]
-    #[Groups(['employee:read'])]
     private Collection $instructorSessions;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Schedule::class, orphanRemoval: true)]
-    #[MaxDepth(1)]
-    #[Groups(['employee:read', 'schedule_exceptions:read'])]
     private Collection $schedules;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['create-user', 'read-user', 'update-user', 'create-employee', 'create-provider', 'agency-group-read'])]
+    #[Groups(['user:read', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider'])]
     private ?string $phoneNumber = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[Groups(['update-user', 'read-media_object'])]
+    #[Groups(['update-user'])]
     private ?MediaObject $image = null;
-    
+
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: FeedBack::class)]
     private Collection $feedBacks;
 
-    #[Groups('employee:read')]
+    #[Groups(['session:read'])]
     public function getStudentMarks(): ?float
     {
         $totalMark = 0;
@@ -249,9 +251,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\PreUpdate]
     public function updatedTimestamps(): void
     {
-        $this->setUpdatedAt(new \DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
         if ($this->getCreatedAt() === null) {
-            $this->setCreatedAt(new \DateTimeImmutable('now'));
+            $this->setCreatedAt(new DateTimeImmutable('now'));
         }
     }
 
@@ -372,24 +374,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $plainPassword;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    public function setUpdatedAt(DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -462,7 +464,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-     /**
+    /**
      * @return Collection<int, Session>
      */
     public function getInstructorSessions(): Collection

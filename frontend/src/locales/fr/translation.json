@@ -253,7 +253,7 @@
     }
   },
   "ProviderFeedBackBuilders": {
-    "title": "Contructeur de formualireFeedback",
+    "title": "Contructeur de formulaire de feedback",
     "form": {
       "title": "Titre",
       "isSelected": "Selectionné",
@@ -273,10 +273,19 @@
       }
     }
   },
+  "ProviderFeedBack": {
+    "title": "Feedback pour un constructeur de formulaire",
+    "sentDate": "Envoyé le",
+    "questionAnswer": "Question / Réponse" 
+  },
   "ProviderEmployee": {
     "title": "Mes employés",
     "form": {
       "agencies": "Agences",
+      "email": "Email",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phoneNumber": "Numéro de téléphone",
       "cta": {
         "addEmployee": "Ajouter un employé",
         "updateEmployee": "Modifier un employé"
@@ -531,7 +540,8 @@
         "companyDetails": {
           "mainInformations": "Informations principales",
           "agenciesList": "List des agences",
-          "employeesList": "List des employés"
+          "employeesList": "List des employés",
+          "noEmployees": "Pas encore d'employés"
         },
         "errors": {
           "socialReason": "Social reason must be at least 2 characters.",

@@ -5,20 +5,24 @@ import { useFetchUserById } from "@/services/user/user.service"
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
 import { FormSchedules } from "@/pages/provider/employees/form"
-import { Employee, Session } from "@/utils/types"
+import { Employee } from "@/utils/types"
 import { useState } from "react"
-import { SessionDetails } from "../../../components/planning/employee-planning/session-details"
+import { SessionDetails } from "@/components/planning/employee-planning/session-details"
 import EmployeeCalendar from "@/components/planning/employee-planning/employee-calendar"
+import { useFetchSessionsByInstructor } from "@/services/sessions.service"
+import { useFetchScheduleByUser } from "@/services/schedule.service"
 
 const HandleEmployee = () => {
   const { userId } = useParams()
   const { t } = useTranslation()
-  const [selectedSession, setSelectedSession] = useState<Session>()
+  const [selectedSessionId, setSelectedSessionId] = useState<number>()
 
   const { data, isLoading, isFetching, isError } = useFetchUserById(Number(userId))
   const employee = data as Employee
+  const sessions = useFetchSessionsByInstructor(Number(userId))
+  const schedules = useFetchScheduleByUser(Number(userId))
 
-  if (isLoading || isFetching) {
+  if (isLoading || isFetching || sessions.isLoading || schedules.isLoading) {
     return (
       <div className="w-full flex justify-center">
         <Spinner />
@@ -51,8 +55,12 @@ const HandleEmployee = () => {
         </CardContent>
       </Card>
       <div className="flex">
-        <EmployeeCalendar setSelectedSession={setSelectedSession} instructor={employee} />
-        <SessionDetails session={selectedSession} />
+        <EmployeeCalendar
+          setSelectedSessionId={setSelectedSessionId}
+          schedules={schedules.data}
+          sessions={sessions.data}
+        />
+        <SessionDetails sessionId={selectedSessionId} />
       </div>
     </div>
   )

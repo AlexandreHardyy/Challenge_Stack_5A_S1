@@ -8,36 +8,94 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\SessionRepository;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\OpenApi\Model\Operation;
 
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[ApiResource(
-    paginationEnabled: false,
     operations: [
-        new Post(validationContext: ['groups' => ['session-create']], security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_USER')", validationContext: ['groups' => ['session-create']]),
         new Get(
-            normalizationContext: ['groups' => ['session-group-read']],
-            security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
+            normalizationContext: ['groups' => ['session:read']],
+            security: "is_granted('ROLE_PROVIDER') or (is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user))"
         ),
         new GetCollection(
-            normalizationContext: ['groups' => ['session-group-read-collection'], 'enable_max_depth' => true]
+            normalizationContext: ['groups' => ['session:read:collection']],
+            // normalizationContext: ['groups' => ['session-group-read-collection'], 'enable_max_depth' => true]
         ),
         new Patch(
-            validationContext: ['groups' => ['session-group-update']],
             denormalizationContext: ['groups' => ['session-group-update']],
-            security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)"
+            security: "is_granted('ROLE_USER') and (object.getInstructor() == user or object.getStudent() == user)",
+            validationContext: ['groups' => ['session-group-update']]
         )
-    ]
+    ],
+    paginationEnabled: false
 )]
+#[ApiResource(
+    uriTemplate: '/agencies/{id}/sessions',
+    operations: [
+        new GetCollection(
+            // normalizationContext:['groups' => ['agency:read:collection:by-companies'], 'enable_max_depth' => true],
+            openapi: new Operation(
+                tags: [ 'Agency', 'Session' ],
+                summary: 'Returns a list of sessions for a specific agency',
+                description: 'Returns a list of sessions for a specific agency'
+            ),
+            normalizationContext: ['groups' => ['session:read:collection:by_agency']]
+        ),
+    ],
+    uriVariables: [
+        'id' => new Link(toProperty: 'agency', fromClass: Agency::class)
+    ],
+    security: "is_granted('ROLE_USER')"
+)]
+
+#[ApiResource(
+    uriTemplate: '/instructors/{id}/sessions',
+    operations: [
+        new GetCollection(
+            openapi: new Operation(
+                tags: [ 'Agency', 'Session' ],
+                summary: 'Returns a list of sessions for a specific instructor',
+                description: 'Returns a list of sessions for a specific instructor'
+            ),
+            normalizationContext: ['groups' => ['session:read:collection:by_instructor']]
+        ),
+    ],
+    uriVariables: [
+        'id' => new Link(toProperty: 'instructor', fromClass: User::class)
+    ],
+    security: "is_granted('ROLE_USER')"
+)]
+
+#[ApiResource(
+    uriTemplate: '/students/{id}/sessions',
+    operations: [
+        new GetCollection(
+            openapi: new Operation(
+                tags: [ 'Agency', 'Session' ],
+                summary: 'Returns a list of sessions for a specific instructor',
+                description: 'Returns a list of sessions for a specific instructor'
+            ),
+            normalizationContext: ['groups' => ['session:read:collection:by_student']]
+        ),
+    ],
+    uriVariables: [
+        'id' => new Link(toProperty: 'student', fromClass: User::class)
+    ],
+    security: "is_granted('ROLE_USER')"
+)]
+
 #[ApiFilter(SearchFilter::class, properties: ['service' => 'exact', 'agency' => 'exact', 'status' => 'exact'])]
 #[ApiFilter(DateFilter::class, properties: ['startDate'])]
 class Session
@@ -45,55 +103,53 @@ class Session
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
+    #[Groups(['session:read', 'session:read:collection:by_instructor', 'session:read:collection:by_student'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'studentSessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[MaxDepth(1)]
     // SECURITY
-    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection'])]
+    #[Groups(['session:read:collection:by_instructor', 'session:read', 'session:read:collection'])]
     private ?User $student = null;
 
     #[ORM\ManyToOne(inversedBy: 'instructorSessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[MaxDepth(1)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'student:read'])]
+    #[Groups(['session:read', 'session:read:collection:by_student', 'session:read:collection'])]
     private ?User $instructor = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
-    private ?\DateTimeInterface $startDate = null;
+    #[Groups(['disponibility:read:collection', 'session:read:collection:by_instructor', 'session:read:collection:by_student', 'session:read', 'session:read:collection'])]
+    private ?DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
-    private ?\DateTimeInterface $endDate = null;
+    #[Groups(['disponibility:read:collection', 'session:read:collection:by_instructor', 'session:read:collection:by_student', 'session:read', 'session:read:collection'])]
+    private ?DateTimeInterface $endDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
     // SECURITY
-    #[Groups(['session-group-read', 'session-group-read-collection', 'employee:read', 'student:read'])]
+    #[Groups(['session:read:collection:by_instructor', 'session:read:collection:by_student', 'session:read', 'session:read:collection'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['session-group-read', 'employee:read', 'session-group-read-collection', 'student:read'])]
+    #[Groups(['session:read', 'session:read:collection'])]
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session-group-read', 'session-group-update', 'employee:read', 'student:read'])]
+    #[Groups(['session:read:collection:by_instructor', 'session:read:collection:by_student', 'session-group-update'])]
     private ?string $status = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['session-group-update', 'employee:read'])]
+    #[Groups(['session-group-update', 'session:read'])]
     private ?float $studentMark = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
-    #[Groups(['session-group-read', 'employee:read', 'student:read'])]
+    #[Groups(['session:read:collection:by_agency', 'session:read'])]
     private ?RatingService $ratingService = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
-    #[Groups(['session-group-read', 'student:read'])]
+    #[Groups(['session:read'])]
     private ?FeedBack $feedBack = null;
 
     public function getId(): ?int
@@ -125,24 +181,24 @@ class Session
         return $this;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    public function getStartDate(): ?DateTimeInterface
     {
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): static
+    public function setStartDate(DateTimeInterface $startDate): static
     {
         $this->startDate = $startDate;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEndDate(): ?DateTimeInterface
     {
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeInterface $endDate): static
+    public function setEndDate(DateTimeInterface $endDate): static
     {
         $this->endDate = $endDate;
 

@@ -274,10 +274,19 @@
       }
     }
   },
+  "ProviderFeedBack": {
+    "title": "Feedbacks from a builder",
+    "sentDate": "Sent date",
+    "questionAnswer": "Question / Answer" 
+  },
   "ProviderEmployee": {
     "title": "Your Employees",
     "form": {
       "agencies": "Agencies",
+      "email": "Email",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phoneNumber": "Phone's Number",
       "cta": {
         "addEmployee": "Add new employee",
         "updateEmployee": "Update employee"
@@ -532,7 +541,8 @@
         "companyDetails": {
           "mainInformations": "Main informations",
           "agenciesList": "Agencies List",
-          "employeesList": "Employees List"
+          "employeesList": "Employees List",
+          "noEmployees": "No employees yet"
         },
         "errors": {
           "socialReason": "socialReason must be at least 2 characters.",

@@ -1,8 +1,20 @@
 import { useToast } from "@/components/ui/use-toast"
 import api from "@/utils/api"
+import { FeedBack } from "@/utils/types"
 import { FeedbackFormSchema } from "@/zod-schemas/feedback"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
+
+export function useFetchFeedBacksByBuilder(builderId?: number) {
+  return useQuery<FeedBack[]>(["getFeedBacks"], async () => {
+    const response = await api.get(`feed_back_builders/${builderId}/feed_backs`)
+    if (response.status !== 200) {
+      throw new Error("Something went wrong with the request (getFeedBacks)")
+    }
+
+    return response.data["hydra:member"]
+  })
+}
 
 export const useSendFeedBack = () => {
   const { toast } = useToast()

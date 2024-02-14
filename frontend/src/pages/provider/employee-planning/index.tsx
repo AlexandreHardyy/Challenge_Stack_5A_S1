@@ -1,14 +1,16 @@
 import { useState } from "react"
-import { Employee, ScheduleException, Session } from "@/utils/types"
+import { ScheduleException } from "@/utils/types"
 import { useAuth } from "@/context/AuthContext"
 import EmployeeCalendar from "@/components/planning/employee-planning/employee-calendar"
 import { SessionDetails } from "@/components/planning/employee-planning/session-details"
 import { ScheduleExceptionsForm } from "./form"
-import { useFetchScheduleExceptionsByEmployee } from "@/services/schedule.service"
+import { useFetchScheduleByUser, useFetchScheduleExceptionsByEmployee } from "@/services/schedule.service"
 import { format } from "date-fns"
 import { Spinner } from "@/components/loader/Spinner"
 import { Separator } from "@/components/ui/separator"
 import { t } from "i18next"
+import { useFetchUserById } from "@/services/user/user.service"
+import { useFetchSessionsByInstructor } from "@/services/sessions.service"
 
 function ScheduleExceptions({
   scheduleExceptions,
@@ -43,15 +45,31 @@ function ScheduleExceptions({
 }
 
 function EmployeePlanning() {
-  const [selectedSession, setSelectedSession] = useState<Session>()
-  const employee = useAuth().user as Employee
-  const scheduleExceptions = useFetchScheduleExceptionsByEmployee(employee.id)
+  const [selectedSessionId, setSelectedSessionId] = useState<number>()
+  const { user } = useAuth()
+  const { isLoading, isFetching } = useFetchUserById(Number(user?.id))
+
+  const scheduleExceptions = useFetchScheduleExceptionsByEmployee(user?.id)
+  const sessions = useFetchSessionsByInstructor(user?.id)
+  const schedules = useFetchScheduleByUser(user?.id)
+
+  if (isLoading || isFetching || scheduleExceptions.isLoading || sessions.isLoading || schedules.isLoading) {
+    return (
+      <div className="w-full flex justify-center">
+        <Spinner />
+      </div>
+    )
+  }
 
   return (
     <div>
       <div className="flex">
-        <EmployeeCalendar setSelectedSession={setSelectedSession} instructor={employee} />
-        <SessionDetails session={selectedSession} />
+        <EmployeeCalendar
+          setSelectedSessionId={setSelectedSessionId}
+          sessions={sessions.data}
+          schedules={schedules.data}
+        />
+        <SessionDetails sessionId={selectedSessionId} />
       </div>
       <div className="flex flex-col gap-6 pt-10">
         <h1 className="text-3xl"> {t("provider.myPlanning.titleBreak")} </h1>

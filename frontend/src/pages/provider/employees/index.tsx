@@ -18,15 +18,22 @@ import { Button } from "@/components/ui/button"
 import React, { useContext, useState } from "react"
 import { EyeIcon, PencilIcon } from "lucide-react"
 import { SelectMultiple } from "@/components/select-multiple"
-import { addNewEmployee, updateEmployeeById, useFetchEmployeesByCompany } from "@/services/user/user.service"
+import {
+  addNewEmployee,
+  updateEmployeeById,
+  useDeleteUserById,
+  useFetchEmployeesByCompany,
+} from "@/services/user/user.service"
 import { Agency, Employee, User } from "@/utils/types"
 import { useFetchAgenciesByCompany } from "@/services/agency.service"
-import { UseQueryResult } from "@tanstack/react-query"
+import { UseQueryResult, useQueryClient } from "@tanstack/react-query"
 import { Spinner } from "@/components/loader/Spinner"
 import { useToast } from "@/components/ui/use-toast"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { useAuth } from "@/context/AuthContext"
+import { DeleteModal } from "@/components/delete-modal"
+import { t } from "i18next"
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -35,19 +42,19 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: () => t("ProviderEmployee.form.email"),
   },
   {
     accessorKey: "firstname",
-    header: "First Name",
+    header: () => t("ProviderEmployee.form.firstName"),
   },
   {
     accessorKey: "lastname",
-    header: "Last Name",
+    header: () => t("ProviderEmployee.form.lastName"),
   },
   {
     accessorKey: "phoneNumber",
-    header: "Phone number",
+    header: () => t("ProviderEmployee.form.phoneNumber"),
   },
   {
     accessorKey: "agencies",
@@ -59,29 +66,33 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "action",
     header: "Action",
-    cell: ({ row: { getValue: val } }) => {
-      return (
-        <div className="flex items-center gap-4">
-          <ModalFormEmployee
-            // WTFF is that ???
-            employee={{
-              id: val("id"),
-              email: val("email"),
-              firstname: val("firstname"),
-              lastname: val("lastname"),
-              phoneNumber: val("phoneNumber"),
-              agencies: val("agencies"),
-            }}
-          />
-          <Link to={`/provider/employee/${val("id")}`}>
-            {" "}
-            <EyeIcon />{" "}
-          </Link>
-        </div>
-      )
+    cell: ({ row: { original: employee } }) => {
+      return <ActionColumn employee={employee} />
     },
   },
 ]
+
+const ActionColumn = ({ employee }: { employee: User }) => {
+  const deleteEmployee = useDeleteUserById()
+  const queryClient = useQueryClient()
+
+  return (
+    <div className="flex items-center gap-4">
+      <ModalFormEmployee employee={employee} />
+      <Link to={`/provider/employee/${employee.id}`}>
+        {" "}
+        <EyeIcon />{" "}
+      </Link>
+      <DeleteModal
+        name={employee.email}
+        onDelete={async () => {
+          await deleteEmployee.mutateAsync(employee.id)
+          queryClient.invalidateQueries(["getEmployees"])
+        }}
+      />
+    </div>
+  )
+}
 
 const employeeFormSchema = z.object({
   email: z.string().email(),

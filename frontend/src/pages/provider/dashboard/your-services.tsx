@@ -1,5 +1,6 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion.tsx"
-import { Company } from "@/utils/types.ts"
+import { Agency, Session } from "@/utils/types.ts"
+import { computeServiceDuration } from "@/utils/helpers.ts"
 import { Flame, Star } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx"
 import { t } from "i18next"
@@ -15,52 +16,52 @@ import {
 } from "@/components/ui/drawer.tsx"
 import { Button } from "@/components/ui/button.tsx"
 import { Loader } from "@/components/ui/loader.tsx"
-import FutureSessionsTable from "@/pages/admin/Dashboard/FutureSessionsTable.tsx"
+import FutureSessionsTable from "@/pages/provider/dashboard/FutureSessionsTable.tsx"
 import { UseQueryResult } from "@tanstack/react-query"
 
-function YourAgencies({
-  companies,
-  selectedCompany,
-  mostSoldAgency,
-  companiesRequest,
-  areCompaniesLoading,
+function YourServices({
+  agencies,
+  selectedAgency,
+  mostSoldService,
+  sessionsRequest,
+  isSessionsLoading,
 }: Readonly<{
-  companies: Company[] | null
-  selectedCompany: string
-  mostSoldAgency: [string, number] | undefined
-  companiesRequest: UseQueryResult<Company[]>
-  areCompaniesLoading: boolean
+  agencies: Agency[] | null
+  selectedAgency: string
+  mostSoldService: [string, number] | undefined
+  sessionsRequest: UseQueryResult<Session[]>
+  isSessionsLoading: boolean
 }>) {
-  const allCompanyNameArray = companies?.map((company) => company.socialReason)
+  const allAgencyNameArray = agencies?.map((agency) => agency.name)
 
   // Filtrer les agences en fonction de l'agence sélectionnée
-  const filteredCompanies =
-    selectedCompany === "AllCompanies"
-      ? companies ?? []
-      : companies?.filter((agency) => agency.socialReason === selectedCompany) ?? []
+  const filteredAgencies =
+    selectedAgency === "AllAgencies"
+      ? agencies ?? []
+      : agencies?.filter((agency) => agency.name === selectedAgency) ?? []
 
   return (
     <div className="space-y-8">
-      <Accordion type="multiple" defaultValue={allCompanyNameArray}>
-        {filteredCompanies.map((company) => (
-          <AccordionItem key={company.id} value={company.socialReason}>
+      <Accordion type="multiple" defaultValue={allAgencyNameArray}>
+        {filteredAgencies.map((agency) => (
+          <AccordionItem key={agency.id} value={agency.name}>
             <AccordionTrigger>
               <div className="flex items-center gap-2">
-                {company.socialReason}
+                {agency.name}
                 <div className="flex items-center gap-1">
                   <Star size={16} className="text-yellow-500" />
                   3.5
                 </div>
               </div>
             </AccordionTrigger>
-            <Drawer key={company.id}>
+            <Drawer key={agency.id}>
               <DrawerTrigger className="w-full">
                 <AccordionContent className="flex flex-col px-2 hover:underline">
-                  {company.agencies.map((agency) => (
-                    <div key={agency.id} className="flex">
+                  {agency.services.map((service) => (
+                    <div key={service.id} className="flex">
                       <p className={"text-sm text-muted-foreground flex items-center gap-2"}>
-                        {agency.name}
-                        {mostSoldAgency && mostSoldAgency[0] && mostSoldAgency[0] === agency.name && (
+                        {service.name}
+                        {mostSoldService && mostSoldService[0] && mostSoldService[0] === service.name && (
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
@@ -69,16 +70,15 @@ function YourAgencies({
                                 </span>
                               </TooltipTrigger>
                               <TooltipContent>
-                                <p>{t("admin.dashboard.yourAgencies.tooltip")}</p>
+                                <p>{t("provider.dashboard.yourServices.tooltip")}</p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
                         )}
                       </p>
-                      <div className={"ml-auto flex items-center gap-1"}>
-                        <p className={"text-sm text-muted-foreground"}>{agency.address}</p>
-                        <p className={"text-sm text-muted-foreground"}>{agency.city}</p>
-                        <p className={"text-sm text-muted-foreground"}>{agency.zip}</p>
+                      <div className={"ml-auto flex items-center gap-2"}>
+                        <p className={"text-sm text-muted-foreground"}>{computeServiceDuration(service.duration)}</p>
+                        <p className={"text-sm text-muted-foreground"}>{service.price}€</p>
                       </div>
                     </div>
                   ))}
@@ -86,15 +86,15 @@ function YourAgencies({
               </DrawerTrigger>
               <DrawerContent>
                 <DrawerHeader>
-                  <DrawerTitle>{t("admin.dashboard.yourAgencies.drawer.title")}</DrawerTitle>
+                  <DrawerTitle>{t("provider.dashboard.yourServices.drawer.title")}</DrawerTitle>
                   <DrawerDescription>
-                    {t("admin.dashboard.yourAgencies.drawer.description", { companyName: company.socialReason })}
+                    {t("provider.dashboard.yourServices.drawer.description", { agencyName: agency.name })}
                   </DrawerDescription>
                 </DrawerHeader>
-                {areCompaniesLoading ? (
+                {isSessionsLoading ? (
                   <Loader />
                 ) : (
-                  <FutureSessionsTable companiesRequest={companiesRequest} companyId={company.id} />
+                  <FutureSessionsTable sessionsRequest={sessionsRequest} agencyId={agency.id} />
                 )}
                 <DrawerFooter>
                   <DrawerClose>
@@ -110,4 +110,4 @@ function YourAgencies({
   )
 }
 
-export default YourAgencies
+export default YourServices
