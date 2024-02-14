@@ -44,8 +44,6 @@ class AgencyGeoLocModifier implements EventSubscriber
 
             $json = json_decode($result);
 
-            dump($json);
-
             $location = $json->{'features'}[0]->{'geometry'}->{'coordinates'};
             return $location;
         } catch(Exception $e){

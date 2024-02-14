@@ -21,8 +21,6 @@ final class DisponibilityProvider implements ProviderInterface
         $startDate = isset($context["filters"]["startDate"]) ? new DateTimeImmutable($context["filters"]["startDate"]) : null;
         $endDate = isset($context["filters"]["endDate"]) ? new DateTimeImmutable($context["filters"]["endDate"]) : null;
 
-        dump($startDate, $endDate);
-
         $query = $this->entityManager->createQuery(
             'SELECT i.id
             FROM App\Entity\User i
