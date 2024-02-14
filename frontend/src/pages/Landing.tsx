@@ -65,10 +65,10 @@ const Landing = () => {
           </div>
         </div>
       </section>
-      <section className="w-full px-8 py-8 flex justify-between items-center flex-col gap-8">
+      <section className="w-full px-8 py-8 flex justify-between items-center flex-col gap-8 mb-20">
         <h1 className="font-semibold text-2xl leading-relaxed">{t("landing.newProvider.title")}</h1>
         <div className={"flex gap-12"}>
-          <img src={carPro} alt="car pro" className="w-96 rounded" />
+          <img src={carPro} alt="car pro" className="w-96 rounded shadow-2xl" />
           <div className={"flex flex-col gap-6"}>
             <p>
               Rejoignez notre réseau de partenaires et offrez à votre auto-école un avantage compétitif indéniable. En

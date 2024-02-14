@@ -39,7 +39,7 @@ const ForgotPasswordForm = () => {
         variant: "success",
         title: t("Un email de réinitialisation de mot de passe a été envoyé."),
       })
-      navigate("auth/login", { replace: true })
+      navigate("/auth/login", { replace: true })
     } catch (e) {
       toast({
         variant: "destructive",
