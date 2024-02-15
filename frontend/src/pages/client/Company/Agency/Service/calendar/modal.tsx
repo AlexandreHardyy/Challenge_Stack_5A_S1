@@ -14,7 +14,6 @@ interface ConfirmationModalProps {
   service: Service
   hourSelected: DateTime
   isModalOpen: boolean
-  // TODO: should not be undefined here
   instructorId?: number
   agency: Agency
   onModalOpenChange: (value: boolean) => void
@@ -40,7 +39,6 @@ export default function ConfirmationModal({
       })
       queryClient.invalidateQueries(["getDisponibilities"])
       onModalOpenChange(false)
-      // sessionsReFetch()
     },
     onError: () => {
       toast({
@@ -51,8 +49,6 @@ export default function ConfirmationModal({
       onModalOpenChange(false)
     },
   })
-
-  // TODO: should not retrieve agencies with 0 instructors
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onModalOpenChange}>
@@ -76,7 +72,6 @@ export default function ConfirmationModal({
             disabled={sessionMutation.isLoading}
             onClick={async () => {
               sessionMutation.mutate({
-                // TODO: remove "!"
                 student: `/api/users/${user?.id}`,
                 instructor: `/api/users/${instructorId}`,
                 service: `/api/services/${service.id}`,

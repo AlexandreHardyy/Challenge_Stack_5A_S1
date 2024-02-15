@@ -13,11 +13,6 @@ export default function ServiceClient() {
   const [selectedInstructor, setSelectedInstructor] = useState<string>()
 
   const { data: agency, status: agencyStatus } = useFetchAgencyById(agencyId)
-  // const requestSessions = useFetchSessions({
-  //   agency: agencyId,
-  //   status: "created",
-  //   "startDate[after]": DateTime.now().toISO({ includeOffset: false }) ?? "",
-  // })
 
   if (agencyStatus === "error") {
     return <h1>WTFFFFF</h1>

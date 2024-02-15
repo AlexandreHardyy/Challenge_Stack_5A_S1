@@ -73,12 +73,6 @@ export function computeSessionsByDisponibilities({
             if (checkIsSessionInSchedules(start, end, disponibility.schedules)) acc = "opened"
             return acc
           }, "closed"),
-          // workingInstructors: disponibilities.reduce((acc: number[], disponibility) => {
-          //   if (checkIsSessionInSchedules(start, end, disponibility.schedules)) {
-          //     acc.push(disponibility.userId)
-          //   }
-          //   return acc
-          // }, []),
           instructorsAvailable: disponibilities.reduce((acc: number[], disponibility) => {
             const formattedAlreadyExistingSessions = disponibility.sessions.map((session) => {
               return {

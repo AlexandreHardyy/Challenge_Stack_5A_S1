@@ -1,17 +1,5 @@
 # RoadWise : Projet de Plateforme SaaS pour les Auto-Écoles
 
-## Table des matières
-
-- [RoadWise : Projet de Plateforme SaaS pour les Auto-Écoles](#roadwise--projet-de-plateforme-saas-pour-les-auto-écoles)
-    - [Table des matières](#table-des-matières)
-    - [Description](#description)
-    - [Fonctionnalités](#fonctionnalités)
-    - [Technologies](#technologies)
-    - [Installation](#installation)
-    - [Utilisation](#utilisation)
-    - [Auteurs](#Auteurs)
-    - [Contact](#contact)
-
 ## Description
 
 Ce projet est le fruit du travail de quatre étudiants de l'ESGI en 5ᵉ année, spécialisés en Informatique et Web (IW).
@@ -19,14 +7,86 @@ L'objectif de ce projet est de développer une application SaaS qui facilite la 
 auto-écoles. La plateforme fournira aux auto-écoles un outil convivial pour la gestion des créneaux de plusieurs
 établissements différents.
 
-## Fonctionnalités
+# Fonctionnalités :
 
-- Gestion des créneaux de réservation pour les leçons de conduite.
-- Prise en charge de plusieurs établissements d'auto-école.
-- Interface utilisateur réactive et intuitive en React.
-- Backend solide et sécurisé basé sur API Platform.
-- Authentification et autorisations des utilisateurs.
-- Intégration de notifications et d'alertes pour les clients et les écoles.
+## Login/Register :
+- Alexandre HARDY
+
+## Recherche avec filtres de prestation ou prestataire avec carte de géolocalisation :
+- Armand DE FARIA LEITE
+
+## Landing page du prestataire avec les prestations disponibles :
+- Armand DE FARIA LEITE
+
+## Choix des créneaux disponibles avec possibilité de choisir parmi les emplois du temps de plusieurs Salariés :
+- Armand DE FARIA LEITE
+
+## Espace de visualisation de ses réservations avec possibilité d’annuler :
+- Armand DE FARIA LEITE
+
+## Gestion des employés :
+- Noé PIGEAU
+
+## Gestion des Agences et des Compagnies :
+- Noé PIGEAU
+
+## Gérer les plannings d’équipe avec demande de repos :
+- Noé PIGEAU
+
+## Création des catégories et des services :
+- Noé PIGEAU
+
+## Notification de nouvelle réservation :
+- Alexandre HARDY
+
+## Notation des prestations avec commentaire :
+- Alexandre HARDY
+
+## Dashboard avec statistiques PRESTATAIRE :
+- Théo HERVÉ
+
+## Dashboard avec statistiques ADMIN :
+- Théo HERVÉ
+
+## Création des Compagnies :
+- Théo HERVÉ
+
+## Gestion des images :
+- Alexandre HARDY
+
+## CRUD complet pour l’ensemble des entités utilitaires :
+- Armand DE FARIA LEITE
+- Noé PIGEAU
+- Théo HERVÉ
+
+## Notification des demandes de prestataire (email) :
+- Alexandre HARDY
+
+## Validation des prestataires :
+- Alexandre HARDY
+- Théo HERVÉ
+
+## Traduction :
+- Théo HERVÉ
+
+## CI/CD:
+- Alexandre HARDY
+- Noé PIGEAU
+- Armand DE FARIA LEITE
+- Théo HERVÉ
+
+## BONUS :
+- Gestion de création de formulaire de feedback (form builder) :
+  - Noé PIGEAU
+
+- Rappel des RDV par SMS :
+  - Armand DE FARIA LEITE
+
+- Gestion de temps différent d’une prestation à une autre :
+  - Armand DE FARIA LEITE
+
+- Notation des clients (bon ou mauvais client) par les prestataires (ou automatiquement ?) :
+  - Armand DE FARIA LEITE
 
 ## Technologies
 

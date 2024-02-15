@@ -49,7 +49,6 @@ export interface Service {
   category: Category
 }
 
-//TODO: cleanup types
 export interface User {
   id: number
   firstname: string

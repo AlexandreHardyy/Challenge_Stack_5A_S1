@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { PencilIcon } from "lucide-react"
+import { Loader2, PencilIcon } from "lucide-react"
 import { agencyAdminFormSchema } from "@/zod-schemas/agencyAdmin"
 
 const AgencyForm = ({ agency, isReadOnly }: { agency: Agency; isReadOnly: boolean }) => {
@@ -97,7 +97,12 @@ const AgencyForm = ({ agency, isReadOnly }: { agency: Agency; isReadOnly: boolea
             </FormItem>
           )}
         />
-        {!isReadOnly && <Button type="submit">{t("ProviderAgencies.form.cta.update")}</Button>}
+        {!isReadOnly && (
+          <Button disabled={updateAgency.isLoading} type="submit">
+            {updateAgency.isLoading && <Loader2 />}
+            {t("ProviderAgencies.form.cta.update")}
+          </Button>
+        )}
       </form>
     </Form>
   )
