@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 #[ApiResource(
-    // normalizationContext: ['groups' => ['company-group-read', 'read-media_object'], 'enable_max_depth' => true],
+    paginationItemsPerPage: 10,
     operations: [
         new GetCollection(
             openapi: new Operation(

@@ -19,6 +19,7 @@ const searchFormSchema = z.object({
   address: z.string().max(50).optional(),
   city: z.string().max(50).optional(),
   zip: z.string().max(50).optional(),
+  page: z.string(),
 })
 
 function SearchForm() {
@@ -73,20 +74,36 @@ function SearchForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(setFilters)} className="space-y-8">
-            <FormField
-              control={form.control}
-              defaultValue=""
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("searchClient.form.nameInput")}</FormLabel>
-                  <FormControl>
-                    <Input placeholder={t("searchClient.form.nameInputPlaceholder")} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex w-full gap-2">
+              <FormField
+                control={form.control}
+                defaultValue=""
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="grow">
+                    <FormLabel>{t("searchClient.form.nameInput")}</FormLabel>
+                    <FormControl>
+                      <Input placeholder={t("searchClient.form.nameInputPlaceholder")} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                defaultValue={"1"}
+                name="page"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Page</FormLabel>
+                    <FormControl>
+                      <Input type="number" min={1} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             {enabledInputs.includes("category") && (
               <FormField
                 control={form.control}

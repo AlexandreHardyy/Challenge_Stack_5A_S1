@@ -34,6 +34,7 @@ type FetchAgenciesQueryParams = {
   address?: string
   city?: string
   zip?: string
+  page: string
 }
 
 export function useFetchAgencies(queryParams?: FetchAgenciesQueryParams, shouldWaitQueryParams = false) {

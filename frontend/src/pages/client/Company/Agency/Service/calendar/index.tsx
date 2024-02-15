@@ -87,15 +87,16 @@ export default function Calendar({ service, agency, selectedInstructorId }: Cale
         instructorId={chosenInstructorIdForSession}
         onModalOpenChange={setIsModalOpen}
       />
-      <div className="flex gap-1">
+      <div className="flex gap-4">
         <Button
           disabled={weekRange.beginningOfTheWeek.equals(DateTime.now().startOf("day"))}
           size="sm"
           onClick={() => modifyWeekRange("previous")}
+          className="mt-2 flex"
         >
           {"<"}
         </Button>
-        <div className="flex gap-8">
+        <div className="flex gap-6">
           {sessions?.map((day) => {
             return (
               <div key={day.weekday.weekdayShort} className="flex flex-col gap-4">
@@ -105,7 +106,7 @@ export default function Calendar({ service, agency, selectedInstructorId }: Cale
                     {day.weekday.day} {day.weekday.monthShort}
                   </p>
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex w-[84px] flex-col gap-2">
                   {day.sessions.map((session) => {
                     if (session.status === "closed") {
                       return <div key={session.hour.toMillis()} className="h-9 rounded-[8px] px-3 bg-secondary"></div>
@@ -129,7 +130,7 @@ export default function Calendar({ service, agency, selectedInstructorId }: Cale
             )
           })}
         </div>
-        <Button size="sm" onClick={() => modifyWeekRange("next")}>
+        <Button className="mt-2" size="sm" onClick={() => modifyWeekRange("next")}>
           {">"}
         </Button>
       </div>

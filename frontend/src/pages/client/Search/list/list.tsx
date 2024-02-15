@@ -38,6 +38,7 @@ function CompaniesAgenciesList({ setAgenciesDataForMap }: CompaniesAgenciesListP
     {
       socialReason: filters?.name,
       "categories.name": filters?.category,
+      page: `${filters.page}`,
     },
     true
   )
@@ -52,6 +53,7 @@ function CompaniesAgenciesList({ setAgenciesDataForMap }: CompaniesAgenciesListP
       address: filters?.address,
       city: filters?.city,
       zip: filters?.zip,
+      page: `${filters.page}`,
     },
     true
   )

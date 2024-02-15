@@ -2,11 +2,7 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\DataProvider\DisponibilityProvider;
 use Doctrine\Common\Collections\Collection;
@@ -31,8 +27,6 @@ class Disponibility
     protected Collection $sessions,
     #[Groups(['disponibility:read:collection'])]
     protected Collection $schedules,
-    // #[Groups(['disponibility:read:collection'])]
-    // protected Collection $scheduleExceptions
   )
   {
   }
