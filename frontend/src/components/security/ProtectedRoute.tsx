@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext.tsx"
 const ProtectedRoute = ({ roles }: { roles?: string[] | undefined }) => {
   const { token, user } = useAuth()
   if (!token) {
-    return <Navigate to="auth/login" />
+    return <Navigate to="/auth/login" />
   }
 
   if (roles && user?.roles && !roles.some((r) => user.roles?.includes(r))) {

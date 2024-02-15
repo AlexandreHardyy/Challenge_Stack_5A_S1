@@ -27,11 +27,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ApiResource(
     operations: [
         new GetCollection(
-            // normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true]
-            normalizationContext: ['groups' => ['user:read:collection']]
+            normalizationContext: ['groups' => ['user:read:collection']],
+            security: "is_granted('ROLE_ADMIN')"
         ),
         new Get(
-            // normalizationContext: ['groups' => ['read-user', 'employee:read', 'read-media_object'], 'enable_max_depth' => true],
             normalizationContext: ['groups' => ['user:read']],
             security: "is_granted('USER_VIEW', object)"
         ),
@@ -43,7 +42,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
             security: "is_granted('USER_EDIT', object)"
         )
     ],
-    // normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true],
 )]
 
 #[ApiResource(
@@ -53,7 +51,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
             uriVariables: [
                 'id' => new Link(toProperty: 'company', fromClass: Company::class)
             ],
-            // normalizationContext:['groups' => ['read-user'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: ['User'],
                 summary: 'Returns a list of users for a specific company',
@@ -82,7 +79,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
                 tags: ['User'],
                 summary: 'update a employee',
                 description: 'Update a user for a company'
-            )
+            ),
+            denormalizationContext: ['groups' => ['update-employee']],
+            security: "is_granted('USER_EDIT', object)"
         ),
         new Delete(
             uriTemplate: '/employees/{id}',
@@ -107,15 +106,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
             ),
             denormalizationContext: ['groups' => ['create-provider']],
         ),
-        new Patch(
-            uriTemplate: '/providers/{id}',
-            openapi: new Operation(
-                tags: ['Company', 'User'],
-                summary: 'update a provider',
-                description: 'Update a user related to a company'
-            ),
-            denormalizationContext: ['groups' => ['create-provider', 'update-provider']],
-        )
     ],
 )]
 
@@ -123,10 +113,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     uriTemplate: '/user/me',
     operations: [
         new Get(
-            // normalizationContext: [
-            //     'groups' => ['read-user', 'read-media_object'],
-            //     'enable_max_depth' => true,
-            // ],
             normalizationContext: ['groups' => ['user:read:me']],
             security: "is_granted('USER_VIEW', object)"
         ),
@@ -146,8 +132,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user:read', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider', 'user:read:me', 'session:read', 'user:read:collection', 'agency:read'])]
-    #[Assert\NotBlank(groups: ['create-user'])]
+    #[Groups(['user:read', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider', 'user:read:me', 'session:read', 'user:read:collection', 'agency:read', 'update-employee'])]
+    #[Assert\NotBlank(groups: ['create-user', 'update-employee'])]
     #[Assert\Email]
     private ?string $email = null;
 
@@ -167,13 +153,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $plainPassword = '';
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:read:me', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection'])]
-    #[Assert\NotBlank(groups: ['create-user'])]
+    #[Groups(['user:read', 'user:read:me', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection', 'update-employee'])]
+    #[Assert\NotBlank(groups: ['create-user', 'update-employee'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:read:me', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection'])]
-    #[Assert\NotBlank(groups: ['create-user'])]
+    #[Groups(['user:read', 'user:read:me', 'user:read:collection:by_company', 'session:read:collection:by_instructor', 'create-user', 'update-user', 'create-employee', 'create-provider', 'agency:read', 'session:read', 'session:read:collection:by_student', 'user:read:collection', 'session:read:collection', 'update-employee'])]
+    #[Assert\NotBlank(groups: ['create-user', 'update-employee'])]
     private ?string $lastname = null;
 
     #[ORM\Column]
@@ -206,7 +192,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $schedules;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['user:read', 'user:read:me', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider'])]
+    #[Groups(['user:read', 'user:read:me', 'user:read:collection:by_company', 'create-user', 'update-user', 'create-employee', 'create-provider', 'update-employee'])]
     private ?string $phoneNumber = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]

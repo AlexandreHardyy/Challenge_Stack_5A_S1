@@ -73,7 +73,6 @@ final class DisponibilityProvider implements ProviderInterface
             if ($startDate && $endDate) {
                 if ($schedule->getDate() >= $startDate && $schedule->getDate() <= $endDate) {
                     $scheduleExceptions = $schedule->getScheduleExceptions()->toArray();
-                    dump($scheduleExceptions);
                     $schedule->setScheduleExceptions(new ArrayCollection(array_filter($scheduleExceptions, function($exception) {
                         return $exception->getStatus() === 'VALIDATED';
                     })));

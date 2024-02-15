@@ -6,6 +6,7 @@ export type SearchFilters = {
   address?: string
   city?: string
   zip?: string
+  page: string
 }
 
 type Context = {
@@ -25,7 +26,9 @@ export function useSearchFiltersContext() {
 }
 
 export function SearchFiltersProvider(props: React.PropsWithChildren) {
-  const [filters, setFilters] = useState<SearchFilters>({})
+  const [filters, setFilters] = useState<SearchFilters>({
+    page: "1",
+  })
 
   return <SearchFiltersContext.Provider {...props} value={{ filters, setFilters }} />
 }

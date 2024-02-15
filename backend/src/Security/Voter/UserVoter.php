@@ -44,6 +44,10 @@ class UserVoter extends Voter
                 break;
 
             case self::EDIT:
+                $bodyRequest = json_decode($this->requestStack->getCurrentRequest()->getContent());
+                if (!$this->security->isGranted('ROLE_ADMIN') && isset($bodyRequest->roles)) {
+                    return false;
+                }
                 if($user->getUserIdentifier() === $subject->getUserIdentifier())
                     return true;
                 else if($this->security->isGranted('ROLE_PROVIDER') && $subject instanceof User) {

@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { useAddCompany } from "@/services/company.service"
 import { addNewProvider } from "@/services/user/auth.service"
+import { Loader2 } from "lucide-react"
 
 /**
  * Verify if the siren is valid
@@ -17,7 +18,6 @@ import { addNewProvider } from "@/services/user/auth.service"
  */
 const verifySiren = async (siren: string) => {
   const token = import.meta.env.VITE_NEXT_PUBLIC_API_ENTREPRISE_TOKEN
-  // const apiUrlProdVerifySiren = `https://entreprise.api.gouv.fr/v3/infogreffe/rcs/unites_legales/${siren}/extrait_kbis`;
   const apiUrlStagingVerifySiren = `https://staging.entreprise.api.gouv.fr/v3/infogreffe/rcs/unites_legales/${siren}/extrait_kbis`
 
   try {
@@ -36,7 +36,7 @@ const verifySiren = async (siren: string) => {
     return Promise.resolve(data)
   } catch (err) {
     console.error(err)
-    return true //TODO: change to false when api is working
+    return true
   }
 }
 
@@ -95,7 +95,6 @@ const NewProvider = () => {
   })
 
   const onSubmit = async (values: z.infer<typeof newProviderFormSchema>) => {
-    //regarder dans son powerpoint, le denormalizerContext slide 52 pour rendre unique le nom de la société et ne pas ajouter si jamais
     const createCompanyRequest = await addCompany.mutateAsync(values)
 
     if (createCompanyRequest.status === 201) {
@@ -218,7 +217,10 @@ const NewProvider = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">{t("newProvider.form.cta.submit")}</Button>
+          <Button disabled={addCompany.isLoading} type="submit">
+            {addCompany.isLoading && <Loader2 />}
+            {t("newProvider.form.cta.submit")}
+          </Button>
         </form>
       </Form>
       <img src={newProviderUndraw} className="w-1/2" alt="image new provider" />

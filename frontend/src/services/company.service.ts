@@ -29,7 +29,7 @@ export function useFetchCompany(companyId?: number) {
 }
 
 export function useFetchCompanies(
-  queryParams?: { socialReason?: string; ["categories.name"]?: string },
+  queryParams?: { socialReason?: string; ["categories.name"]?: string; page: string },
   shouldWaitQueryParams = false
 ) {
   const formatedQueryParams = formatQueryParams(queryParams)
@@ -47,21 +47,6 @@ export function useFetchCompanies(
     },
     enabled: shouldWaitQueryParams ? !!formatedQueryParams : undefined,
   })
-
-  // return useQuery<Company[]>(
-  //   ["getCompanies"],
-  //   async (queryParams) => {
-
-  //     const response = await api.get("companies")
-  //     if (response.status !== 200) {
-  //       throw new Error("Something went wrong with the request (getCompanies)")
-  //     }
-  //     return response.data["hydra:member"]
-  //   },
-  //   {
-  //     retry: false,
-  //   }
-  // )
 }
 
 export const useAddCompany = () => {
