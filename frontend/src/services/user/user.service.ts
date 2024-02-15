@@ -9,10 +9,6 @@ export function useFetchUserMe() {
     queryKey: ["userMe"],
     queryFn: async () => {
       const response = await api.get(`user/me`)
-      if (response.status !== 200) {
-        throw new Error("Something went wrong with the request (getUserById)")
-      }
-
       return response.data
     },
     enabled: false,
