@@ -410,6 +410,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function isCompanyVerified(): ?bool
+    {
+        if ($this->company instanceof Company) {
+            return $this->company->isIsVerified();
+        }
+
+        return true;
+    }
+
     /**
      * @return Collection<int, Agency>
      */
