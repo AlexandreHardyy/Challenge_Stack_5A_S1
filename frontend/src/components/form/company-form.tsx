@@ -40,6 +40,7 @@ export const CompanyForm = ({ company, isReadOnly = false, isAdmin = false }: Co
     const result = await (!company ? addCompany.mutateAsync(values) : updateCompany.mutateAsync(body))
     if (result.status === 201 || result.status === 200) {
       queryClient.invalidateQueries(["getCompanies"])
+      queryClient.invalidateQueries(["companies"])
     }
   }
 

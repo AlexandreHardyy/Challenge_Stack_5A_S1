@@ -8,10 +8,6 @@ import { t } from "i18next"
 
 const columns: ColumnDef<FeedBack>[] = [
   {
-    accessorKey: "id",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
-  {
     accessorKey: "createdAt",
     header: () => t("ProviderFeedBack.sentDate"),
     cell: ({ row }) => {

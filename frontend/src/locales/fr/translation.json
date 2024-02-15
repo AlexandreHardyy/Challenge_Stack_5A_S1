@@ -39,6 +39,11 @@
       "description": "Êtes-vous sur de vouloir supprimer",
       "confirm": "Confirmer",
       "cancel": "Annuler"
+    },
+    "table": {
+      "columns": "Colonnes",
+      "search": "Rechercher",
+      "noResult": "Pas de résultat"
     }
   },
   "feedBackInfo": {
@@ -299,6 +304,15 @@
       }
     }
   },
+  "ProviderScheduleException": {
+    "title": "Demande de repos",
+    "table": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "startHour": "Heure de début",
+      "endHour": "Heure de fin"
+    }
+  },
   "providerService": {
     "title": "Mes services",
     "form": {
@@ -332,6 +346,7 @@
     "title": "Gérer son salarié",
     "subTitle": "Mettre a jour son emploi du temps",
     "fetchError": "Une error a eu lieu lors de la récupération de l'utilisateur",
+    "noShedules": "Vous n'avez pas de jour de travail",
     "form": {
       "info": "Sélectionner un interval de temps ou vous voulez modifier l'emploi du temps de votre employer",
       "start": "Heure de début",

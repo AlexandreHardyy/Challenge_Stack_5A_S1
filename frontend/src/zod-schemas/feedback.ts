@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const feedbackFormSchema = z.object({
-  feedbackGroups: z.array(
+  feedBackGroups: z.array(
     z.object({
       question: z.string(),
       answer: z.string(),

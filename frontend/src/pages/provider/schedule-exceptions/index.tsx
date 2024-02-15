@@ -10,32 +10,24 @@ import { useQueryClient } from "@tanstack/react-query"
 
 const columns: ColumnDef<ScheduleException>[] = [
   {
-    accessorKey: "id",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
-  {
     accessorKey: "firstname",
-    header: "First name",
+    header: () => t("ProviderScheduleException.table.firstName"),
   },
   {
     accessorKey: "lastname",
-    header: "Last name",
+    header: () => t("ProviderScheduleException.table.lastName"),
   },
   {
     accessorKey: "date",
-    header: "Date",
+    header: () => "Date",
   },
   {
     accessorKey: "startHour",
-    header: "Start Hour",
+    header: () => t("ProviderScheduleException.table.startHour"),
   },
   {
     accessorKey: "endHour",
-    header: "End Hour",
-  },
-  {
-    accessorKey: "status",
-    header: ({ column }) => column.toggleVisibility(false),
+    header: () => t("ProviderScheduleException.table.endHour"),
   },
   {
     accessorKey: "action",
@@ -77,8 +69,7 @@ const ScheduleExceptions = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-3xl"> {t("ProviderAgencies.title")} </h1>
-      <div className="self-start w-full max-w-xl">{/* <ModalAgencyForm variant="outline" /> */}</div>
+      <h1 className="text-3xl"> {t("ProviderScheduleException.title")} </h1>
       <DataTable isLoading={scheduleExceptions.isLoading} columns={columns} data={filteredScheduleExceptions} />
     </div>
   )

@@ -9,18 +9,22 @@ import { useTranslation } from "react-i18next"
 
 import defaultAgencyLogo from "@/assets/img/default-company-logo.svg"
 import { formatDate } from "@/utils/helpers.ts"
+import { useFetchEmployeesByCompany } from "@/services/user/user.service"
+import { useFetchAgenciesByCompany } from "@/services/agency.service"
 
 function CompanyDetails() {
   const { t } = useTranslation()
   const { companyId } = useParams()
 
-  const companyRequest = useFetchCompany(parseInt(companyId ?? ""))
+  const company = useFetchCompany(Number(companyId))
+  const employees = useFetchEmployeesByCompany(Number(companyId))
+  const agencies = useFetchAgenciesByCompany(Number(companyId))
 
-  if (companyRequest.status === "error") {
-    return <h1>WTFFFFF</h1>
+  if (employees.status === "error" || company.status === "error" || agencies.status === "error") {
+    return <h1>{t("searchClient.list.error")}</h1>
   }
 
-  if (companyRequest.status === "loading") {
+  if (employees.status === "loading" || company.status === "loading" || agencies.status === "loading") {
     return (
       <div className="flex justify-center items-center w-full h-screen gap-3">
         <Spinner />
@@ -42,8 +46,8 @@ function CompanyDetails() {
                 alt="companylogo"
                 className="w-[185px] h-[185px]"
                 src={
-                  companyRequest.data.image
-                    ? `${import.meta.env.VITE_API_URL_PUBLIC}${companyRequest.data.image?.contentUrl}`
+                  company.data.image
+                    ? `${import.meta.env.VITE_API_URL_PUBLIC}${company.data.image?.contentUrl}`
                     : defaultAgencyLogo
                 }
               />
@@ -51,33 +55,33 @@ function CompanyDetails() {
           </div>
           <div className="mt-6">
             <p>
-              {t("admin.companies.table.socialReason")}: {companyRequest.data.socialReason}
+              {t("admin.companies.table.socialReason")}: {company.data.socialReason}
             </p>
             <p>
-              {t("admin.companies.table.email")}: {companyRequest.data.email}
+              {t("admin.companies.table.email")}: {company.data.email}
             </p>
             <p>
-              {t("admin.companies.table.phoneNumber")}: {companyRequest.data.phoneNumber}
+              {t("admin.companies.table.phoneNumber")}: {company.data.phoneNumber}
             </p>
             <p>
-              {t("admin.companies.table.isVerified")}: {companyRequest.data.isVerified ? "true" : "false"}
+              {t("admin.companies.table.isVerified")}: {company.data.isVerified ? "true" : "false"}
             </p>
             <p>
-              {t("admin.companies.table.sirenNumber")}: {companyRequest.data.siren}
+              {t("admin.companies.table.sirenNumber")}: {company.data.siren}
             </p>
             <p>
-              {t("admin.companies.table.createdAt")}: {formatDate(companyRequest.data.createdAt)}
+              {t("admin.companies.table.createdAt")}: {formatDate(company.data.createdAt)}
             </p>
             <p>
-              {t("admin.companies.table.description")}: {companyRequest.data.description}
+              {t("admin.companies.table.description")}: {company.data.description}
             </p>
           </div>
         </CardContent>
         <Separator />
       </Card>
       <div className="grow gap-4 flex flex-col">
-        <AdminAgenciesList agencies={companyRequest.data.agencies} />
-        <AdminEmployeesList employees={companyRequest.data.users} />
+        <AdminAgenciesList agencies={agencies.data} />
+        <AdminEmployeesList employees={employees.data} />
       </div>
     </div>
   )
