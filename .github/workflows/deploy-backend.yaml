@@ -17,5 +17,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            git pull git@github.com:AlexandreHardyy/Challenge_Stack_5A_S1.git
+            cd /home/ubuntu/challenge-caddy
+            git pull
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build

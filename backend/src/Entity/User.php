@@ -142,7 +142,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['agency:read', 'user:read', 'user:read:me', 'user:read:collection:by_company'])]
+    #[Groups(['agency:read', 'user:read', 'user:read:me', 'user:read:collection', 'user:read:collection:by_company'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -408,6 +408,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->company = $company;
 
         return $this;
+    }
+
+    public function isCompanyVerified(): ?bool
+    {
+        if ($this->company instanceof Company) {
+            return $this->company->isIsVerified();
+        }
+
+        return true;
     }
 
     /**

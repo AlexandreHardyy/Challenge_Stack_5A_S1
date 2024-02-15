@@ -12,6 +12,7 @@ import { SelectInput } from "@/components/select-input"
 import { format } from "date-fns"
 import { useAddScheduleException, useFetchScheduleByUser } from "@/services/schedule.service"
 import { useQueryClient } from "@tanstack/react-query"
+import { Spinner } from "@/components/loader/Spinner"
 
 const HOURS = Array.from(Array(14)).map((_, index) => ({ value: String(8 + index), label: `${String(8 + index)}h` }))
 
@@ -30,6 +31,18 @@ export const ScheduleExceptionsForm = () => {
       status: "PROCESSING",
     },
   })
+
+  if (schedules.isLoading) {
+    return (
+      <div className="flex items-center">
+        <Spinner />
+      </div>
+    )
+  }
+
+  if (schedules.data?.length === 0) {
+    return <div className="flex items-center">{t("You dont have work shedules.")}</div>
+  }
 
   const onSubmit = async (values: ScheduleExceptionsFormSchema) => {
     const result = await addScheduleException.mutateAsync(values)

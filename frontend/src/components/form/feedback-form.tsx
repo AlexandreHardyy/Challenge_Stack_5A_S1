@@ -42,19 +42,19 @@ const FeedBackForm = ({
       company: `/api/companies/${companyId}`,
       client: `/api/users/${user?.id}`,
       feedBackBuilder: `/api/feed_back_builders/${feedBackBuilderSelected?.id}`,
-      feedbackGroups: [],
+      feedBackGroups: [],
     },
   })
 
   const onAnswerChange = (e: ChangeEvent<HTMLTextAreaElement>, question: string, index: number) => {
-    const feedBackGroups = form.getValues().feedbackGroups
+    const feedBackGroups = form.getValues().feedBackGroups
 
     feedBackGroups[index] = {
       question,
       answer: e.target.value,
     }
 
-    form.setValue("feedbackGroups", feedBackGroups)
+    form.setValue("feedBackGroups", feedBackGroups)
   }
 
   const onSubmit = async (values: FeedbackFormSchema) => {

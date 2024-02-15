@@ -12,10 +12,6 @@ import { useAuth } from "@/context/AuthContext"
 
 const columns: ColumnDef<Agency>[] = [
   {
-    accessorKey: "id",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
-  {
     accessorKey: "name",
     header: "Name",
   },
@@ -30,14 +26,6 @@ const columns: ColumnDef<Agency>[] = [
   {
     accessorKey: "zip",
     header: "Zip code",
-  },
-  {
-    accessorKey: "description",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
-  {
-    accessorKey: "company",
-    header: ({ column }) => column.toggleVisibility(false),
   },
   {
     accessorKey: "services",

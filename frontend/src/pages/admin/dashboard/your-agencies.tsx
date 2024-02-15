@@ -1,6 +1,6 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion.tsx"
 import { Company, Session } from "@/utils/types.ts"
-import { Flame, Star } from "lucide-react"
+import { Flame } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip.tsx"
 import { t } from "i18next"
 import {
@@ -45,13 +45,7 @@ function YourAgencies({
         {filteredCompanies.map((company) => (
           <AccordionItem key={company.id} value={company.socialReason}>
             <AccordionTrigger>
-              <div className="flex items-center gap-2">
-                {company.socialReason}
-                <div className="flex items-center gap-1">
-                  <Star size={16} className="text-yellow-500" />
-                  3.5
-                </div>
-              </div>
+              <div className="flex items-center gap-2">{company.socialReason}</div>
             </AccordionTrigger>
             <Drawer key={company.id}>
               <DrawerTrigger className="w-full">

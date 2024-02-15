@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\FeedBackGroupRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FeedBackGroupRepository::class)]
 class FeedBackGroup
@@ -14,13 +15,15 @@ class FeedBackGroup
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['create-feedback', 'feed_backs:read:collection:by_feed_back_builder'])]
     private ?string $question = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['create-feedback', 'feed_backs:read:collection:by_feed_back_builder'])]
     private ?string $answer = null;
 
-    #[ORM\ManyToOne(inversedBy: 'feedBackGroups')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'feedBackGroups', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
     private ?FeedBack $feedBack = null;
 
     public function getId(): ?int

@@ -40,6 +40,11 @@
       "description": "Are you sure you want to delete",
       "confirm": "Confirm",
       "cancel": "Cancel"
+    },
+    "table": {
+      "columns": "Columns",
+      "search": "Search",
+      "noResult": "No result"
     }
   },
   "feedBackInfo": {
@@ -300,6 +305,15 @@
       }
     }
   },
+  "ProviderScheduleException": {
+    "title": "Request for rest",
+    "table": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "startHour": "Start hour",
+      "endHour": "End hour"
+    }
+  },
   "providerService": {
     "title": "My services",
     "form": {
@@ -333,6 +347,7 @@
     "title": "Manage your employee",
     "subTitle": "Update his schedule",
     "fetchError": "An error occurred while fetching employee",
+    "noShedules": "You dont have work shedules.",
     "form": {
       "info": "Select a start hour and an end hour where your employee works for a specific date range",
       "start": "Start Hour",

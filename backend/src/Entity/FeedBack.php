@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FeedBackRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
         new Post(
@@ -36,8 +37,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             openapi: new Operation(
                 tags: [ 'FeedBack' ],
                 summary: 'Returns a list of feedbacks for a specific feedback builder',
-                description: 'Returns a list of feedbacks for a specific feedback builder'
-            )
+                description: 'Returns a list of feedbacks for a specific feedback builder',
+            ),
+            normalizationContext: [ 'groups' => 'feed_backs:read:collection:by_feed_back_builder']
         ),
     ],
     uriVariables: [
@@ -52,7 +54,7 @@ class FeedBack
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'feedBacks')]
-    #[Groups(['create-feedback'])]
+    #[Groups(['create-feedback', 'feed_backs:read:collection:by_feed_back_builder'])]
     private ?User $client = null;
 
     #[ORM\ManyToOne(inversedBy: 'feedBacks')]
@@ -64,13 +66,15 @@ class FeedBack
     private ?FeedBackBuilder $feedBackBuilder = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['feed_backs:read:collection:by_feed_back_builder'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['feed_backs:read:collection:by_feed_back_builder'])]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'feedBack', targetEntity: FeedBackGroup::class, orphanRemoval: true)]
-    #[Groups(['create-feedback'])]
+    #[ORM\OneToMany(mappedBy: 'feedBack', targetEntity: FeedBackGroup::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
+    #[Groups(['create-feedback', 'feed_backs:read:collection:by_feed_back_builder'])]
     private Collection $feedBackGroups;
 
     #[ORM\OneToOne(inversedBy: 'feedBack', cascade: ['persist', 'remove'])]

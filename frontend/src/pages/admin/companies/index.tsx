@@ -82,15 +82,59 @@ const ActionColumn = ({ company }: { company: Omit<Company, "users"> }) => {
   )
 }
 
+const columns: ColumnDef<Company>[] = [
+  {
+    accessorKey: "socialReason",
+    header: () => t("admin.companies.table.socialReason"),
+  },
+  {
+    accessorKey: "email",
+    header: () => t("admin.companies.table.email"),
+  },
+  {
+    accessorKey: "phoneNumber",
+    header: () => t("admin.companies.table.phoneNumber"),
+  },
+  {
+    accessorKey: "description",
+    header: () => t("admin.companies.table.description"),
+  },
+  {
+    accessorKey: "siren",
+    header: () => t("admin.companies.table.sirenNumber"),
+  },
+  {
+    accessorKey: "isVerified",
+    header: () => t("admin.companies.table.isVerified"),
+  },
+  {
+    accessorKey: "createdAt",
+    header: () => t("admin.companies.table.createdAt"),
+    cell: ({ row: { original: company } }) => formatDate(company.createdAt),
+  },
+  {
+    accessorKey: "updatedAt",
+    header: () => t("admin.companies.table.updatedAt"),
+    cell: ({ row: { original: company } }) => formatDate(company.updatedAt),
+  },
+  {
+    accessorKey: "action",
+    header: () => t("admin.companies.table.actions"),
+    cell: ({ row: { original: company } }) => {
+      return <ActionColumn company={company} />
+    },
+  },
+]
+
 const Companies = () => {
   const { t } = useTranslation()
-  const companiesRequest = useFetchCompanies()
+  const companies = useFetchCompanies()
 
-  if (companiesRequest.isError) {
+  if (companies.isError) {
     return <div>{t("common.form.fetchingError")}</div>
   }
 
-  if (companiesRequest.isLoading) {
+  if (companies.isLoading) {
     return (
       <div className="flex justify-center items-center h-[100vh]">
         <Spinner />
@@ -98,67 +142,13 @@ const Companies = () => {
     )
   }
 
-  const companies: Company[] = companiesRequest.data
-
-  const formattedCompanies: Company[] = companies.map((company: Company) => ({
-    ...company,
-    createdAt: formatDate(company.createdAt),
-    updatedAt: formatDate(company.updatedAt),
-  }))
-
-  const columns: ColumnDef<Company>[] = [
-    {
-      accessorKey: "id",
-      header: ({ column }) => column.toggleVisibility(false),
-    },
-    {
-      accessorKey: "socialReason",
-      header: t("admin.companies.table.socialReason"),
-    },
-    {
-      accessorKey: "email",
-      header: t("admin.companies.table.email"),
-    },
-    {
-      accessorKey: "phoneNumber",
-      header: t("admin.companies.table.phoneNumber"),
-    },
-    {
-      accessorKey: "description",
-      header: t("admin.companies.table.description"),
-    },
-    {
-      accessorKey: "siren",
-      header: t("admin.companies.table.sirenNumber"),
-    },
-    {
-      accessorKey: "isVerified",
-      header: t("admin.companies.table.isVerified"),
-    },
-    {
-      accessorKey: "createdAt",
-      header: t("admin.companies.table.createdAt"),
-    },
-    {
-      accessorKey: "updatedAt",
-      header: t("admin.companies.table.updatedAt"),
-    },
-    {
-      accessorKey: "action",
-      header: t("admin.companies.table.actions"),
-      cell: ({ row: { original: company } }) => {
-        return <ActionColumn company={company} />
-      },
-    },
-  ]
-
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-3xl">{t("admin.companies.title")}</h1>
       <div className="self-start w-full max-w-xl">
         <ModalCompanyForm variant="outline" />
       </div>
-      <DataTable isLoading={companiesRequest.isLoading} columns={columns} data={formattedCompanies} />
+      <DataTable isLoading={companies.isLoading} columns={columns} data={companies.data} />
     </div>
   )
 }
