@@ -3,6 +3,9 @@ api_platform:
     version: 1.0.0
     description: This is a sample API built with API Platform
     show_webby: false
+    enable_swagger: false
+    enable_swagger_ui: false
+    enable_docs: false
 
     swagger:
         api_keys:
