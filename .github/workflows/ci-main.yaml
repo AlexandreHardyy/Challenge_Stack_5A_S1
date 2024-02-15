@@ -1,0 +1,24 @@
+name: backend-test
+
+# When does this workflow run
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v3
+    - uses: isbang/compose-action@v1.5.1
+      with:
+        compose-file: "./docker/docker-compose.yml"
+        down-flags: "--volumes"
+        services: php
+
+    - name: Run tests
+      run: |
+        docker compose exec php ./vendor/bin/phpunit tests
