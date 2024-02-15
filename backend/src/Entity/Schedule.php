@@ -160,6 +160,12 @@ class Schedule
         return $this->scheduleExceptions;
     }
 
+    public function setScheduleExceptions(Collection $scheduleExceptions): static
+    {
+        $this->scheduleExceptions = $scheduleExceptions;
+        return $this;
+    }
+
     public function addScheduleException(ScheduleException $scheduleException): static
     {
         if (!$this->scheduleExceptions->contains($scheduleException)) {

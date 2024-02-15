@@ -72,18 +72,16 @@ final class DisponibilityProvider implements ProviderInterface
         foreach($schedules as $schedule) {
             if ($startDate && $endDate) {
                 if ($schedule->getDate() >= $startDate && $schedule->getDate() <= $endDate) {
+                    $scheduleExceptions = $schedule->getScheduleExceptions()->toArray();
+                    dump($scheduleExceptions);
+                    $schedule->setScheduleExceptions(new ArrayCollection(array_filter($scheduleExceptions, function($exception) {
+                        return $exception->getStatus() === 'VALIDATED';
+                    })));
                     $results[$schedule->getEmployee()->getId()]['schedules'][] = $schedule;
                 }
             } else {
                 $results[$schedule->getEmployee()->getId()]['schedules'][] = $schedule;
             }
-
-            // $exceptions = $schedule->getScheduleExceptions();
-            // foreach($exceptions as $exception) {
-            //     if ($exception->getStatus() == "VALIDATED") {
-            //         $results[$schedule->getEmployee()->getId()]['scheduleExceptions'][] = $exception;
-            //     }
-            // }
         }
         
         return array_map(static function ($result, $index) {
@@ -91,7 +89,6 @@ final class DisponibilityProvider implements ProviderInterface
                 $index,
                 new ArrayCollection($result["sessions"]),
                 new ArrayCollection($result["schedules"]),
-                // new ArrayCollection($result["scheduleExceptions"])
             );
         }, $results, array_keys($results));
         
