@@ -31,7 +31,6 @@ use ApiPlatform\OpenApi\Model\Operation;
         ),
         new GetCollection(
             normalizationContext: ['groups' => ['session:read:collection']],
-            // normalizationContext: ['groups' => ['session-group-read-collection'], 'enable_max_depth' => true]
         ),
         new Patch(
             denormalizationContext: ['groups' => ['session-group-update']],
@@ -45,7 +44,6 @@ use ApiPlatform\OpenApi\Model\Operation;
     uriTemplate: '/agencies/{id}/sessions',
     operations: [
         new GetCollection(
-            // normalizationContext:['groups' => ['agency:read:collection:by-companies'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Agency', 'Session' ],
                 summary: 'Returns a list of sessions for a specific agency',
@@ -127,7 +125,6 @@ class Session
 
     #[ORM\ManyToOne(inversedBy: 'sessions')]
     #[ORM\JoinColumn(nullable: false)]
-    // SECURITY
     #[Groups(['session:read:collection:by_instructor', 'session:read:collection:by_student', 'session:read', 'session:read:collection'])]
     private ?Service $service = null;
 

@@ -27,11 +27,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ApiResource(
     operations: [
         new GetCollection(
-            // normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true]
-            normalizationContext: ['groups' => ['user:read:collection']]
+            normalizationContext: ['groups' => ['user:read:collection']],
+            security: "is_granted('ROLE_ADMIN')"
         ),
         new Get(
-            // normalizationContext: ['groups' => ['read-user', 'employee:read', 'read-media_object'], 'enable_max_depth' => true],
             normalizationContext: ['groups' => ['user:read']],
             security: "is_granted('USER_VIEW', object)"
         ),
@@ -43,7 +42,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
             security: "is_granted('USER_EDIT', object)"
         )
     ],
-    // normalizationContext: ['groups' => ['read-user', 'read-media_object'], 'enable_max_depth' => true],
 )]
 
 #[ApiResource(
@@ -53,7 +51,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
             uriVariables: [
                 'id' => new Link(toProperty: 'company', fromClass: Company::class)
             ],
-            // normalizationContext:['groups' => ['read-user'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: ['User'],
                 summary: 'Returns a list of users for a specific company',

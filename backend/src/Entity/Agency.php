@@ -22,9 +22,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AgencyRepository::class)]
 #[ApiResource(
+    paginationItemsPerPage: 10,
     operations: [
         new Get(
-            // normalizationContext:['groups' => ['agency:read'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Returns agency by Id',
@@ -33,7 +33,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => ['agency:read', 'read-media_object']]
         ),
         new GetCollection(
-            // normalizationContext:['groups' => ['agency:read:collection'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Agency' ],
                 summary: 'Returns agencies',
@@ -68,13 +67,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
         )
     ],
     security: "is_granted('ROLE_USER')",
-    // normalizationContext: ['groups' => ['read-media_object'], 'enable_max_depth' => true]
 )]
 #[ApiResource(
     uriTemplate: '/companies/{id}/agencies',
     operations: [
         new GetCollection(
-            // normalizationContext:['groups' => ['agency:read:collection:by-companies'], 'enable_max_depth' => true],
             openapi: new Operation(
                 tags: [ 'Agency', 'Company' ],
                 summary: 'Returns a list of agencies for a specific company',

@@ -29,7 +29,7 @@ export function useFetchCompany(companyId?: number) {
 }
 
 export function useFetchCompanies(
-  queryParams?: { socialReason?: string; ["categories.name"]?: string },
+  queryParams?: { socialReason?: string; ["categories.name"]?: string; page: string },
   shouldWaitQueryParams = false
 ) {
   const formatedQueryParams = formatQueryParams(queryParams)
