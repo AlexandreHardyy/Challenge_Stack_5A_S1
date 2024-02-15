@@ -29,7 +29,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       refetch().then((res) => {
         if (res.data === undefined) {
           setUser(null)
-          localStorage.removeItem("token")
+          setToken(null)
           delete api.defaults.headers.common["Authorization"]
         } else {
           setUser(res.data ?? null)
@@ -40,7 +40,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       localStorage.removeItem("token")
       setUser(null)
     }
-  }, [token])
+  }, [refetch, token])
 
   const contextValue = useMemo(
     () => ({
