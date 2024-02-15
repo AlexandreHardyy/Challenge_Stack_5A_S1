@@ -20,3 +20,4 @@ jobs:
             cd /home/ubuntu/challenge-caddy/backend
             git pull
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml exec php bin/console lexik:jwt:generate-keypair
