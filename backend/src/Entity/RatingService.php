@@ -18,7 +18,7 @@ class RatingService
     private ?int $id = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    #[Groups(['session:read:collection:by_agency', 'session:read', 'agency:read'])]
+    #[Groups(['session:read:collection:by_agency', 'session:read', 'agency:read', 'agency:read:collection:by_company'])]
     private ?int $rating = null;
 
     #[ORM\Column(length: 1000)]

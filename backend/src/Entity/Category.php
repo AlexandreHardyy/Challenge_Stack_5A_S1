@@ -34,7 +34,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 tags: ['Category'],
                 summary: 'Update category',
                 description: 'Update a category'
-            )          
+            )
         ),
         new Delete(
             security: "is_granted('CATEGORY_EDIT', object)",
