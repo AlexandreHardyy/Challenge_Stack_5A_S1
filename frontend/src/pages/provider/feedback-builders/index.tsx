@@ -13,10 +13,6 @@ import { Link } from "react-router-dom"
 
 const columns: ColumnDef<FeedBackBuilder>[] = [
   {
-    accessorKey: "id",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
-  {
     accessorKey: "title",
     header: "Title",
   },

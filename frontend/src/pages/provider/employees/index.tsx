@@ -1,4 +1,3 @@
-import { DataTable } from "@/components/Table"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { useForm } from "react-hook-form"
 import { ColumnDef } from "@tanstack/react-table"
@@ -34,12 +33,9 @@ import { Link } from "react-router-dom"
 import { useAuth } from "@/context/AuthContext"
 import { DeleteModal } from "@/components/delete-modal"
 import { t } from "i18next"
+import { DataTable } from "@/components/Table"
 
-export const columns: ColumnDef<User>[] = [
-  {
-    accessorKey: "id",
-    header: ({ column }) => column.toggleVisibility(false),
-  },
+const columns: ColumnDef<User>[] = [
   {
     accessorKey: "email",
     header: () => t("ProviderEmployee.form.email"),
@@ -79,10 +75,11 @@ const ActionColumn = ({ employee }: { employee: User }) => {
   return (
     <div className="flex items-center gap-4">
       <ModalFormEmployee employee={employee} />
-      <Link to={`/provider/employee/${employee.id}`}>
-        {" "}
-        <EyeIcon />{" "}
-      </Link>
+      <Button asChild className="px-2" variant={"ghost"}>
+        <Link to={`/provider/employee/${employee.id}`}>
+          <EyeIcon />
+        </Link>
+      </Button>
       <DeleteModal
         name={employee.email}
         onDelete={async () => {
