@@ -47,21 +47,6 @@ export function useFetchCompanies(
     },
     enabled: shouldWaitQueryParams ? !!formatedQueryParams : undefined,
   })
-
-  // return useQuery<Company[]>(
-  //   ["getCompanies"],
-  //   async (queryParams) => {
-
-  //     const response = await api.get("companies")
-  //     if (response.status !== 200) {
-  //       throw new Error("Something went wrong with the request (getCompanies)")
-  //     }
-  //     return response.data["hydra:member"]
-  //   },
-  //   {
-  //     retry: false,
-  //   }
-  // )
 }
 
 export const useAddCompany = () => {

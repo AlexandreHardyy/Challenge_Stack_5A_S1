@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { PencilIcon } from "lucide-react"
+import { Loader2, PencilIcon } from "lucide-react"
 import { useAuth } from "@/context/AuthContext"
 
 const AgencyForm = ({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boolean }) => {
@@ -125,7 +125,8 @@ const AgencyForm = ({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boole
           }}
         />
         {!isReadOnly && (
-          <Button type="submit">
+          <Button disabled={addAgency.isLoading} type="submit">
+            {addAgency.isLoading && <Loader2 />}
             {agency ? t("ProviderAgencies.form.cta.update") : t("ProviderAgencies.form.cta.new")}
           </Button>
         )}

@@ -34,7 +34,6 @@ function YourServices({
 }>) {
   const allAgencyNameArray = agencies?.map((agency) => agency.name)
 
-  // Filtrer les agences en fonction de l'agence sélectionnée
   const filteredAgencies =
     selectedAgency === "AllAgencies"
       ? agencies ?? []

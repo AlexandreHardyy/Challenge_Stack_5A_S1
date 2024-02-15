@@ -13,6 +13,7 @@ import { format } from "date-fns"
 import { useAddScheduleException, useFetchScheduleByUser } from "@/services/schedule.service"
 import { useQueryClient } from "@tanstack/react-query"
 import { Spinner } from "@/components/loader/Spinner"
+import { Loader2 } from "lucide-react"
 
 const HOURS = Array.from(Array(14)).map((_, index) => ({ value: String(8 + index), label: `${String(8 + index)}h` }))
 
@@ -102,7 +103,10 @@ export const ScheduleExceptionsForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">{t("provider.myPlanning.form.cta.new")}</Button>
+        <Button disabled={addScheduleException.isLoading} type="submit">
+          {addScheduleException.isLoading && <Loader2 />}
+          {t("provider.myPlanning.form.cta.new")}
+        </Button>
       </form>
     </Form>
   )

@@ -59,7 +59,6 @@ function AgencyCard({ agency }: AgencyCardProps) {
             {Array.from(categoriesNames).map((categoryName) => {
               return (
                 <Badge asChild key={categoryName}>
-                  {/* TODO: onClick set category filter */}
                   <button onClick={() => onSetCategory(categoryName)}>{categoryName}</button>
                 </Badge>
               )
