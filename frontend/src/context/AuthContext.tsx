@@ -27,7 +27,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       api.defaults.headers.common["Authorization"] = "Bearer " + token
       localStorage.setItem("token", token)
       refetch().then((res) => {
-        setUser(res.data ?? null)
+        if (res.data === undefined) {
+          setUser(null)
+          localStorage.removeItem("token")
+          delete api.defaults.headers.common["Authorization"]
+        } else {
+          setUser(res.data ?? null)
+        }
       })
     } else {
       delete api.defaults.headers.common["Authorization"]
