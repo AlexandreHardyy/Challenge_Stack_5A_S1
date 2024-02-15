@@ -115,8 +115,6 @@ export function useFetchDisponibilities({ agency, queryParams }: UseFetchDisponi
     url = url + `?${new URLSearchParams(queryParams)}`
   }
 
-  console.log(url)
-
   return useQuery<Disponibility[]>(
     ["getDisponibilities", url],
     async () => {
