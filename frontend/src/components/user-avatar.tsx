@@ -5,8 +5,6 @@ function UserAvatar({ email, image, className }: { email: string; image: string 
 
   const finalImage = image ? `${import.meta.env.VITE_API_URL_PUBLIC}${image}` : placeholderImage
 
-  console.log(className)
-
   return (
     <Avatar className={className}>
       <AvatarImage src={finalImage} className={className} />

@@ -145,7 +145,7 @@ class Session
     private ?float $studentMark = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]
-    #[Groups(['session:read:collection:by_agency', 'session:read', 'agency:read'])]
+    #[Groups(['session:read:collection:by_agency', 'session:read', 'agency:read', 'agency:read:collection:by_company'])]
     private ?RatingService $ratingService = null;
 
     #[ORM\OneToOne(mappedBy: 'session', cascade: ['persist', 'remove'])]

@@ -40,6 +40,17 @@ function YourServices({
       ? agencies ?? []
       : agencies?.filter((agency) => agency.name === selectedAgency) ?? []
 
+  const averageAgenciesRating = (sessions: Session[]) => {
+    const totalRatings = sessions.reduce((acc, session) => {
+      if (session.ratingService) {
+        return acc + session.ratingService.rating
+      }
+      return acc
+    }, 0)
+    const totalSessions = (sessions.filter((session) => session.ratingService) ?? []).length
+    return totalRatings && totalSessions ? totalRatings / totalSessions : 0
+  }
+
   return (
     <div className="space-y-8">
       <Accordion type="multiple" defaultValue={allAgencyNameArray}>
@@ -50,7 +61,7 @@ function YourServices({
                 {agency.name}
                 <div className="flex items-center gap-1">
                   <Star size={16} className="text-yellow-500" />
-                  3.5
+                  {averageAgenciesRating(agency.sessions)}
                 </div>
               </div>
             </AccordionTrigger>

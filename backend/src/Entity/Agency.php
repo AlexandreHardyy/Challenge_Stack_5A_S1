@@ -147,7 +147,7 @@ class Agency
     private Collection $schedules;
     
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: Session::class, orphanRemoval: true)]
-    #[Groups(['agency:read'])]
+    #[Groups(['agency:read', 'agency:read:collection:by_company'])]
     private Collection $sessions;
 
     #[ORM\OneToMany(mappedBy: 'agency', targetEntity: MediaObject::class)]

@@ -171,7 +171,6 @@ const ModalFormAgency = ({ agency, variant = "ghost" }: { agency?: Agency; varia
 }
 
 const ModalFormAgencyImages = ({ agency, isReadOnly }: { agency?: Agency; isReadOnly: boolean }) => {
-  console.log(agency)
   return (
     <Dialog onOpenChange={(open) => !open && isReadOnly}>
       <DialogTrigger asChild>
