@@ -46,7 +46,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 tags: ['Company'],
                 summary: 'Create company',
                 description: 'Create a new company'
-            )
+            ),
+            denormalizationContext: ['groups' => ['company:create']]
         ),
         new Delete(
             openapi: new Operation(
@@ -77,23 +78,23 @@ class Company
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['update-company', 'company:read:collection', 'company:read', 'user:read:collection:by_agency', 'user:read:collection', 'session:read:collection'])]
+    #[Groups(['update-company', 'company:read:collection', 'company:read', 'user:read:collection:by_agency', 'user:read:collection', 'session:read:collection', 'company:create'])]
     private ?string $socialReason = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['update-company', 'company:read', 'company:read:collection'])]
+    #[Groups(['update-company', 'company:read', 'company:read:collection', 'company:create'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['update-company', 'company:read', 'company:read:collection'])]
+    #[Groups(['update-company', 'company:read', 'company:read:collection', 'company:create'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['update-company', 'company:read:collection', 'company:read'])]
+    #[Groups(['update-company', 'company:read:collection', 'company:read', 'company:create'])]
     private ?string $siren = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['update-company', 'company:read', 'company:read:collection', 'company:read'])]
+    #[Groups(['update-company', 'company:read', 'company:read:collection', 'company:read', 'company:create'])]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -101,11 +102,11 @@ class Company
     private ?bool $isVerified = false;
 
     #[ORM\Column]
-    #[Groups(['company:read:collection', 'company:read'])]
+    #[Groups(['company:read:collection', 'company:read', 'company:create'])]
     private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['company:read:collection'])]
+    #[Groups(['company:read:collection', 'company:create'])]
     private ?DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Agency::class, orphanRemoval: true)]

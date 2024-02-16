@@ -81,6 +81,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
                 description: 'Update a user for a company'
             ),
             denormalizationContext: ['groups' => ['update-employee']],
+            normalizationContext: ['groups' => ['update-employee']],
             security: "is_granted('USER_EDIT', object)"
         ),
         new Delete(
