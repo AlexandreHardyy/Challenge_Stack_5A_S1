@@ -116,7 +116,7 @@ class Agency
 
     #[ORM\ManyToOne(inversedBy: 'agencies')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['create-agency', 'agency:read:collection', 'session:read'])]
+    #[Groups(['create-agency', 'agency:read:collection', 'session:read', 'session:read:collection'])]
     private ?Company $company = null;
 
     #[ORM\Column(length: 255)]

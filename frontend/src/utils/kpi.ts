@@ -15,6 +15,9 @@ export const filterSessionsByDateRange = (sessions: Session[], from: Date, to: D
 export const filterSessionsByAgency = (sessions: Session[], agencyName: string) =>
   sessions.filter((session) => session.agency.name === agencyName)
 
+export const filterSessionsByCompany = (sessions: Session[], companyName: string) =>
+  sessions.filter((session) => session.agency.company.socialReason === companyName)
+
 export const calculateNumberOfSessionsInDateRange = (sessions: Session[], from: Date, to: Date, agencyName: string) =>
   agencyName === AGENCIES_ALL
     ? filterSessionsByDateRange(sessions, from, to).length
@@ -35,7 +38,7 @@ export const calculateTotalRevenueByCompanies = (
 ) =>
   companyName === COMPANIES_ALL
     ? sessions.reduce((acc, session) => (filterFn(session) ? acc + session.service.price : acc), 0)
-    : filterSessionsByAgency(sessions, companyName).reduce(
+    : filterSessionsByCompany(sessions, companyName).reduce(
         (acc, session) => (filterFn(session) ? acc + session.service.price : acc),
         0
       )
