@@ -77,7 +77,7 @@ class Company
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['update-company', 'company:read:collection', 'company:read', 'user:read:collection:by_agency', 'user:read:collection'])]
+    #[Groups(['update-company', 'company:read:collection', 'company:read', 'user:read:collection:by_agency', 'user:read:collection', 'session:read:collection'])]
     private ?string $socialReason = null;
 
     #[ORM\Column(length: 255)]

@@ -23,6 +23,7 @@ export interface Agency {
   zip: string
   company: {
     id: number
+    socialReason: string
     categories: Category[]
   }
   services: Service[]
