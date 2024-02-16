@@ -21,18 +21,25 @@ type useFetchSessionsQueryParams = {
   "startDate[after]"?: string
 }
 
-export function useFetchSessions(queryParams?: useFetchSessionsQueryParams) {
+export function useFetchSessions(queryParams: useFetchSessionsQueryParams, enabled = true) {
   const formatedQueryParams = formatQueryParams(queryParams)
   const url = `sessions${formatedQueryParams}`
 
-  return useQuery<Session[]>(["getSessions"], async () => {
-    const response = await api.get(url)
-    if (response.status !== 200) {
-      throw new Error("Something went wrong with the request (getSessions)")
-    }
+  return useQuery<Session[]>(
+    ["getSessions"],
+    async () => {
+      if (!enabled) return Promise.resolve([])
+      const response = await api.get(url)
+      if (response.status !== 200) {
+        throw new Error("Something went wrong with the request (getSessions)")
+      }
 
-    return response.data["hydra:member"]
-  })
+      return response.data["hydra:member"]
+    },
+    {
+      enabled,
+    }
+  )
 }
 
 export function useFetchSessionsByInstructor(userId?: number) {
