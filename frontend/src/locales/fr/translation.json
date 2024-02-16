@@ -374,6 +374,7 @@
   },
   "provider": {
     "dashboard": {
+      "noAgencies": "Vous devez ajouter une agence pour voir votre tableau de bord",
       "selectAgencyPlaceholder": "Sélectionner une agence",
       "selectAgencyAll": "Toutes les agences",
       "dashboard": "Tableau de bord",

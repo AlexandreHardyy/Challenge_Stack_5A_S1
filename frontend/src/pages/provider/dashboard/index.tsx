@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DateTime } from "luxon"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx"
 import { DateRangePickerCustom } from "@/components/ui/date-range-picker-custom.tsx"
@@ -50,10 +50,32 @@ const DashboardProvider = () => {
       return acc
     }, [] as string[]) ?? []
 
-  const sessionsRequest = useFetchSessions({
-    agency: agenciesIdArray,
-  })
-  const sessions: Session[] | null = sessionsRequest.status === "success" ? sessionsRequest.data : []
+  const sessionsRequest = useFetchSessions(
+    {
+      agency: agenciesIdArray,
+    },
+    !agenciesRequest.isLoading
+  )
+  const sessionsData: Session[] | null = sessionsRequest.status === "success" ? sessionsRequest.data : []
+
+  useEffect(() => {
+    sessionsRequest.refetch()
+  }, [agenciesRequest.data])
+
+  if (agenciesRequest.isLoading || sessionsRequest.isLoading) {
+    return <Loader />
+  }
+
+  if (agenciesIdArray.length === 0) {
+    return <div>{t("provider.dashboard.noAgencies")}</div>
+  }
+
+  const sessions = sessionsData.reduce((acc: Session[], session: Session) => {
+    if (session.status === "created") {
+      acc.push(session)
+    }
+    return acc
+  }, [] as Session[])
 
   const numberOfSessionsByAgency =
     selectedAgency === AGENCIES_ALL ? sessions.length : filterSessionsByAgency(sessions, selectedAgency).length

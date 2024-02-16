@@ -74,7 +74,13 @@ const Routes = () => {
             },
             {
               path: "search",
-              element: <Search />,
+              element: <ProtectedRoute roles={["ROLE_USER"]} />,
+              children: [
+                {
+                  path: "",
+                  element: <Search />,
+                },
+              ],
             },
             {
               path: "companies/:companyId",
