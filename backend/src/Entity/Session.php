@@ -134,7 +134,7 @@ class Session
     private ?Agency $agency = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups(['session:read:collection:by_instructor', 'session:read:collection:by_student', 'session-group-update', 'session:read'])]
+    #[Groups(['session:read:collection:by_instructor', 'session:read:collection:by_student', 'session-group-update', 'session:read', 'session:read:collection'])]
     private ?string $status = null;
 
     #[ORM\Column(nullable: true)]

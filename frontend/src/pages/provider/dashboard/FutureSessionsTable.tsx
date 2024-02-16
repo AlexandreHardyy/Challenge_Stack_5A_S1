@@ -74,7 +74,14 @@ const SessionsHistoryTable = ({
     )
   }
 
-  const sessions: Session[] = sessionsRequest.status === "success" ? sessionsRequest.data : []
+  const sessionsData: Session[] | null = sessionsRequest.status === "success" ? sessionsRequest.data : []
+
+  const sessions = sessionsData.reduce((acc: Session[], session: Session) => {
+    if (session.status === "created") {
+      acc.push(session)
+    }
+    return acc
+  }, [] as Session[])
 
   const sessionsByAgencyInTheFuture: Session[] = sessions
     .filter(

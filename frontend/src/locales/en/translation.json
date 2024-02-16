@@ -375,6 +375,7 @@
   },
   "provider": {
     "dashboard": {
+      "noAgencies": "You must have at least one agency to access the dashboard",
       "selectAgencyPlaceholder": "Select an agency",
       "selectAgencyAll": "All agencies",
       "dashboard": "Dashboard",
